@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Config. Tipi — ShortCode Maker v4</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="assets/styles.css" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Config. Tipi — ShortCode Maker v4</h1>
+      <nav class="topnav">
+        <a href="index.html">Generatore</a>
+        <a href="istruzioni.html">Istruzioni</a>
+        <a href="dati.html">Dati</a>
+        <a class="active" href="tipi.html">Config. Tipi</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Elenco Tipi Prodotto (in uso)</h2>
+      <p class="muted">Per modificare/aggiungere Tipi usa la pagina <a href="dati.html">Dati</a> (blocco “Tipi”).</p>
+      <div class="table" id="tabTipi">
+        <div class="thead">
+          <div>Codice</div><div>Etichetta</div><div>Note</div>
+        </div>
+        <!-- righe generate via JS -->
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { getData } from './assets/data/loader.js';
+    const { tipi } = getData();
+
+    const container = document.getElementById('tabTipi');
+    tipi.forEach(t => {
+      const row = document.createElement('div'); row.className='trow';
+      const c1 = document.createElement('div'); c1.textContent = t.code;
+      const c2 = document.createElement('div'); c2.textContent = t.label;
+      const c3 = document.createElement('div'); c3.textContent = t.note || '';
+      row.append(c1,c2,c3); container.appendChild(row);
+    });
+  </script>
+</body>
+</html>
