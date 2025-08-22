@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>ShortCode Maker v4 — Grimaldelli</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="assets/styles.css" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>ShortCode Maker v4 — Grimaldelli</h1>
+      <nav class="topnav">
+        <a class="active" href="index.html">Generatore</a>
+        <a href="istruzioni.html">Istruzioni</a>
+        <a href="dati.html">Dati</a>
+        <a href="tipi.html">Config. Tipi</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Cataloghi (per i menu a discesa)</h2>
+      <div class="grid">
+        <div class="col-4">
+          <label for="famiglia">Famiglia</label>
+          <select id="famiglia"></select>
+        </div>
+        <div class="col-4">
+          <label for="materiale">Materiale</label>
+          <select id="materiale"></select>
+        </div>
+        <div class="col-4">
+          <label for="finitura">Finitura</label>
+          <select id="finitura"></select>
+        </div>
+      </div>
+      <p class="muted small">Le liste si modificano dalla pagina <a href="dati.html">Dati</a>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Composizione ShortCode (seleziona cosa includere)</h2>
+      <div class="row wrap gap8">
+        <label class="chk"><input type="checkbox" id="includeFam" checked disabled> Famiglia</label>
+        <label class="chk"><input type="checkbox" id="includeTipo" checked> Tipo</label>
+        <label class="chk"><input type="checkbox" id="includeD" checked> Ø D</label>
+        <label class="chk"><input type="checkbox" id="includeL" checked> L</label>
+        <label class="chk"><input type="checkbox" id="includeH" checked> H</label>
+        <label class="chk"><input type="checkbox" id="includeSpessore"> Spessore</label>
+        <label class="chk"><input type="checkbox" id="includeMat"> Materiale</label>
+        <label class="chk"><input type="checkbox" id="includeFin"> Finitura</label>
+        <label class="chk"><input type="checkbox" id="includeToken"> Token</label>
+      </div>
+      <p class="note">Struttura v4: <b>FAM-TIPO-D3-L4-H4-S3-MAT-FIN-TOK</b>. I campi non inclusi diventano <b>000</b>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Attributi</h2>
+      <div class="grid">
+        <div class="col-3">
+          <label for="tipo">Tipo Prodotto</label>
+          <select id="tipo"></select>
+        </div>
+        <div class="col-3">
+          <label for="D">Ø D [mm]</label>
+          <input type="number" id="D" step="1" placeholder="000">
+        </div>
+        <div class="col-3">
+          <label for="L">L [mm]</label>
+          <input type="number" id="L" step="1" placeholder="0000">
+        </div>
+        <div class="col-3">
+          <label for="H">H [mm]</label>
+          <input type="number" id="H" step="1" placeholder="0000">
+        </div>
+        <div class="col-3">
+          <label for="spessore">Spessore [mm]</label>
+          <input type="number" id="spessore" step="0.1" placeholder="000">
+        </div>
+        <div class="col-3">
+          <label for="token">Token (DX/SN/ALTRO, max 5)</label>
+          <input id="token" maxlength="5" placeholder="000">
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Output</h2>
+      <div class="grid">
+        <div class="col-6">
+          <label for="shortcode">ShortCode (solo codice)</label>
+          <div class="row gap8">
+            <input id="shortcode" class="output" readonly>
+            <button class="btn" data-copy="#shortcode">Copia</button>
+          </div>
+        </div>
+        <div class="col-6">
+          <label for="foldername">Nome cartella (auto)</label>
+          <div class="row gap8">
+            <input id="foldername" class="output" readonly>
+            <button class="btn" data-copy="#foldername">Copia</button>
+          </div>
+        </div>
+        <div class="col-6">
+          <label for="filename">Nome file (auto)</label>
+          <div class="row gap8">
+            <input id="filename" class="output" readonly>
+            <button class="btn" data-copy="#filename">Copia</button>
+          </div>
+        </div>
+        <div class="col-6">
+          <label for="descrizione">Descrizione (auto)</label>
+          <div class="row gap8">
+            <input id="descrizione" class="output" readonly>
+            <button class="btn" data-copy="#descrizione">Copia</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>
