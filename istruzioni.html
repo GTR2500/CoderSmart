@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Istruzioni — ShortCode Maker v4</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="assets/styles.css" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Istruzioni — ShortCode Maker v4</h1>
+      <nav class="topnav">
+        <a href="index.html">Generatore</a>
+        <a class="active" href="istruzioni.html">Istruzioni</a>
+        <a href="dati.html">Dati</a>
+        <a href="tipi.html">Config. Tipi</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container doc">
+    <h2>Indice</h2>
+    <ol>
+      <li><a href="#rapido">Avvio rapido (3 step)</a></li>
+      <li><a href="#logica">Logica di calcolo</a></li>
+      <li><a href="#campi">Campi e regole</a></li>
+      <li><a href="#output">Output generati</a></li>
+      <li><a href="#dati">Gestione dati</a></li>
+    </ol>
+
+    <h3 id="rapido">1) Avvio rapido</h3>
+    <ol>
+      <li>Seleziona <b>Famiglia</b>, <b>Materiale</b>, <b>Finitura</b>.</li>
+      <li>Imposta <b>Tipo</b>, <b>D</b>, <b>L</b>, <b>H</b>, <b>Spessore</b> e (se serve) <b>Token</b>.</li>
+      <li>Copiati <b>ShortCode</b>, <b>Nome cartella</b>, <b>Nome file</b>, <b>Descrizione</b>.</li>
+    </ol>
+
+    <h3 id="logica">2) Logica di calcolo</h3>
+    <p>Struttura codice: <code>FAM-TIPO-D3-L4-H4-S3-MAT-FIN-TOK</code>. I campi esclusi (o vuoti) sono normalizzati a <code>000</code>. I numeri sono zero-paddati alla lunghezza indicata.</p>
+
+    <h3 id="campi">3) Campi e regole</h3>
+    <ul>
+      <li><b>D</b>: 3 cifre (es. 45 → 045)</li>
+      <li><b>L</b>, <b>H</b>: 4 cifre (es. 120 → 0120)</li>
+      <li><b>Spessore</b>: 3 cifre (arrotondato al decimo; 1.5 → 015)</li>
+      <li><b>Token</b>: alfanumerico, max 5, uppercase; se vuoto → 000</li>
+    </ul>
+
+    <h3 id="output">4) Output generati</h3>
+    <ul>
+      <li><b>ShortCode</b>: il codice compatto.</li>
+      <li><b>Nome cartella</b>: <code>FAM/TIPO/ShortCode</code>.</li>
+      <li><b>Nome file</b>: <code>ShortCode.dwg</code> (estensione modificabile).</li>
+      <li><b>Descrizione</b>: stringa umana con etichette complete.</li>
+    </ul>
+
+    <h3 id="dati">5) Gestione dati</h3>
+    <p>I cataloghi (Famiglie, Materiali, Finiture) e i Tipi sono definiti in <code>assets/data/*.js</code>. Puoi modificarli comodamente da <a href="dati.html">Dati</a> e applicare un override in <code>localStorage</code> o esportare un JSON da committare nel repo.</p>
+  </main>
+</body>
+</html>
