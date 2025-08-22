@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Dati — ShortCode Maker v4</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="assets/styles.css" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Dati — ShortCode Maker v4</h1>
+      <nav class="topnav">
+        <a href="index.html">Generatore</a>
+        <a href="istruzioni.html">Istruzioni</a>
+        <a class="active" href="dati.html">Dati</a>
+        <a href="tipi.html">Config. Tipi</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Editor cataloghi (override locale)</h2>
+      <p class="muted">Modifica qui i dati. Salva in <b>localStorage</b> per provarli subito, oppure <b>Esporta JSON</b> e committalo nel repo aggiornando i file in <code>assets/data/</code>.</p>
+
+      <div class="grid">
+        <div class="col-6">
+          <h3>Famiglie</h3>
+          <textarea id="jsonFam" rows="12" spellcheck="false"></textarea>
+        </div>
+        <div class="col-6">
+          <h3>Materiali</h3>
+          <textarea id="jsonMat" rows="12" spellcheck="false"></textarea>
+        </div>
+        <div class="col-6">
+          <h3>Finiture</h3>
+          <textarea id="jsonFin" rows="12" spellcheck="false"></textarea>
+        </div>
+        <div class="col-6">
+          <h3>Tipi</h3>
+          <textarea id="jsonTipi" rows="12" spellcheck="false"></textarea>
+        </div>
+      </div>
+
+      <div class="row wrap gap8">
+        <button class="btn" id="btnLoadDefaults">Ricarica default</button>
+        <button class="btn" id="btnValidate">Valida</button>
+        <button class="btn" id="btnSaveLocal">Salva in browser</button>
+        <button class="btn" id="btnClearLocal">Rimuovi override</button>
+        <button class="btn" id="btnExport">Esporta JSON</button>
+      </div>
+      <p id="status" class="status"></p>
+    </section>
+  </main>
+
+  <script type="module">
+    import { getData, setOverride, clearOverride } from './assets/data/loader.js';
+
+    const els = {
+      fam: document.getElementById('jsonFam'),
+      mat: document.getElementById('jsonMat'),
+      fin: document.getElementById('jsonFin'),
+      tipi: document.getElementById('jsonTipi'),
+      status: document.getElementById('status'),
+      btnLoadDefaults: document.getElementById('btnLoadDefaults'),
+      btnValidate: document.getElementById('btnValidate'),
+      btnSaveLocal: document.getElementById('btnSaveLocal'),
+      btnClearLocal: document.getElementById('btnClearLocal'),
+      btnExport: document.getElementById('btnExport'),
+    };
+
+    function loadIntoEditors(data) {
+      els.fam.value  = JSON.stringify(data.famiglie, null, 2);
+      els.mat.value  = JSON.stringify(data.materiali, null, 2);
+      els.fin.value  = JSON.stringify(data.finiture, null, 2);
+      els.tipi.value = JSON.stringify(data.tipi, null, 2);
+    }
+
+    function ok(msg){ els.status.textContent = '✅ ' + msg; els.status.className='status ok'; }
+    function err(msg){ els.status.textContent = '❌ ' + msg; els.status.className='status err'; }
+
+    function parseAll() {
+      try {
+        const fam = JSON.parse(els.fam.value);
+        const mat = JSON.parse(els.mat.value);
+        const fin = JSON.parse(els.fin.value);
+        const tipi = JSON.parse(els.tipi.value);
+        if (!Array.isArray(fam) || !Array.isArray(mat) || !Array.isArray(fin) || !Array.isArray(tipi)) {
+          throw new Error('I 4 blocchi devono essere array JSON.');
+        }
+        return { famiglie: fam, materiali: mat, finiture: fin, tipi };
+      } catch (e) {
+        throw e;
+      }
+    }
+
+    // Init
+    const data = getData();
+    loadIntoEditors(data);
+
+    els.btnLoadDefaults.addEventListener('click', () => {
+      loadIntoEditors(getData(true)); // true = ignora override
+      ok('Dati di default ricaricati.');
+    });
+
+    els.btnValidate.addEventListener('click', () => {
+      try { parseAll(); ok('JSON valido.'); } catch(e){ err(e.message); }
+    });
+
+    els.btnSaveLocal.addEventListener('click', () => {
+      try {
+        const parsed = parseAll();
+        setOverride(parsed);
+        ok('Override salvato nel browser. Apri il Generatore per vederlo.');
+      } catch(e){ err(e.message); }
+    });
+
+    els.btnClearLocal.addEventListener('click', () => {
+      clearOverride();
+      ok('Override rimosso. Verranno usati i dati di default.');
+    });
+
+    els.btnExport.addEventListener('click', () => {
+      try {
+        const parsed = parseAll();
+        const blob = new Blob([JSON.stringify(parsed, null, 2)], {type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'shortcode-maker-dati.json';
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+        ok('JSON esportato.');
+      } catch(e){ err(e.message); }
+    });
+  </script>
+</body>
+</html>
