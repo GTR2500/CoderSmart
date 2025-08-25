@@ -8,19 +8,25 @@
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- ===== HEADER ===== -->
   <header class="app-header">
     <a class="brand" href="https://www.glcgrimaldelli.com" target="_blank" rel="noopener">
       <img class="brand-logo" src="https://www.glcgrimaldelli.com/wp-content/uploads/2019/06/Logo-Sottopagine.jpg" alt="Grimaldelli s.r.l." />
     </a>
+
     <h1 class="brand-title">Tecnical Coder</h1>
+
+    <!-- Badge versione + toggle tema -->
+    <div id="buildBadge" class="build-badge" title="Ultimo aggiornamento"></div>
     <button id="themeToggle" class="theme-toggle" title="Cambia tema">
+      <!-- Sole -->
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <!-- Luna -->
       <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
   </header>
 
-  <!-- NAV -->
+  <!-- ===== NAV ===== -->
   <div class="subnav">
     <div class="bar">
       <nav>
@@ -31,6 +37,7 @@
     </div>
   </div>
 
+  <!-- ===== MAIN ===== -->
   <main>
     <section class="card">
       <h3>Cataloghi (per i menu a discesa)</h3>
@@ -125,7 +132,7 @@
     </section>
   </main>
 
-  <!-- FOOTER -->
+  <!-- ===== FOOTER ===== -->
   <footer class="app-footer">
     <div class="footer-inner">
       <span class="product">&copy; Tecnical Coder</span>
@@ -135,186 +142,256 @@
     </div>
   </footer>
 
+  <!-- ===== SCRIPT ===== -->
   <script>
-  /* ===== Tema ===== */
-  const THEME_KEY='tc.theme';
-  const setTheme = t => document.documentElement.setAttribute('data-theme', t);
-  (function(){ setTheme(localStorage.getItem(THEME_KEY) || 'dark'); })();
-  document.getElementById('themeToggle').addEventListener('click', ()=>{
-    const curr = document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
-    const next = curr==='light' ? 'dark' : 'light';
-    setTheme(next); localStorage.setItem(THEME_KEY, next);
-  });
-
-  /* ===== Cataloghi: override locale + default da assets/data ===== */
-  const STORAGE_KEYS = [
-    'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
-  ];
-  const PATHS = {
-    famiglie:'assets/data/famiglie.json',
-    materiali:'assets/data/materiali.json',
-    finiture:'assets/data/finiture.json',
-    tipi:'assets/data/tipi.json'
-  };
-  const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
-  const canonFam = x => ({
-    code:(x.code||'').trim().toUpperCase(),
-    label:x.label||'',
-    D:toBool(x.D??x.useD??x.d),
-    L:toBool(x.L??x.useL??x.l),
-    H:toBool(x.H??x.useH??x.h),
-    Sp:toBool(x.Sp??x.useSp??x.sp),
-    mat:toBool(x.mat??x.hasMaterial??x.material),
-    fin:toBool(x.fin??x.hasFinish??x.finish),
-    tok:toBool(x.tok??x.useTokens??x.tokens)
-  });
-  const canonSimple = x => ({code:(x.code||'').trim().toUpperCase(),label:x.label||''});
-  function canonize(obj){
-    return {
-      famiglie:(obj.famiglie||[]).map(canonFam),
-      materiali:(obj.materiali||[]).map(canonSimple),
-      finiture:(obj.finiture||[]).map(canonSimple),
-      tipi:(obj.tipi||[]).map(canonSimple)
-    };
-  }
-  function readLS(){
-    for(const k of STORAGE_KEYS){
-      const raw=localStorage.getItem(k);
-      if(!raw) continue;
-      try{ const j=JSON.parse(raw);
-        if(j && j.famiglie && j.materiali && j.finiture && j.tipi) return canonize(j);
-      }catch(e){}
-    }
-    return null;
-  }
-  async function loadCatalogs(){
-    const fromLS = readLS();
-    if(fromLS) return fromLS;
-    const [fam,mat,fin,tip] = await Promise.all([
-      fetch(PATHS.famiglie).then(r=>r.json()),
-      fetch(PATHS.materiali).then(r=>r.json()),
-      fetch(PATHS.finiture).then(r=>r.json()),
-      fetch(PATHS.tipi).then(r=>r.json())
-    ]);
-    return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
-  }
-
-  const pad = (n, w)=> String(Math.max(0, +n|0)).padStart(w,'0');
-  const $ = s => document.querySelector(s);
-
-  let catalogs = {famiglie:[],materiali:[],finiture:[],tipi:[]};
-  let famSel = null;
-
-  function fillSelect(sel, items){
-    sel.innerHTML = '<option value=""></option>' + items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
-  }
-  function fillSimple(sel, items){
-    sel.innerHTML = '<option value=""></option>' + items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
-  }
-
-  function applyFamFlags(){
-    const fcode = $('#selFamiglia').value;
-    famSel = catalogs.famiglie.find(f=>f.code===fcode) || null;
-    const flags = famSel || {D:false,L:false,H:false,Sp:false,mat:false,fin:false,tok:false};
-
-    $('#chkD').disabled = !flags.D; if(!flags.D) $('#chkD').checked=false;
-    $('#chkL').disabled = !flags.L; if(!flags.L) $('#chkL').checked=false;
-    $('#chkH').disabled = !flags.H; if(!flags.H) $('#chkH').checked=false;
-    $('#chkSp').disabled= !flags.Sp; if(!flags.Sp) $('#chkSp').checked=false;
-    $('#chkMat').disabled=!flags.mat; if(!flags.mat) $('#chkMat').checked=false;
-    $('#chkFin').disabled=!flags.fin; if(!flags.fin) $('#chkFin').checked=false;
-    $('#chkTok').disabled=!flags.tok; if(!flags.tok) $('#chkTok').checked=false;
-
-    render();
-  }
-
-  // descrizione compatta: Famiglia (label), Tipo (codice), Ø/L/H/Sp, Materiale (codice), Finitura (codice), Token (valore)
-  function makeDescriptionCompact(inc){
-    const parts = [];
-    if (famSel && famSel.label) parts.push(famSel.label);
-    const tipoCode = ($('#selTipo').value || '').trim().toUpperCase();
-    if (inc.tipo && tipoCode) parts.push(tipoCode);
-    const Dval = +$('#inpD').value || 0, Lval = +$('#inpL').value || 0, Hval = +$('#inpH').value || 0, Spval = +$('#inpSp').value || 0;
-    if (inc.D  && Dval>0) parts.push('Ø', String(Dval));
-    if (inc.L  && Lval>0) parts.push('L', String(Lval));
-    if (inc.H  && Hval>0) parts.push('H', String(Hval));
-    if (inc.Sp && Spval>0) parts.push('Sp', String(Spval), 'mm');
-    const matCode = ($('#selMateriale').value || '').trim().toUpperCase();
-    const finCode = ($('#selFinitura').value  || '').trim().toUpperCase();
-    if (inc.mat && matCode) parts.push(matCode);
-    if (inc.fin && finCode) parts.push(finCode);
-    const tokVal = ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);
-    if (inc.tok && tokVal) parts.push(tokVal);
-    return parts.join(' ').replace(/\s+/g,' ').trim();
-  }
-
-  function render(){
-    const fam = $('#selFamiglia').value || '';
-    const tipo = $('#selTipo').value || '';
-
-    const inc = {
-      fam:true,
-      tipo: $('#chkTipo').checked,
-      D:    $('#chkD').checked,
-      L:    $('#chkL').checked,
-      H:    $('#chkH').checked,
-      Sp:   $('#chkSp').checked,
-      mat:  $('#chkMat').checked,
-      fin:  $('#chkFin').checked,
-      tok:  $('#chkTok').checked,
-    };
-
-    const vals = {
-      D: pad($('#inpD').value,3),
-      L: pad($('#inpL').value,4),
-      H: pad($('#inpH').value,4),
-      Sp: pad($('#inpSp').value,3),
-      mat: $('#selMateriale').value || '000',
-      fin: $('#selFinitura').value || '000',
-      tok: ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5) || '000'
-    };
-
-    const parts = [];
-    parts.push(fam || '---');
-    parts.push(inc.tipo ? (tipo || '---') : '000');
-    parts.push(inc.D   ? `D${vals.D}` : '000');
-    parts.push(inc.L   ? `L${vals.L}` : '000');
-    parts.push(inc.H   ? `H${vals.H}` : '000');
-    parts.push(inc.Sp  ? `S${vals.Sp}`: '000');
-    parts.push(inc.mat ? vals.mat     : '000');
-    parts.push(inc.fin ? vals.fin     : '000');
-    parts.push(inc.tok ? vals.tok     : '000');
-
-    const sc = parts.join('-');
-    $('#outCode').value = sc;
-
-    const desc = makeDescriptionCompact(inc);
-    $('#outDesc').value = desc;
-    $('#outFolder').value = desc ? `${sc} — ${desc}` : sc;
-  }
-
-  function attach(){
-    document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input', render));
-    document.getElementById('selFamiglia').addEventListener('change', applyFamFlags);
-    document.querySelectorAll('[data-copy]').forEach(b=>{
-      b.addEventListener('click', ()=>{
-        const inp = document.querySelector(b.getAttribute('data-copy'));
-        inp.select(); document.execCommand('copy');
-      });
+    /* ===== Tema chiaro/scuro ===== */
+    const THEME_KEY='tc.theme';
+    const setTheme = t => document.documentElement.setAttribute('data-theme', t);
+    (function(){ setTheme(localStorage.getItem(THEME_KEY) || 'dark'); })();
+    document.getElementById('themeToggle').addEventListener('click', ()=>{
+      const curr = document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+      const next = curr==='light' ? 'dark' : 'light';
+      setTheme(next); localStorage.setItem(THEME_KEY, next);
     });
-  }
 
-  async function init(){
-    const cats = await loadCatalogs();
-    catalogs = cats;
-    fillSelect(document.getElementById('selFamiglia'), cats.famiglie);
-    fillSimple(document.getElementById('selMateriale'), cats.materiali);
-    fillSimple(document.getElementById('selFinitura'), cats.finiture);
-    fillSimple(document.getElementById('selTipo'), cats.tipi);
-    applyFamFlags();
-  }
+    /* ===== Badge versione auto da GitHub + click per aggiornare ===== */
+    function guessRepo(){
+      const host = location.hostname;                 // es. gtr2500.github.io
+      const owner = host.split('.')[0];               // gtr2500
+      const path = location.pathname.split('/').filter(Boolean);
+      const repo  = path[0] || 'CoderSmart';          // cartella progetto pages
+      const branch = 'main';
+      return { owner, repo, branch };
+    }
+    const OV_KEYS = [
+      'scm.catalogs.override','scm:catalogsOverride',
+      'scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
+    ];
+    function clearLocalOverrides(){ OV_KEYS.forEach(k=>localStorage.removeItem(k)); }
+    async function clearHttpCaches(){
+      if(!('caches' in window)) return;
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k=>caches.delete(k)));
+    }
+    async function loadVersionBadge(){
+      const badge = document.getElementById('buildBadge');
+      if(!badge) return;
+      badge.textContent = 'Verifica aggiornamenti…';
+      try{
+        const {owner, repo, branch} = guessRepo();
+        const url = `https://api.github.com/repos/${owner}/${repo}/commits?sha=${branch}&per_page=1`;
+        const resp = await fetch(url, {headers:{'Accept':'application/vnd.github+json'}});
+        if(resp.ok){
+          const arr = await resp.json();
+          if(Array.isArray(arr) && arr.length){
+            const sha = (arr[0].sha||'').slice(0,7);
+            const iso = arr[0].commit?.committer?.date || arr[0].commit?.author?.date || new Date().toISOString();
+            const d   = new Date(iso);
+            const dataIT = d.toLocaleDateString('it-IT');
+            const oraIT  = d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+            const version = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${sha}`;
+            badge.textContent = `Ultimo agg.: ${dataIT} ${oraIT} • ${sha}`;
+            badge.dataset.version = version;
+            badge.addEventListener('click', async ()=>{
+              const ok = confirm('Aggiornare alla versione più recente?\nQuesto cancellerà i dati salvati in locale (override) e pulirà la cache.\nProcedere?');
+              if(!ok) return;
+              try{ clearLocalOverrides(); await clearHttpCaches(); }catch(e){}
+              const v = badge.dataset.version || Date.now();
+              const base = location.pathname.split('?')[0];
+              const qs = location.search && !location.search.includes('v=') ? location.search + '&' : '?';
+              location.replace(base + qs + 'v=' + v);
+            });
+            return;
+          }
+        }
+      }catch(e){}
+      // fallback
+      badge.textContent = 'Ultimo agg.: ' + new Date(document.lastModified).toLocaleString('it-IT');
+    }
+    loadVersionBadge();
 
-  attach(); init();
+    /* ===== Generatore ===== */
+
+    // 1) Cataloghi (override locale oppure file assets/data)
+    const STORAGE_KEYS = [
+      'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
+    ];
+    const PATHS = {
+      famiglie:'assets/data/famiglie.json',
+      materiali:'assets/data/materiali.json',
+      finiture:'assets/data/finiture.json',
+      tipi:'assets/data/tipi.json'
+    };
+    const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
+    const canonFam = x => ({
+      code:(x.code||'').trim().toUpperCase(),
+      label:x.label||'',
+      D:toBool(x.D??x.useD??x.d),
+      L:toBool(x.L??x.useL??x.l),
+      H:toBool(x.H??x.useH??x.h),
+      Sp:toBool(x.Sp??x.useSp??x.sp),
+      mat:toBool(x.mat??x.hasMaterial??x.material),
+      fin:toBool(x.fin??x.hasFinish??x.finish),
+      tok:toBool(x.tok??x.useTokens??x.tokens)
+    });
+    const canonSimple = x => ({code:(x.code||'').trim().toUpperCase(),label:x.label||''});
+    function canonize(obj){
+      return {
+        famiglie:(obj.famiglie||[]).map(canonFam),
+        materiali:(obj.materiali||[]).map(canonSimple),
+        finiture:(obj.finiture||[]).map(canonSimple),
+        tipi:(obj.tipi||[]).map(canonSimple)
+      };
+    }
+    function readLS(){
+      for(const k of STORAGE_KEYS){
+        const raw=localStorage.getItem(k);
+        if(!raw) continue;
+        try{
+          const j=JSON.parse(raw);
+          if(j && j.famiglie && j.materiali && j.finiture && j.tipi) return canonize(j);
+        }catch(e){}
+      }
+      return null;
+    }
+    async function loadCatalogs(){
+      const fromLS = readLS();
+      if(fromLS) return fromLS;
+      const [fam,mat,fin,tip] = await Promise.all([
+        fetch(PATHS.famiglie).then(r=>r.json()),
+        fetch(PATHS.materiali).then(r=>r.json()),
+        fetch(PATHS.finiture).then(r=>r.json()),
+        fetch(PATHS.tipi).then(r=>r.json())
+      ]);
+      return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
+    }
+
+    // 2) Utility UI
+    const $ = s => document.querySelector(s);
+    const pad = (n, w)=> String(Math.max(0, +n|0)).padStart(w,'0');
+
+    let catalogs = {famiglie:[],materiali:[],finiture:[],tipi:[]};
+    let famSel = null;
+
+    function fillSelect(sel, items){
+      sel.innerHTML = '<option value=""></option>' +
+        items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
+    }
+
+    function applyFamFlags(){
+      const fcode = $('#selFamiglia').value;
+      famSel = catalogs.famiglie.find(f=>f.code===fcode) || null;
+      const flags = famSel || {D:false,L:false,H:false,Sp:false,mat:false,fin:false,tok:false};
+
+      $('#chkD').disabled=!flags.D; if(!flags.D) $('#chkD').checked=false;
+      $('#chkL').disabled=!flags.L; if(!flags.L) $('#chkL').checked=false;
+      $('#chkH').disabled=!flags.H; if(!flags.H) $('#chkH').checked=false;
+      $('#chkSp').disabled=!flags.Sp; if(!flags.Sp) $('#chkSp').checked=false;
+      $('#chkMat').disabled=!flags.mat; if(!flags.mat) $('#chkMat').checked=false;
+      $('#chkFin').disabled=!flags.fin; if(!flags.fin) $('#chkFin').checked=false;
+      $('#chkTok').disabled=!flags.tok; if(!flags.tok) $('#chkTok').checked=false;
+
+      render();
+    }
+
+    // Descrizione compatta: Famiglia (label) + TIPO (sigla) + Ø/L/H/Sp + Materiale (sigla) + Finitura (sigla) + Token (valore)
+    function makeDescriptionCompact(inc){
+      const parts = [];
+      if (famSel && famSel.label) parts.push(famSel.label);
+      const tipoCode = ($('#selTipo').value || '').trim().toUpperCase();
+      if (inc.tipo && tipoCode) parts.push(tipoCode);
+
+      const Dv = +$('#inpD').value || 0;
+      const Lv = +$('#inpL').value || 0;
+      const Hv = +$('#inpH').value || 0;
+      const Sv = +$('#inpSp').value || 0;
+
+      if (inc.D  && Dv>0) parts.push('Ø', String(Dv));
+      if (inc.L  && Lv>0) parts.push('L', String(Lv));
+      if (inc.H  && Hv>0) parts.push('H', String(Hv));
+      if (inc.Sp && Sv>0) parts.push('Sp', String(Sv), 'mm');
+
+      const matCode = ($('#selMateriale').value || '').trim().toUpperCase();
+      const finCode = ($('#selFinitura').value  || '').trim().toUpperCase();
+      if (inc.mat && matCode) parts.push(matCode);
+      if (inc.fin && finCode) parts.push(finCode);
+
+      const tokVal = ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);
+      if (inc.tok && tokVal) parts.push(tokVal);
+
+      return parts.join(' ').replace(/\s+/g,' ').trim();
+    }
+
+    // 3) Render ShortCode + Descrizione + Nome cartella
+    function render(){
+      const fam  = $('#selFamiglia').value || '';
+      const tipo = $('#selTipo').value || '';
+
+      const inc = {
+        fam:true,
+        tipo: $('#chkTipo').checked,
+        D:    $('#chkD').checked,
+        L:    $('#chkL').checked,
+        H:    $('#chkH').checked,
+        Sp:   $('#chkSp').checked,
+        mat:  $('#chkMat').checked,
+        fin:  $('#chkFin').checked,
+        tok:  $('#chkTok').checked,
+      };
+
+      const vals = {
+        D: pad($('#inpD').value,3),
+        L: pad($('#inpL').value,4),
+        H: pad($('#inpH').value,4),
+        Sp: pad($('#inpSp').value,3),
+        mat: $('#selMateriale').value || '000',
+        fin: $('#selFinitura').value  || '000',
+        tok: ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5) || '000'
+      };
+
+      const parts = [];
+      parts.push(fam || '---');
+      parts.push(inc.tipo ? (tipo || '---') : '000');
+      parts.push(inc.D   ? `D${vals.D}` : '000');
+      parts.push(inc.L   ? `L${vals.L}` : '000');
+      parts.push(inc.H   ? `H${vals.H}` : '000');
+      parts.push(inc.Sp  ? `S${vals.Sp}`: '000');
+      parts.push(inc.mat ? vals.mat     : '000');
+      parts.push(inc.fin ? vals.fin     : '000');
+      parts.push(inc.tok ? vals.tok     : '000');
+
+      const sc = parts.join('-');
+      $('#outCode').value = sc;
+
+      const desc = makeDescriptionCompact(inc);
+      $('#outDesc').value = desc;
+      $('#outFolder').value = desc ? `${sc} — ${desc}` : sc;
+    }
+
+    // 4) Attach eventi
+    function attach(){
+      document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input', render));
+      document.getElementById('selFamiglia').addEventListener('change', applyFamFlags);
+      document.querySelectorAll('[data-copy]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const inp = document.querySelector(b.getAttribute('data-copy'));
+          inp.select(); document.execCommand('copy');
+        });
+      });
+    }
+
+    // 5) Init
+    async function init(){
+      const cats = await loadCatalogs();
+      catalogs = cats;
+      fillSelect(document.getElementById('selFamiglia'), cats.famiglie);
+      fillSelect(document.getElementById('selMateriale'), cats.materiali);
+      fillSelect(document.getElementById('selFinitura'),  cats.finiture);
+      fillSelect(document.getElementById('selTipo'),      cats.tipi);
+      applyFamFlags();
+    }
+
+    attach(); init();
   </script>
 </body>
 </html>
