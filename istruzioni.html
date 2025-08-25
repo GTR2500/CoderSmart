@@ -5,42 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tecnical Coder — Istruzioni</title>
   <link rel="stylesheet" href="assets/styles.css" />
-  <style>
-    :root{ --bg:#0f1115; --panel:#111827; --panel2:#0f1623; --line:#2a2f3a; --text:#e6e6e6; --muted:#9aa4b2; --accent:#3b82f6; --ok:#22c55e; --warn:#f59e0b; --err:#ef4444; }
-    *{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-    body{margin:0;background:var(--bg);color:var(--text)}
-    .bar{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center}
-    nav{margin-left:auto;display:flex;gap:8px}
-    nav a{color:#cbd5e1;text-decoration:none;background:#111827;border:1px solid #2a2f3a;padding:6px 10px;border-radius:8px}
-    nav a.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
-    main{max-width:1000px;margin:0 auto;padding:20px}
-    .card{background:#111827;border:1px solid #2a2f3a;border-radius:12px;padding:16px;margin:14px 0}
-    h2{font-size:20px;margin:0 0 10px}
-    h3{font-size:16px;margin:14px 0 8px}
-    .lead{color:#cbd5e1}
-    ul,ol{margin:8px 0 8px 18px}
-    .note{font-size:13px;color:#9aa4b2}
-    .kbd{display:inline-block;border:1px solid #344155;border-radius:6px;padding:2px 6px;background:#0b1220;color:#e5e7eb}
-    .pill{display:inline-flex;align-items:center;gap:8px;background:#0b1220;border:1px solid #2a2f3a;padding:8px 10px;border-radius:999px}
-    .toc a{display:block;padding:6px 0;color:#cbd5e1;text-decoration:none}
-    .toc a:hover{color:#fff}
-    .callout{border-left:4px solid var(--accent);padding:10px 12px;background:#0b1220;border-radius:6px;margin:10px 0}
-    .ok{border-left-color:var(--ok)} .warn{border-left-color:var(--warn)} .err{border-left-color:var(--err)}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width: 760px){ .grid2{grid-template-columns:1fr} }
-    .footer{margin-top:18px;font-size:12px;color:#9aa4b2}
-  </style>
 </head>
 <body>
 
-  <!-- Header con logo + titolo -->
+  <!-- Header -->
   <header class="app-header">
     <a class="brand" href="https://www.glcgrimaldelli.com" target="_blank" rel="noopener">
-      <img class="brand-logo"
-           src="https://www.glcgrimaldelli.com/wp-content/uploads/2019/06/Logo-Sottopagine.jpg"
-           alt="Grimaldelli s.r.l." />
+      <img class="brand-logo" src="https://www.glcgrimaldelli.com/wp-content/uploads/2019/06/Logo-Sottopagine.jpg" alt="Grimaldelli s.r.l." />
     </a>
     <h1 class="brand-title">Tecnical Coder</h1>
+    <button id="themeToggle" class="theme-toggle" title="Cambia tema">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
   </header>
 
   <!-- Nav -->
@@ -55,34 +32,38 @@
   </div>
 
   <main>
-    <!-- (Mantieni qui il contenuto delle istruzioni già preparato) -->
-    <div class="card">
-      <p class="lead">
-        Questa pagina spiega come usare l’app, anche senza competenze tecniche.  
-        Il flusso di lavoro è sempre lo stesso:
-      </p>
+    <section class="card">
+      <h2>Benvenuto</h2>
+      <p>Questa pagina spiega come usare l’app. Il flusso:</p>
       <ol>
-        <li><b>Compila/aggiorna i cataloghi</b> in <a href="dati.html">Dati</a> (Famiglie, Materiali, Finiture, Tipi).</li>
-        <li><b>Genera il codice</b> in <a href="index.html">Generatore</a> scegliendo i valori.</li>
-        <li><b>Copia</b> ShortCode, nome cartella, nome file e descrizione.</li>
+        <li>Compila/aggiorna i cataloghi in <a href="dati.html">Dati</a>.</li>
+        <li>Genera il codice in <a href="index.html">Generatore</a>.</li>
+        <li>Copia i tre output.</li>
       </ol>
-    </div>
+    </section>
 
-    <!-- … (segue il resto delle tue sezioni: indice, dettagli, FAQ, glossario) … -->
-
-    <div class="footer">
-      Suggerimento: aggiungi questa pagina ai preferiti del browser per una consultazione veloce.
-    </div>
+    <!-- Inserisci qui le tue altre sezioni/FAQ già preparate -->
   </main>
 
-  <!-- Footer firmato -->
+  <!-- Footer -->
   <footer class="app-footer">
     <div class="footer-inner">
-      <span class="signature">Manuel Zago</span>
-      <span class="sep"> — </span>
       <span class="product">&copy; Tecnical Coder</span>
       <span class="for"> per Grimaldelli s.r.l.</span>
+      <span class="sep"> — </span>
+      <span class="signature">Manuel Zago</span>
     </div>
   </footer>
+
+  <script>
+    const THEME_KEY='tc.theme';
+    const setTheme = t => document.documentElement.setAttribute('data-theme', t);
+    (function(){ setTheme(localStorage.getItem(THEME_KEY) || 'dark'); })();
+    document.getElementById('themeToggle').addEventListener('click', ()=>{
+      const curr = document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+      const next = curr==='light' ? 'dark' : 'light';
+      setTheme(next); localStorage.setItem(THEME_KEY, next);
+    });
+  </script>
 </body>
 </html>
