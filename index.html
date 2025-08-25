@@ -219,37 +219,42 @@ function applyFamFlags(){
   render();
 }
 
-function makeDescription(inc){
-  const famLabel = famSel ? famSel.label : '';
-  const tipoLabel = (catalogs.tipi.find(t=>t.code===$('#selTipo').value)||{}).label || '';
+/* === Nuova costruzione descrizione compatta ================================
+   Formato: [Famiglia label] [Tipo codice] [Ø D] [L] [H] [Sp mm] [Mat codice] [Fin codice] [Token]
+   Solo se flag attivo + dato presente.
+============================================================================ */
+function makeDescriptionCompact(inc){
+  const parts = [];
 
-  const head = [];
-  if (famLabel) head.push(famLabel);
-  if (inc.tipo && tipoLabel) head.push(tipoLabel);
-  const headStr = head.join(' — ');
+  // Famiglia (label completa)
+  if (famSel && famSel.label) parts.push(famSel.label);
 
-  const details = [];
+  // Tipo (solo codice)
+  const tipoCode = ($('#selTipo').value || '').trim().toUpperCase();
+  if (inc.tipo && tipoCode) parts.push(tipoCode);
+
+  // Dimensioni
   const Dval = +$('#inpD').value || 0;
   const Lval = +$('#inpL').value || 0;
   const Hval = +$('#inpH').value || 0;
   const Spval = +$('#inpSp').value || 0;
 
-  if (inc.D  && Dval>0) details.push(`Ø ${Dval}`);
-  if (inc.L  && Lval>0) details.push(`L ${Lval}`);
-  if (inc.H  && Hval>0) details.push(`H ${Hval}`);
-  if (inc.Sp && Spval>0) details.push(`Sp ${Spval} mm`);
+  if (inc.D  && Dval>0) parts.push('Ø', String(Dval));
+  if (inc.L  && Lval>0) parts.push('L', String(Lval));
+  if (inc.H  && Hval>0) parts.push('H', String(Hval));
+  if (inc.Sp && Spval>0) parts.push('Sp', String(Spval), 'mm');
 
-  const matLabel = (catalogs.materiali.find(m=>m.code===$('#selMateriale').value)||{}).label || '';
-  const finLabel = (catalogs.finiture.find(f=>f.code===$('#selFinitura').value)||{}).label || '';
-  const tokVal   = ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);
+  // Materiale e Finitura (solo codice dai select)
+  const matCode = ($('#selMateriale').value || '').trim().toUpperCase();
+  const finCode = ($('#selFinitura').value  || '').trim().toUpperCase();
+  if (inc.mat && matCode) parts.push(matCode);
+  if (inc.fin && finCode) parts.push(finCode);
 
-  if (inc.mat && matLabel) details.push(matLabel);
-  if (inc.fin && finLabel) details.push(finLabel);
-  if (inc.tok && tokVal)   details.push(`Token ${tokVal}`);
+  // Token (solo valore)
+  const tokVal = ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);
+  if (inc.tok && tokVal) parts.push(tokVal);
 
-  if (!headStr && details.length===0) return '';
-  return headStr ? (details.length ? `${headStr} — ${details.join(' ')}` : headStr)
-                 : details.join(' ');
+  return parts.join(' ').replace(/\s+/g,' ').trim();
 }
 
 function render(){
@@ -293,8 +298,8 @@ function render(){
   const sc = parts.join('-');
   $('#outCode').value = sc;
 
-  // Descrizione
-  const desc = makeDescription(inc);
+  // Descrizione compatta
+  const desc = makeDescriptionCompact(inc);
   $('#outDesc').value = desc;
 
   // Nome cartella = ShortCode — Descrizione
