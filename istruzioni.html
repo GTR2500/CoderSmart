@@ -5,10 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tecnical Coder — Istruzioni</title>
   <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    main{max-width:1000px;margin:0 auto;padding:20px}
+    .card h2{margin:0 0 10px}
+    .card h3{margin:14px 0 8px}
+    ul,ol{margin:8px 0 8px 18px}
+  </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- HEADER -->
   <header class="app-header">
     <a class="brand" href="https://www.glcgrimaldelli.com" target="_blank" rel="noopener">
       <img class="brand-logo" src="https://www.glcgrimaldelli.com/wp-content/uploads/2019/06/Logo-Sottopagine.jpg" alt="Grimaldelli s.r.l." />
@@ -20,7 +26,7 @@
     </button>
   </header>
 
-  <!-- Nav -->
+  <!-- NAV -->
   <div class="subnav">
     <div class="bar">
       <nav>
@@ -33,19 +39,55 @@
 
   <main>
     <section class="card">
-      <h2>Benvenuto</h2>
-      <p>Questa pagina spiega come usare l’app. Il flusso:</p>
+      <h2>Come si usa</h2>
       <ol>
-        <li>Compila/aggiorna i cataloghi in <a href="dati.html">Dati</a>.</li>
-        <li>Genera il codice in <a href="index.html">Generatore</a>.</li>
-        <li>Copia i tre output.</li>
+        <li>Apri <b>Dati</b> e compila/aggiorna i 4 cataloghi: <i>Famiglie, Materiali, Finiture, Tipi</i>.
+          <ul>
+            <li><b>Salva</b> memorizza in locale (browser). </li>
+            <li><b>Reset default</b> ricarica i file in <code>assets/data/</code>.</li>
+            <li><b>Esporta/Importa JSON</b> per backup o condivisione.</li>
+            <li><b>Salva su GitHub</b> (con PAT) aggiorna i file nel repo.</li>
+          </ul>
+        </li>
+        <li>Vai su <b>Generatore</b>, scegli i valori:
+          <ul>
+            <li>Le caselle D/L/H/Sp/Mat/Fin/Tok sono abilitate in base alla <i>Famiglia</i>.</li>
+            <li>Solo i campi spuntati entrano nello ShortCode (gli altri diventano <code>000</code>).</li>
+          </ul>
+        </li>
+        <li>Copia gli output:
+          <ul>
+            <li><b>ShortCode (auto)</b> – solo codice.</li>
+            <li><b>Descrizione (auto)</b> – formato compatto come richiesto.</li>
+            <li><b>Nome cartella (auto)</b> – ShortCode + descrizione.</li>
+          </ul>
+        </li>
       </ol>
     </section>
 
-    <!-- Inserisci qui le tue altre sezioni/FAQ già preparate -->
+    <section class="card">
+      <h2>Struttura codice</h2>
+      <p><b>FAM-TIPO-D3-L4-H4-S3-MAT-FIN-TOK</b> — i campi non inclusi diventano <b>000</b>.</p>
+      <ul>
+        <li><b>FAM</b>: codice famiglia (es. ARG)</li>
+        <li><b>TIPO</b>: codice tipo (es. TUB)</li>
+        <li><b>D3/L4/H4/S3</b>: misure con padding (es. D050, L0050)</li>
+        <li><b>MAT/FIN</b>: codici (es. S235, V)</li>
+        <li><b>TOK</b>: fino a 5 caratteri alfanumerici</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Consigli</h2>
+      <ul>
+        <li>Usa codici brevi e univoci.</li>
+        <li>Valida prima di salvare su GitHub.</li>
+        <li>Fai un export JSON periodico per backup.</li>
+      </ul>
+    </section>
   </main>
 
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer class="app-footer">
     <div class="footer-inner">
       <span class="product">&copy; Tecnical Coder</span>
