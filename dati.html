@@ -142,20 +142,20 @@
 </main>
 
 <script type="module">
-import { loadCatalogs } from './assets/loader.js';
+import { loadCatalogs } from './assets/data/loader.js';  // << path corretto
 
 const STORAGE_KEYS = [
   'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
 ];
 
-let data = { famiglie:[], materiali:[], finiture:[], tipi:[] }; // interno (useD/useL/…)
+let data = { famiglie:[], materiali:[], finiture:[], tipi:[] };
 
 const $ = s => document.querySelector(s);
 const el = (t,p={}) => Object.assign(document.createElement(t), p);
 const setMsg = (m) => $('#statusMsg').textContent = m;
 
 const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
-const canonFromAny = f => ({ // canonico
+const canonFromAny = f => ({
   code:(f.code||'').trim().toUpperCase(),
   label:f.label||'',
   D:toBool(f.D??f.useD??f.d), L:toBool(f.L??f.useL??f.l), H:toBool(f.H??f.useH??f.h), Sp:toBool(f.Sp??f.useSp??f.sp),
@@ -171,10 +171,7 @@ function saveToLS(canon){
   for(const k of STORAGE_KEYS) localStorage.setItem(k, raw);
 }
 function removeLS(){ for(const k of STORAGE_KEYS) localStorage.removeItem(k); }
-async function loadDefaults(){
-  const canon = await loadCatalogs(); // loader già normalizza
-  return canon;
-}
+async function loadDefaults(){ return await loadCatalogs(); }
 function toCanonical(){
   return {
     famiglie: data.famiglie.map(f => canonFromAny({code:f.code,label:f.label,D:f.useD,L:f.useL,H:f.useH,Sp:f.useSp,mat:f.hasMaterial,fin:f.hasFinish,tok:f.useTokens})),
@@ -184,7 +181,7 @@ function toCanonical(){
   };
 }
 
-// UI render
+// UI
 function renderAll(){ renderFam(); renderSimple('materiali','#tbodyMat'); renderSimple('finiture','#tbodyFin'); renderSimple('tipi','#tbodyTip'); }
 function renderFam(){
   const tb = $('#tbodyFam'); tb.innerHTML='';
@@ -212,7 +209,7 @@ function renderSimple(key, tbSel){
   });
 }
 
-// Events
+// Actions
 $('#addFam').onclick=()=>{data.famiglie.push({code:'',label:'',useD:false,useL:false,useH:false,useSp:false,hasMaterial:false,hasFinish:false,useTokens:false}); renderFam();}
 $('#addMat').onclick=()=>{data.materiali.push({code:'',label:''}); renderSimple('materiali','#tbodyMat');}
 $('#addFin').onclick=()=>{data.finiture.push({code:'',label:''}); renderSimple('finiture','#tbodyFin');}
@@ -229,11 +226,10 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelect
 
 // GitHub helpers
 function guessRepo(){
-  // es: https://gtr2500.github.io/CoderSmart/dati.html
-  const host = location.hostname;              // gtr2500.github.io
-  const owner = host.split('.')[0];            // gtr2500
+  const host = location.hostname;              // es: gtr2500.github.io
+  const owner = host.split('.')[0];
   const path = location.pathname.split('/').filter(Boolean);
-  const repo  = path[0] || 'CoderSmart';       // CoderSmart
+  const repo  = path[0] || 'CoderSmart';
   const branch = 'main';
   return {owner, repo, branch};
 }
@@ -241,13 +237,14 @@ function b64(s){ return btoa(unescape(encodeURIComponent(s))); }
 
 $('#btnOpenGH').onclick=()=>{
   const {owner,repo,branch} = guessRepo();
-  const files = ['famiglie.json','materiali.json','finiture.json','tipi.json'].map(f=>`https://github.com/${owner}/${repo}/edit/${branch}/assets/data/${f}`);
-  files.forEach(u=>window.open(u,'_blank'));
+  ['famiglie.json','materiali.json','finiture.json','tipi.json']
+    .map(f=>`https://github.com/${owner}/${repo}/edit/${branch}/assets/data/${f}`)
+    .forEach(u=>window.open(u,'_blank'));
   setMsg('Aperte le pagine di editing su GitHub.');
 };
 
 $('#btnSaveGH').onclick=async()=>{
-  const token = prompt('Inserisci un GitHub Personal Access Token (permesso: Contents RW sul repo). Non verrà salvato.');
+  const token = prompt('Inserisci un GitHub Personal Access Token (Contents RW solo su questo repo).');
   if(!token) return;
   const {owner,repo,branch} = guessRepo();
   const canon = toCanonical();
@@ -259,7 +256,6 @@ $('#btnSaveGH').onclick=async()=>{
   };
   try{
     for(const [path,content] of Object.entries(payloads)){
-      // prendi sha file
       const info = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,{
         headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`}
       }).then(r=>r.ok?r.json():null);
@@ -267,12 +263,7 @@ $('#btnSaveGH').onclick=async()=>{
       const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
         method:'PUT',
         headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`},
-        body: JSON.stringify({
-          message:`Update ${path} from dati.html`,
-          content:b64(content),
-          branch,
-          sha
-        })
+        body: JSON.stringify({ message:`Update ${path} from dati.html`, content:b64(content), branch, sha })
       });
       if(!res.ok) throw new Error(`GitHub API error su ${path}`);
     }
