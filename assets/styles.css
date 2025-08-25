@@ -143,3 +143,16 @@ tbody td:last-child{border-right:1px solid var(--line);border-top-right-radius:1
 /* Helpers */
 .hidden{display:none}
 .note{font-size:13px;color:var(--muted);margin-top:6px}
+
+/* mini selettore vicino al campo D */
+.inline{display:flex; gap:8px; align-items:center}
+.mini{
+  min-width:56px;
+  padding:6px 8px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--text);
+  border-radius:10px;
+  height:36px;
+}
+
