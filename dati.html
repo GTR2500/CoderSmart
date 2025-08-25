@@ -9,24 +9,33 @@
     main{max-width:1200px;margin:0 auto;padding:20px}
     .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
     .btn{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:8px 12px;border-radius:10px;font-size:14px;cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
     .spacer{flex:1}
+    .row-actions{display:flex;gap:8px}
+    input[type="checkbox"]{transform:translateY(2px)}
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- ===== HEADER ===== -->
   <header class="app-header">
     <a class="brand" href="https://www.glcgrimaldelli.com" target="_blank" rel="noopener">
       <img class="brand-logo" src="https://www.glcgrimaldelli.com/wp-content/uploads/2019/06/Logo-Sottopagine.jpg" alt="Grimaldelli s.r.l." />
     </a>
+
     <h1 class="brand-title">Tecnical Coder</h1>
+
+    <!-- Badge versione + toggle tema -->
+    <div id="buildBadge" class="build-badge" title="Ultimo aggiornamento"></div>
     <button id="themeToggle" class="theme-toggle" title="Cambia tema">
+      <!-- Sole -->
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <!-- Luna -->
       <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
   </header>
 
-  <!-- NAV -->
+  <!-- ===== NAV ===== -->
   <div class="subnav">
     <div class="bar">
       <nav>
@@ -38,7 +47,7 @@
   </div>
 
   <main>
-    <!-- Toolbar -->
+    <!-- Toolbar principale -->
     <div class="toolbar">
       <button class="btn" onclick="history.back()">← Indietro</button>
       <div class="spacer"></div>
@@ -51,6 +60,7 @@
       <input id="fileImport" type="file" accept="application/json" class="hidden" />
     </div>
 
+    <!-- Toolbar GitHub -->
     <div class="toolbar">
       <button class="btn" id="btnOpenGH">Apri editor GitHub</button>
       <button class="btn" id="btnSaveGH">Salva su GitHub (API)</button>
@@ -66,7 +76,7 @@
       </nav>
     </div>
 
-    <!-- Pannelli -->
+    <!-- Pannello FAMIGLIE -->
     <section id="view-famiglie" class="panel">
       <div style="display:flex;gap:8px;margin:8px 0 12px">
         <button class="btn" id="addFam">+ Aggiungi famiglia</button>
@@ -92,10 +102,11 @@
       <div class="note" id="statusFam"></div>
     </section>
 
+    <!-- Pannello MATERIALI -->
     <section id="view-materiali" class="panel hidden">
       <div style="display:flex;gap:8px;margin:8px 0 12px">
         <button class="btn" id="addMat">+ Aggiungi materiale</button>
-        <span class="note">Esempi: S235, S355, AISI 304…</span>
+        <span class="note">Esempi: S235, S355, AISI304…</span>
       </div>
       <table>
         <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
@@ -103,10 +114,11 @@
       </table>
     </section>
 
+    <!-- Pannello FINITURE -->
     <section id="view-finiture" class="panel hidden">
       <div style="display:flex;gap:8px;margin:8px 0 12px">
         <button class="btn" id="addFin">+ Aggiungi finitura</button>
-        <span class="note">Esempi: GREZ, VERN, ZINC…</span>
+        <span class="note">Esempi: GR, V, ZINC…</span>
       </div>
       <table>
         <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
@@ -114,6 +126,7 @@
       </table>
     </section>
 
+    <!-- Pannello TIPI -->
     <section id="view-tipi" class="panel hidden">
       <div style="display:flex;gap:8px;margin:8px 0 12px">
         <button class="btn" id="addTip">+ Aggiungi tipo</button>
@@ -128,7 +141,7 @@
     <div class="note" id="statusMsg" style="margin-top:8px">Pronto.</div>
   </main>
 
-  <!-- FOOTER -->
+  <!-- ===== FOOTER ===== -->
   <footer class="app-footer">
     <div class="footer-inner">
       <span class="product">&copy; Tecnical Coder</span>
@@ -138,256 +151,333 @@
     </div>
   </footer>
 
+  <!-- ===== SCRIPT ===== -->
   <script>
-  /* ===== Tema ===== */
-  const THEME_KEY='tc.theme';
-  const setTheme = t => document.documentElement.setAttribute('data-theme', t);
-  (function(){ setTheme(localStorage.getItem(THEME_KEY) || 'dark'); })();
-  document.getElementById('themeToggle').addEventListener('click', ()=>{
-    const curr = document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
-    const next = curr==='light' ? 'dark' : 'light';
-    setTheme(next); localStorage.setItem(THEME_KEY, next);
-  });
-
-  /* ===== Cataloghi: override locale + default da assets/data ===== */
-  const STORAGE_KEYS = [
-    'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
-  ];
-  const PATHS = {
-    famiglie:'assets/data/famiglie.json',
-    materiali:'assets/data/materiali.json',
-    finiture:'assets/data/finiture.json',
-    tipi:'assets/data/tipi.json'
-  };
-  const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
-  const canonFam = x => ({
-    code:(x.code||'').trim().toUpperCase(),
-    label:x.label||'',
-    D:toBool(x.D??x.useD??x.d),
-    L:toBool(x.L??x.useL??x.l),
-    H:toBool(x.H??x.useH??x.h),
-    Sp:toBool(x.Sp??x.useSp??x.sp),
-    mat:toBool(x.mat??x.hasMaterial??x.material),
-    fin:toBool(x.fin??x.hasFinish??x.finish),
-    tok:toBool(x.tok??x.useTokens??x.tokens)
-  });
-  const canonSimple = x => ({code:(x.code||'').trim().toUpperCase(),label:x.label||''});
-  function canonize(obj){
-    return {
-      famiglie:(obj.famiglie||[]).map(canonFam),
-      materiali:(obj.materiali||[]).map(canonSimple),
-      finiture:(obj.finiture||[]).map(canonSimple),
-      tipi:(obj.tipi||[]).map(canonSimple)
-    };
-  }
-  function readLS(){
-    for(const k of STORAGE_KEYS){
-      const raw=localStorage.getItem(k);
-      if(!raw) continue;
-      try{ const j=JSON.parse(raw);
-        if(j && j.famiglie && j.materiali && j.finiture && j.tipi) return canonize(j);
-      }catch(e){}
-    }
-    return null;
-  }
-  async function loadCatalogs(){
-    const fromLS = readLS();
-    if(fromLS) return fromLS;
-    const [fam,mat,fin,tip] = await Promise.all([
-      fetch(PATHS.famiglie).then(r=>r.json()),
-      fetch(PATHS.materiali).then(r=>r.json()),
-      fetch(PATHS.finiture).then(r=>r.json()),
-      fetch(PATHS.tipi).then(r=>r.json())
-    ]);
-    return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
-  }
-  async function fetchDefaultsDirect(){
-    const [fam, mat, fin, tip] = await Promise.all([
-      fetch(PATHS.famiglie).then(r=>r.json()),
-      fetch(PATHS.materiali).then(r=>r.json()),
-      fetch(PATHS.finiture).then(r=>r.json()),
-      fetch(PATHS.tipi).then(r=>r.json()),
-    ]);
-    return { famiglie: fam, materiali: mat, finiture: fin, tipi: tip };
-  }
-  function saveOverrideCanonical(canon){
-    const raw = JSON.stringify(canon);
-    STORAGE_KEYS.forEach(k=>localStorage.setItem(k,raw));
-  }
-  function clearOverride(){ STORAGE_KEYS.forEach(k=>localStorage.removeItem(k)); }
-
-  let data = { famiglie:[], materiali:[], finiture:[], tipi:[] };
-
-  const $ = s => document.querySelector(s);
-  const el = (t,p={}) => Object.assign(document.createElement(t), p);
-  const setMsg = (m) => $('#statusMsg').textContent = m;
-
-  const canonFromAny = f => ({
-    code:(f.code||'').trim().toUpperCase(),
-    label:f.label||'',
-    D:!!(f.D??f.useD), L:!!(f.L??f.useL), H:!!(f.H??f.useH), Sp:!!(f.Sp??f.useSp),
-    mat:!!(f.mat??f.hasMaterial), fin:!!(f.fin??f.hasFinish), tok:!!(f.tok??f.useTokens)
-  });
-  const toInternal = canon => ({
-    famiglie:(canon.famiglie||[]).map(f=>({code:f.code,label:f.label,useD:f.D,useL:f.L,useH:f.H,useSp:f.Sp,hasMaterial:f.mat,hasFinish:f.fin,useTokens:f.tok})),
-    materiali:canon.materiali||[], finiture:canon.finiture||[], tipi:canon.tipi||[]
-  });
-  function toCanonical(){
-    return {
-      famiglie: data.famiglie.map(f => canonFromAny({code:f.code,label:f.label,D:f.useD,L:f.useL,H:f.useH,Sp:f.useSp,mat:f.hasMaterial,fin:f.hasFinish,tok:f.useTokens})),
-      materiali: data.materiali,
-      finiture: data.finiture,
-      tipi: data.tipi
-    };
-  }
-
-  function renderAll(){ renderFam(); renderSimple('materiali','#tbodyMat'); renderSimple('finiture','#tbodyFin'); renderSimple('tipi','#tbodyTip'); }
-  function renderFam(){
-    const tb = $('#tbodyFam'); tb.innerHTML='';
-    data.famiglie.forEach((row,idx)=>tb.appendChild(buildFamRow(row,idx)));
-    $('#statusFam').textContent = data.famiglie.length ? '' : 'Nessuna famiglia presente.';
-  }
-  function buildFamRow(row,idx){
-    const tr=el('tr');
-    const tdC=el('td'), tdL=el('td');
-    const inC=el('input',{type:'text',value:row.code}); inC.oninput=()=>row.code=inC.value.trim().toUpperCase(); tdC.appendChild(inC);
-    const inL=el('input',{type:'text',value:row.label}); inL.oninput=()=>row.label=inL.value; tdL.appendChild(inL);
-    const mk=(p)=>{const td=el('td'); const c=el('input',{type:'checkbox',checked:!!row[p]}); c.onchange=()=>row[p]=c.checked; td.appendChild(c); return td;}
-    const tdA=el('td'); const btn=el('button',{className:'btn',textContent:'Elimina'}); btn.onclick=()=>{ if(confirm('Eliminare?')){data.famiglie.splice(idx,1); renderFam();}}; tdA.appendChild(el('div',{className:'row-actions'})).appendChild(btn);
-    tr.append(tdC,tdL,mk('useD'),mk('useL'),mk('useH'),mk('useSp'),mk('hasMaterial'),mk('hasFinish'),mk('useTokens'),tdA);
-    return tr;
-  }
-  function renderSimple(key, tbSel){
-    const tb = document.querySelector(tbSel); tb.innerHTML='';
-    data[key].forEach((row,idx)=>{
-      const tr=el('tr');
-      const tdC=el('td'); const inC=el('input',{type:'text',value:row.code||''}); inC.oninput=()=>row.code=inC.value.trim().toUpperCase(); tdC.appendChild(inC);
-      const tdL=el('td'); const inL=el('input',{type:'text',value:row.label||''}); inL.oninput=()=>row.label=inL.value; tdL.appendChild(inL);
-      const tdA=el('td'); const btn=el('button',{className:'btn',textContent:'Elimina'}); btn.onclick=()=>{ if(confirm('Eliminare?')){data[key].splice(idx,1); renderSimple(key,tbSel);} }; tdA.appendChild(el('div',{className:'row-actions'})).appendChild(btn);
-      tr.append(tdC,tdL,tdA); tb.appendChild(tr);
+    /* ===== Tema chiaro/scuro ===== */
+    const THEME_KEY='tc.theme';
+    const setTheme = t => document.documentElement.setAttribute('data-theme', t);
+    (function(){ setTheme(localStorage.getItem(THEME_KEY) || 'dark'); })();
+    document.getElementById('themeToggle').addEventListener('click', ()=>{
+      const curr = document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+      const next = curr==='light' ? 'dark' : 'light';
+      setTheme(next); localStorage.setItem(THEME_KEY, next);
     });
-  }
 
-  // Azioni
-  $('#addFam').onclick=()=>{data.famiglie.push({code:'',label:'',useD:false,useL:false,useH:false,useSp:false,hasMaterial:false,hasFinish:false,useTokens:false}); renderFam();}
-  $('#addMat').onclick=()=>{data.materiali.push({code:'',label:''}); renderSimple('materiali','#tbodyMat');}
-  $('#addFin').onclick=()=>{data.finiture.push({code:'',label:''}); renderSimple('finiture','#tbodyFin');}
-  $('#addTip').onclick=()=>{data.tipi.push({code:'',label:''}); renderSimple('tipi','#tbodyTip');}
+    /* ===== Badge versione auto da GitHub + click per aggiornare ===== */
+    function guessRepo(){
+      const host = location.hostname;                 // es. gtr2500.github.io
+      const owner = host.split('.')[0];               // gtr2500
+      const path = location.pathname.split('/').filter(Boolean);
+      const repo  = path[0] || 'CoderSmart';          // cartella progetto pages
+      const branch = 'main';
+      return { owner, repo, branch };
+    }
+    const OV_KEYS = [
+      'scm.catalogs.override','scm:catalogsOverride',
+      'scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
+    ];
+    function clearLocalOverrides(){ OV_KEYS.forEach(k=>localStorage.removeItem(k)); }
+    async function clearHttpCaches(){
+      if(!('caches' in window)) return;
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k=>caches.delete(k)));
+    }
+    async function loadVersionBadge(){
+      const badge = document.getElementById('buildBadge');
+      if(!badge) return;
+      badge.textContent = 'Verifica aggiornamenti…';
+      try{
+        const {owner, repo, branch} = guessRepo();
+        const url = `https://api.github.com/repos/${owner}/${repo}/commits?sha=${branch}&per_page=1`;
+        const resp = await fetch(url, {headers:{'Accept':'application/vnd.github+json'}});
+        if(resp.ok){
+          const arr = await resp.json();
+          if(Array.isArray(arr) && arr.length){
+            const sha = (arr[0].sha||'').slice(0,7);
+            const iso = arr[0].commit?.committer?.date || arr[0].commit?.author?.date || new Date().toISOString();
+            const d   = new Date(iso);
+            const dataIT = d.toLocaleDateString('it-IT');
+            const oraIT  = d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+            const version = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${sha}`;
+            badge.textContent = `Ultimo agg.: ${dataIT} ${oraIT} • ${sha}`;
+            badge.dataset.version = version;
+            badge.addEventListener('click', async ()=>{
+              const ok = confirm('Aggiornare alla versione più recente?\nQuesto cancellerà i dati salvati in locale (override) e pulirà la cache.\nProcedere?');
+              if(!ok) return;
+              try{ clearLocalOverrides(); await clearHttpCaches(); }catch(e){}
+              const v = badge.dataset.version || Date.now();
+              const base = location.pathname.split('?')[0];
+              const qs = location.search && !location.search.includes('v=') ? location.search + '&' : '?';
+              location.replace(base + qs + 'v=' + v);
+            });
+            return;
+          }
+        }
+      }catch(e){}
+      // fallback
+      badge.textContent = 'Ultimo agg.: ' + new Date(document.lastModified).toLocaleString('it-IT');
+    }
+    loadVersionBadge();
 
-  $('#btnSave').onclick=()=>{ saveOverrideCanonical(toCanonical()); setMsg('Dati salvati in browser (override attivo).'); };
-  $('#btnRemove').onclick=()=>{ if(confirm('Rimuovere override locale?')){ clearOverride(); location.reload(); } };
+    /* ====== LOGICA DATI (cataloghi) ==================================== */
 
-  $('#btnReset').onclick=async()=>{ 
-    if(!confirm('Caricare i default da assets/data/? (sovrascrive l’override locale)')) return;
-    const canon = await fetchDefaultsDirect();
-    saveOverrideCanonical(canon);
-    data = toInternal(canon);
-    renderAll();
-    setMsg('Default caricati dai file e salvati in locale.');
-  };
+    // Chiavi compatibili con tutte le versioni precedenti
+    const STORAGE_KEYS = [
+      'scm.catalogs.override',
+      'scm:catalogsOverride',
+      'scm_override_catalogs',
+      'ShortCodeMakerV4.catalogsOverride'
+    ];
 
-  $('#btnExport').onclick=()=>{ const a=document.createElement('a'); const txt=JSON.stringify(toCanonical(),null,2); a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'})); a.download='cataloghi_scm_v4.json'; a.click(); URL.revokeObjectURL(a.href); setMsg('JSON esportato.'); }
+    // Percorsi dei file default (repo)
+    const PATHS = {
+      famiglie:'assets/data/famiglie.json',
+      materiali:'assets/data/materiali.json',
+      finiture:'assets/data/finiture.json',
+      tipi:'assets/data/tipi.json'
+    };
 
-  $('#fileImport').addEventListener('change', async (ev)=>{
-    const file = ev.target.files?.[0];
-    if(!file) return;
-    try{
-      const text = await file.text();
-      const parsed = JSON.parse(text);
-      let canon;
-      if(Array.isArray(parsed)){
-        canon = { famiglie: parsed, materiali:[], finiture:[], tipi:[] };
-      }else{
-        canon = { famiglie: parsed.famiglie||[], materiali: parsed.materiali||[], finiture: parsed.finiture||[], tipi: parsed.tipi||[] };
+    // Canonicalizzazione (uniforma i campi tra vecchie e nuove versioni)
+    const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
+    const canonFam = x => ({
+      code:(x.code||'').trim().toUpperCase(),
+      label:x.label||'',
+      D:toBool(x.D??x.useD??x.d),
+      L:toBool(x.L??x.useL??x.l),
+      H:toBool(x.H??x.useH??x.h),
+      Sp:toBool(x.Sp??x.useSp??x.sp),
+      mat:toBool(x.mat??x.hasMaterial??x.material),
+      fin:toBool(x.fin??x.hasFinish??x.finish),
+      tok:toBool(x.tok??x.useTokens??x.tokens)
+    });
+    const canonSimple = x => ({code:(x.code||'').trim().toUpperCase(),label:x.label||''});
+    function canonize(obj){
+      return {
+        famiglie:(obj.famiglie||[]).map(canonFam),
+        materiali:(obj.materiali||[]).map(canonSimple),
+        finiture:(obj.finiture||[]).map(canonSimple),
+        tipi:(obj.tipi||[]).map(canonSimple)
+      };
+    }
+
+    // Legge override locale se presente
+    function readLS(){
+      for(const k of STORAGE_KEYS){
+        const raw = localStorage.getItem(k);
+        if(!raw) continue;
+        try{
+          const j = JSON.parse(raw);
+          if(j && j.famiglie && j.materiali && j.finiture && j.tipi) return canonize(j);
+        }catch(e){}
       }
+      return null;
+    }
+
+    // Carica default da repo (se manca override)
+    async function loadCatalogs(){
+      const fromLS = readLS();
+      if(fromLS) return fromLS;
+      const [fam,mat,fin,tip] = await Promise.all([
+        fetch(PATHS.famiglie).then(r=>r.json()),
+        fetch(PATHS.materiali).then(r=>r.json()),
+        fetch(PATHS.finiture).then(r=>r.json()),
+        fetch(PATHS.tipi).then(r=>r.json())
+      ]);
+      return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
+    }
+
+    // Carica i default (grezzi) direttamente dai file (per il Reset)
+    async function fetchDefaultsDirect(){
+      const [fam,mat,fin,tip] = await Promise.all([
+        fetch(PATHS.famiglie).then(r=>r.json()),
+        fetch(PATHS.materiali).then(r=>r.json()),
+        fetch(PATHS.finiture).then(r=>r.json()),
+        fetch(PATHS.tipi).then(r=>r.json())
+      ]);
+      return { famiglie:fam, materiali:mat, finiture:fin, tipi:tip };
+    }
+
+    // Salva override in tutte le chiavi compatibili
+    function saveOverrideCanonical(canon){
+      const raw = JSON.stringify(canon);
+      STORAGE_KEYS.forEach(k => localStorage.setItem(k, raw));
+    }
+    function clearOverride(){ STORAGE_KEYS.forEach(k => localStorage.removeItem(k)); }
+
+    // Stato in memoria
+    let data = { famiglie:[], materiali:[], finiture:[], tipi:[] };
+
+    // Helpers DOM
+    const $ = s => document.querySelector(s);
+    const el = (t,p={}) => Object.assign(document.createElement(t), p);
+    const setMsg = (m) => $('#statusMsg').textContent = m;
+
+    // Conversioni per la UI
+    const canonFromAny = f => ({
+      code:(f.code||'').trim().toUpperCase(),
+      label:f.label||'',
+      D:!!(f.D??f.useD), L:!!(f.L??f.useL), H:!!(f.H??f.useH), Sp:!!(f.Sp??f.useSp),
+      mat:!!(f.mat??f.hasMaterial), fin:!!(f.fin??f.hasFinish), tok:!!(f.tok??f.useTokens)
+    });
+    const toInternal = canon => ({
+      famiglie:(canon.famiglie||[]).map(f=>({code:f.code,label:f.label,useD:f.D,useL:f.L,useH:f.H,useSp:f.Sp,hasMaterial:f.mat,hasFinish:f.fin,useTokens:f.tok})),
+      materiali:canon.materiali||[], finiture:canon.finiture||[], tipi:canon.tipi||[]
+    });
+    function toCanonical(){
+      return {
+        famiglie: data.famiglie.map(f => canonFromAny({code:f.code,label:f.label,D:f.useD,L:f.useL,H:f.useH,Sp:f.useSp,mat:f.hasMaterial,fin:f.hasFinish,tok:f.useTokens})),
+        materiali: data.materiali,
+        finiture: data.finiture,
+        tipi: data.tipi
+      };
+    }
+
+    // Rendering tabelle
+    function renderAll(){ renderFam(); renderSimple('materiali','#tbodyMat'); renderSimple('finiture','#tbodyFin'); renderSimple('tipi','#tbodyTip'); }
+    function renderFam(){
+      const tb = $('#tbodyFam'); tb.innerHTML='';
+      data.famiglie.forEach((row,idx)=>tb.appendChild(buildFamRow(row,idx)));
+      $('#statusFam').textContent = data.famiglie.length ? '' : 'Nessuna famiglia presente.';
+    }
+    function buildFamRow(row,idx){
+      const tr=el('tr');
+      const tdC=el('td'), tdL=el('td');
+      const inC=el('input',{type:'text',value:row.code}); inC.oninput=()=>row.code=inC.value.trim().toUpperCase(); tdC.appendChild(inC);
+      const inL=el('input',{type:'text',value:row.label}); inL.oninput=()=>row.label=inL.value; tdL.appendChild(inL);
+      const mk=(p)=>{const td=el('td'); const c=el('input',{type:'checkbox',checked:!!row[p]}); c.onchange=()=>row[p]=c.checked; td.appendChild(c); return td;}
+      const tdA=el('td'); const btn=el('button',{className:'btn',textContent:'Elimina'}); btn.onclick=()=>{ if(confirm('Eliminare?')){data.famiglie.splice(idx,1); renderFam();}}; tdA.appendChild(el('div',{className:'row-actions'})).appendChild(btn);
+      tr.append(tdC,tdL,mk('useD'),mk('useL'),mk('useH'),mk('useSp'),mk('hasMaterial'),mk('hasFinish'),mk('useTokens'),tdA);
+      return tr;
+    }
+    function renderSimple(key, tbSel){
+      const tb = document.querySelector(tbSel); tb.innerHTML='';
+      data[key].forEach((row,idx)=>{
+        const tr=el('tr');
+        const tdC=el('td'); const inC=el('input',{type:'text',value:row.code||''}); inC.oninput=()=>row.code=inC.value.trim().toUpperCase(); tdC.appendChild(inC);
+        const tdL=el('td'); const inL=el('input',{type:'text',value:row.label||''}); inL.oninput=()=>row.label=inL.value; tdL.appendChild(inL);
+        const tdA=el('td'); const btn=el('button',{className:'btn',textContent:'Elimina'}); btn.onclick=()=>{ if(confirm('Eliminare?')){data[key].splice(idx,1); renderSimple(key,tbSel);} }; tdA.appendChild(el('div',{className:'row-actions'})).appendChild(btn);
+        tr.append(tdC,tdL,tdA); tb.appendChild(tr);
+      });
+    }
+
+    // Azioni UI
+    $('#addFam').onclick=()=>{data.famiglie.push({code:'',label:'',useD:false,useL:false,useH:false,useSp:false,hasMaterial:false,hasFinish:false,useTokens:false}); renderFam();}
+    $('#addMat').onclick=()=>{data.materiali.push({code:'',label:''}); renderSimple('materiali','#tbodyMat');}
+    $('#addFin').onclick=()=>{data.finiture.push({code:'',label:''}); renderSimple('finiture','#tbodyFin');}
+    $('#addTip').onclick=()=>{data.tipi.push({code:'',label:''}); renderSimple('tipi','#tbodyTip');}
+
+    $('#btnSave').onclick=()=>{ saveOverrideCanonical(toCanonical()); setMsg('Dati salvati in browser (override attivo).'); };
+    $('#btnRemove').onclick=()=>{ if(confirm('Rimuovere override locale?')){ clearOverride(); location.reload(); } };
+
+    $('#btnReset').onclick=async()=>{ 
+      if(!confirm('Caricare i default da assets/data/? (sovrascrive l’override locale)')) return;
+      const canon = await fetchDefaultsDirect();
       saveOverrideCanonical(canon);
       data = toInternal(canon);
       renderAll();
-      setMsg('JSON importato e salvato in locale.');
-    }catch(e){
-      alert('File non valido: ' + e.message);
-    }finally{
-      ev.target.value = '';
-    }
-  });
-
-  $('#btnValidate').onclick=()=>{ 
-    const c=toCanonical(); const probs=[];
-    const chk=(arr,name)=>{const seen=new Set(); for(const x of arr){ if(!x.code||!x.label) probs.push(`${name}: codice/descrizione mancanti`); if(seen.has(x.code)) probs.push(`${name}: duplicato ${x.code}`); seen.add(x.code);} };
-    chk(c.famiglie,'Famiglie'); chk(c.materiali,'Materiali'); chk(c.finiture,'Finiture'); chk(c.tipi,'Tipi');
-    alert(probs.length ? 'Problemi:\n - ' + probs.join('\n - ') : 'Validazione OK.');
-  };
-
-  // Tab
-  function activate(key){
-    document.querySelectorAll('[data-tab]').forEach(a=>a.classList.toggle('active',a.dataset.tab===key));
-    ['famiglie','materiali','finiture','tipi'].forEach(k=>{
-      document.getElementById('view-'+k).classList.toggle('hidden',k!==key);
-    });
-  }
-  window.activate = activate;
-
-  // GitHub helper
-  function guessRepo(){
-    const host = location.hostname;
-    const owner = host.split('.')[0];               // es: gtr2500
-    const path = location.pathname.split('/').filter(Boolean);
-    const repo  = path[0] || 'CoderSmart';          // cartella root pages
-    const branch = 'main';
-    return {owner, repo, branch};
-  }
-  const b64 = s => btoa(unescape(encodeURIComponent(s)));
-
-  $('#btnOpenGH').onclick=()=>{
-    const {owner,repo,branch} = guessRepo();
-    ['famiglie.json','materiali.json','finiture.json','tipi.json']
-      .map(f=>`https://github.com/${owner}/${repo}/edit/${branch}/assets/data/${f}`)
-      .forEach(u=>window.open(u,'_blank'));
-    setMsg('Aperte le pagine di editing su GitHub.');
-  };
-
-  $('#btnSaveGH').onclick=async()=>{
-    const token = prompt('Inserisci un GitHub Personal Access Token (permesso Contents: RW su questo repo).');
-    if(!token) return;
-    const {owner,repo,branch} = guessRepo();
-    const canon = toCanonical();
-    const payloads = {
-      'assets/data/famiglie.json': JSON.stringify(canon.famiglie, null, 2),
-      'assets/data/materiali.json': JSON.stringify(canon.materiali, null, 2),
-      'assets/data/finiture.json': JSON.stringify(canon.finiture, null, 2),
-      'assets/data/tipi.json': JSON.stringify(canon.tipi, null, 2),
+      setMsg('Default caricati dai file e salvati in locale.');
     };
-    try{
-      for(const [path,content] of Object.entries(payloads)){
-        const info = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,{
-          headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`}
-        }).then(r=>r.ok?r.json():null);
-        const sha = info?.sha;
-        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
-          method:'PUT',
-          headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`},
-          body: JSON.stringify({ message:`Update ${path} from dati.html`, content:b64(content), branch, sha })
-        });
-        if(!res.ok) throw new Error(`GitHub API error su ${path}`);
-      }
-      alert('Salvataggio su GitHub completato.');
-      setMsg('File aggiornati nel repo.');
-    }catch(e){
-      console.error(e);
-      alert('Errore nel salvataggio su GitHub: '+e.message);
-      setMsg('Errore GitHub.');
-    }
-  };
 
-  // Init
-  (async function(){
-    setMsg('Caricamento cataloghi…');
-    const canon = await loadCatalogs();
-    data = toInternal(canon);
-    renderAll();
-    activate('famiglie');
-    setMsg('Pronto.');
-  })();
+    $('#btnExport').onclick=()=>{ 
+      const a=document.createElement('a'); 
+      const txt=JSON.stringify(toCanonical(),null,2); 
+      a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'})); 
+      a.download='cataloghi_scm_v4.json'; a.click(); 
+      URL.revokeObjectURL(a.href); 
+      setMsg('JSON esportato.'); 
+    };
+
+    $('#fileImport').addEventListener('change', async (ev)=>{
+      const file = ev.target.files?.[0];
+      if(!file) return;
+      try{
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        let canon;
+        if(Array.isArray(parsed)){
+          canon = { famiglie: parsed, materiali:[], finiture:[], tipi:[] };
+        }else{
+          canon = { famiglie: parsed.famiglie||[], materiali: parsed.materiali||[], finiture: parsed.finiture||[], tipi: parsed.tipi||[] };
+        }
+        saveOverrideCanonical(canon);
+        data = toInternal(canon);
+        renderAll();
+        setMsg('JSON importato e salvato in locale.');
+      }catch(e){
+        alert('File non valido: ' + e.message);
+      }finally{
+        ev.target.value = '';
+      }
+    });
+
+    $('#btnValidate').onclick=()=>{ 
+      const c=toCanonical(); const probs=[];
+      const chk=(arr,name)=>{const seen=new Set(); for(const x of arr){ if(!x.code||!x.label) probs.push(`${name}: codice/descrizione mancanti`); if(seen.has(x.code)) probs.push(`${name}: duplicato ${x.code}`); seen.add(x.code);} };
+      chk(c.famiglie,'Famiglie'); chk(c.materiali,'Materiali'); chk(c.finiture,'Finiture'); chk(c.tipi,'Tipi');
+      alert(probs.length ? 'Problemi:\n - ' + probs.join('\n - ') : 'Validazione OK.');
+    };
+
+    // Tab
+    function activate(key){
+      document.querySelectorAll('[data-tab]').forEach(a=>a.classList.toggle('active',a.dataset.tab===key));
+      ['famiglie','materiali','finiture','tipi'].forEach(k=>{
+        document.getElementById('view-'+k).classList.toggle('hidden',k!==key);
+      });
+    }
+    window.activate = activate;
+
+    // GitHub helper
+    const b64 = s => btoa(unescape(encodeURIComponent(s)));
+    $('#btnOpenGH').onclick=()=>{
+      const {owner,repo,branch} = guessRepo();
+      ['famiglie.json','materiali.json','finiture.json','tipi.json']
+        .map(f=>`https://github.com/${owner}/${repo}/edit/${branch}/assets/data/${f}`)
+        .forEach(u=>window.open(u,'_blank'));
+      setMsg('Aperte le pagine di editing su GitHub.');
+    };
+
+    $('#btnSaveGH').onclick=async()=>{
+      const token = prompt('Inserisci un GitHub Personal Access Token (permesso Contents: RW su questo repo).');
+      if(!token) return;
+      const {owner,repo,branch} = guessRepo();
+      const canon = toCanonical();
+      const payloads = {
+        'assets/data/famiglie.json': JSON.stringify(canon.famiglie, null, 2),
+        'assets/data/materiali.json': JSON.stringify(canon.materiali, null, 2),
+        'assets/data/finiture.json': JSON.stringify(canon.finiture, null, 2),
+        'assets/data/tipi.json': JSON.stringify(canon.tipi, null, 2)
+      };
+      try{
+        for(const [path,content] of Object.entries(payloads)){
+          const info = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,{
+            headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`}
+          }).then(r=>r.ok?r.json():null);
+          const sha = info?.sha;
+          const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
+            method:'PUT',
+            headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`},
+            body: JSON.stringify({ message:`Update ${path} from dati.html`, content:b64(content), branch, sha })
+          });
+          if(!res.ok) throw new Error(`GitHub API error su ${path}`);
+        }
+        alert('Salvataggio su GitHub completato.');
+        setMsg('File aggiornati nel repo.');
+      }catch(e){
+        console.error(e);
+        alert('Errore nel salvataggio su GitHub: '+e.message);
+        setMsg('Errore GitHub.');
+      }
+    };
+
+    // Init
+    (async function(){
+      setMsg('Caricamento cataloghi…');
+      const canon = await loadCatalogs();
+      data = toInternal(canon);
+      renderAll();
+      activate('famiglie');
+      setMsg('Pronto.');
+    })();
   </script>
 </body>
 </html>
