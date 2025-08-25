@@ -2,87 +2,74 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Dati — ShortCode Maker v4</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tecnical Coder — Dati</title>
+  <link rel="stylesheet" href="assets/styles.css" />
   <style>
-    :root{ --bg:#0f1115; --panel:#111827; --panel2:#0f1623; --line:#2a2f3a;
-           --text:#e6e6e6; --muted:#9aa4b2; --ok:#22c55e; --warn:#f59e0b; --err:#ef4444; }
-    *{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-    body{margin:0;background:var(--bg);color:var(--text)}
-    header{position:sticky;top:0;background:#0f131a;border-bottom:1px solid var(--line);z-index:10}
-    .bar{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;gap:12px;align-items:center}
-    h1{font-size:18px;margin:0}
-    nav{margin-left:auto;display:flex;gap:8px}
-    nav a{color:#cbd5e1;text-decoration:none;background:var(--panel);border:1px solid var(--line);padding:6px 10px;border-radius:8px}
-    nav a.active{border-color:#3b82f6;box-shadow:0 0 0 1px #3b82f6 inset}
+    /* Stili pagina Dati specifici (usano le variabili del tema) */
     main{max-width:1200px;margin:0 auto;padding:20px}
     .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-    .btn{background:var(--panel);border:1px solid var(--line);color:#e5e7eb;padding:8px 12px;border-radius:10px;font-size:14px;cursor:pointer}
-    .btn.ok{border-color:var(--ok)} .btn.warn{border-color:var(--warn)} .btn.danger{border-color:var(--err);color:#fecaca}
-    .btn.ghost{background:transparent}
+    .btn{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:8px 12px;border-radius:10px;font-size:14px;cursor:pointer}
     .spacer{flex:1}
-    .tabs{display:flex;gap:8px;margin:8px 0 16px}
-    .tab{padding:8px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--line);cursor:pointer}
-    .tab.active{border-color:#3b82f6;box-shadow:0 0 0 1px #3b82f6 inset}
-    .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
-    table{width:100%;border-collapse:separate;border-spacing:0 8px}
-    thead th{font-size:13px;color:#cbd5e1;text-align:left;padding:8px 10px}
-    tbody td{background:var(--panel2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 10px}
-    tbody td:first-child{border-left:1px solid var(--line);border-top-left-radius:10px;border-bottom-left-radius:10px}
-    tbody td:last-child{border-right:1px solid var(--line);border-top-right-radius:10px;border-bottom-right-radius:10px}
-    input[type="text"]{width:100%;background:#0b1220;border:1px solid #233047;color:#e5e7eb;border-radius:8px;padding:8px 10px}
-    input[type="checkbox"]{width:18px;height:18px}
-    .row-actions{display:flex;gap:8px}
-    .note{font-size:13px;color:#98a2b3;margin-top:6px}
-    .hidden{display:none}
-    .footer{margin-top:12px;font-size:12px;color:#9aa4b2}
   </style>
 </head>
 <body>
-<header>
-  <div class="bar">
-    <h1>Dati — ShortCode Maker v4</h1>
-    <nav>
-      <a href="index.html">Generatore</a>
-      <a href="istruzioni.html">Istruzioni</a>
-      <a class="active" href="dati.html">Dati</a>
-    </nav>
-  </div>
-</header>
 
-<main>
-  <div class="toolbar">
-    <button class="btn" onclick="history.back()">← Indietro</button>
-    <div class="spacer"></div>
-    <button class="btn ok" id="btnSave">Salva</button>
-    <button class="btn" id="btnValidate">Valida</button>
-    <button class="btn" id="btnReset">Reset default</button>
-    <button class="btn" id="btnRemove">Rimuovi override</button>
-    <button class="btn" id="btnExport">Esporta JSON</button>
-    <label class="btn ghost" for="fileImport">Importa JSON</label>
-    <input id="fileImport" type="file" accept="application/json" class="hidden" />
-  </div>
+  <!-- Header -->
+  <header class="app-header">
+    <a class="brand" href="https://www.glcgrimaldelli.com" target="_blank" rel="noopener">
+      <img class="brand-logo" src="https://www.glcgrimaldelli.com/wp-content/uploads/2019/06/Logo-Sottopagine.jpg" alt="Grimaldelli s.r.l." />
+    </a>
+    <h1 class="brand-title">Tecnical Coder</h1>
+    <button id="themeToggle" class="theme-toggle" title="Cambia tema">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
 
-  <div class="toolbar">
-    <button class="btn warn" id="btnOpenGH">Apri editor GitHub</button>
-    <button class="btn warn" id="btnSaveGH">Salva su GitHub (API)</button>
-  </div>
-
-  <div class="tabs">
-    <div class="tab" data-tab="famiglie">Famiglie</div>
-    <div class="tab" data-tab="materiali">Materiali</div>
-    <div class="tab" data-tab="finiture">Finiture</div>
-    <div class="tab" data-tab="tipi">Tipi</div>
-  </div>
-
-  <!-- Famiglie -->
-  <section class="panel" id="view-famiglie">
-    <div style="display:flex;gap:8px;margin:8px 0 12px">
-      <button class="btn" id="addFam">+ Aggiungi famiglia</button>
-      <span class="note">D • L • H • Sp • Mat • Fin • Tok → abilita le colonne per quella famiglia</span>
+  <!-- Nav -->
+  <div class="subnav">
+    <div class="bar">
+      <nav>
+        <a href="index.html">Generatore</a>
+        <a href="istruzioni.html">Istruzioni</a>
+        <a class="active" href="dati.html">Dati</a>
+      </nav>
     </div>
-    <table>
-      <thead>
+  </div>
+
+  <main>
+    <!-- Toolbar azioni -->
+    <div class="toolbar">
+      <button class="btn" onclick="history.back()">← Indietro</button>
+      <div class="spacer"></div>
+      <button class="btn" id="btnSave">Salva</button>
+      <button class="btn" id="btnValidate">Valida</button>
+      <button class="btn" id="btnReset">Reset default</button>
+      <button class="btn" id="btnRemove">Rimuovi override</button>
+      <button class="btn" id="btnExport">Esporta JSON</button>
+      <label class="btn" for="fileImport">Importa JSON</label>
+      <input id="fileImport" type="file" accept="application/json" class="hidden" />
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs bar" style="padding:0;margin:0 0 14px 0">
+      <nav>
+        <a class="active" data-tab="famiglie" href="#famiglie" onclick="activate('famiglie');return false;">Famiglie</a>
+        <a data-tab="materiali" href="#materiali" onclick="activate('materiali');return false;">Materiali</a>
+        <a data-tab="finiture"  href="#finiture" onclick="activate('finiture');return false;">Finiture</a>
+        <a data-tab="tipi"      href="#tipi" onclick="activate('tipi');return false;">Tipi</a>
+      </nav>
+    </div>
+
+    <!-- Pannelli (usa le classi .panel con bordo arancione) -->
+    <section id="view-famiglie" class="panel">
+      <div style="display:flex;gap:8px;margin:8px 0 12px">
+        <button class="btn" id="addFam">+ Aggiungi famiglia</button>
+        <span class="note">D • L • H • Sp • Mat • Fin • Tok → abilita le colonne per quella famiglia</span>
+      </div>
+      <table>
+        <thead>
         <tr>
           <th style="width:120px">Codice</th>
           <th>Descrizione</th>
@@ -95,298 +82,74 @@
           <th style="width:70px">Tok</th>
           <th style="width:120px">Azioni</th>
         </tr>
-      </thead>
-      <tbody id="tbodyFam"></tbody>
-    </table>
-    <div class="note" id="statusFam"></div>
-  </section>
+        </thead>
+        <tbody id="tbodyFam"></tbody>
+      </table>
+      <div class="note" id="statusFam"></div>
+    </section>
 
-  <!-- Materiali -->
-  <section class="panel hidden" id="view-materiali">
-    <div style="display:flex;gap:8px;margin:8px 0 12px">
-      <button class="btn" id="addMat">+ Aggiungi materiale</button>
-      <span class="note">Esempi: S235, S355, AISI 304…</span>
+    <section id="view-materiali" class="panel hidden">
+      <div style="display:flex;gap:8px;margin:8px 0 12px">
+        <button class="btn" id="addMat">+ Aggiungi materiale</button>
+        <span class="note">Esempi: S235, S355, AISI 304…</span>
+      </div>
+      <table>
+        <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
+        <tbody id="tbodyMat"></tbody>
+      </table>
+    </section>
+
+    <section id="view-finiture" class="panel hidden">
+      <div style="display:flex;gap:8px;margin:8px 0 12px">
+        <button class="btn" id="addFin">+ Aggiungi finitura</button>
+        <span class="note">Esempi: GREZ, VERN, ZINC…</span>
+      </div>
+      <table>
+        <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
+        <tbody id="tbodyFin"></tbody>
+      </table>
+    </section>
+
+    <section id="view-tipi" class="panel hidden">
+      <div style="display:flex;gap:8px;margin:8px 0 12px">
+        <button class="btn" id="addTip">+ Aggiungi tipo</button>
+        <span class="note">Esempi: TUB, LAM, STA…</span>
+      </div>
+      <table>
+        <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
+        <tbody id="tbodyTip"></tbody>
+      </table>
+    </section>
+
+    <div class="note" id="statusMsg" style="margin-top:8px">Pronto.</div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span class="product">&copy; Tecnical Coder</span>
+      <span class="for"> per Grimaldelli s.r.l.</span>
+      <span class="sep"> — </span>
+      <span class="signature">Manuel Zago</span>
     </div>
-    <table>
-      <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
-      <tbody id="tbodyMat"></tbody>
-    </table>
-  </section>
+  </footer>
 
-  <!-- Finiture -->
-  <section class="panel hidden" id="view-finiture">
-    <div style="display:flex;gap:8px;margin:8px 0 12px">
-      <button class="btn" id="addFin">+ Aggiungi finitura</button>
-      <span class="note">Esempi: GREZ, VERN, ZINC…</span>
-    </div>
-    <table>
-      <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
-      <tbody id="tbodyFin"></tbody>
-    </table>
-  </section>
-
-  <!-- Tipi -->
-  <section class="panel hidden" id="view-tipi">
-    <div style="display:flex;gap:8px;margin:8px 0 12px">
-      <button class="btn" id="addTip">+ Aggiungi tipo</button>
-      <span class="note">Esempi: TUB, LAM, STA…</span>
-    </div>
-    <table>
-      <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
-      <tbody id="tbodyTip"></tbody>
-    </table>
-  </section>
-
-  <div class="footer" id="statusMsg">Pronto.</div>
-</main>
-
-<script>
-/* ========= Loader inline (override → default) ========= */
-const STORAGE_KEYS = [
-  'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
-];
-const PATHS = {
-  famiglie:'assets/data/famiglie.json',
-  materiali:'assets/data/materiali.json',
-  finiture:'assets/data/finiture.json',
-  tipi:'assets/data/tipi.json'
-};
-const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
-const canonFam = x => ({
-  code:(x.code||'').trim().toUpperCase(),
-  label:x.label||'',
-  D:toBool(x.D??x.useD??x.d),
-  L:toBool(x.L??x.useL??x.l),
-  H:toBool(x.H??x.useH??x.h),
-  Sp:toBool(x.Sp??x.useSp??x.sp),
-  mat:toBool(x.mat??x.hasMaterial??x.material),
-  fin:toBool(x.fin??x.hasFinish??x.finish),
-  tok:toBool(x.tok??x.useTokens??x.tokens)
-});
-const canonSimple = x => ({code:(x.code||'').trim().toUpperCase(),label:x.label||''});
-function canonize(obj){
-  return {
-    famiglie:(obj.famiglie||[]).map(canonFam),
-    materiali:(obj.materiali||[]).map(canonSimple),
-    finiture:(obj.finiture||[]).map(canonSimple),
-    tipi:(obj.tipi||[]).map(canonSimple)
-  };
-}
-function readLS(){
-  for(const k of STORAGE_KEYS){
-    const raw = localStorage.getItem(k);
-    if(!raw) continue;
-    try{
-      const j = JSON.parse(raw);
-      if(j && j.famiglie && j.materiali && j.finiture && j.tipi) return canonize(j);
-    }catch(e){}
-  }
-  return null;
-}
-async function loadCatalogs(){
-  const fromLS = readLS();
-  if(fromLS) return fromLS;
-  const [fam,mat,fin,tip] = await Promise.all([
-    fetch(PATHS.famiglie).then(r=>r.json()),
-    fetch(PATHS.materiali).then(r=>r.json()),
-    fetch(PATHS.finiture).then(r=>r.json()),
-    fetch(PATHS.tipi).then(r=>r.json())
-  ]);
-  return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
-}
-// IGNORA LS: serve per Reset default
-async function fetchDefaultsDirect(){
-  const [fam, mat, fin, tip] = await Promise.all([
-    fetch(PATHS.famiglie).then(r=>r.json()),
-    fetch(PATHS.materiali).then(r=>r.json()),
-    fetch(PATHS.finiture).then(r=>r.json()),
-    fetch(PATHS.tipi).then(r=>r.json()),
-  ]);
-  return { famiglie: fam, materiali: mat, finiture: fin, tipi: tip };
-}
-function saveOverrideCanonical(canon){
-  const raw = JSON.stringify(canon);
-  STORAGE_KEYS.forEach(k=>localStorage.setItem(k,raw));
-}
-function clearOverride(){ STORAGE_KEYS.forEach(k=>localStorage.removeItem(k)); }
-/* ===================================================== */
-
-let data = { famiglie:[], materiali:[], finiture:[], tipi:[] };
-
-const $ = s => document.querySelector(s);
-const el = (t,p={}) => Object.assign(document.createElement(t), p);
-const setMsg = (m) => $('#statusMsg').textContent = m;
-
-const canonFromAny = f => ({
-  code:(f.code||'').trim().toUpperCase(),
-  label:f.label||'',
-  D:!!(f.D??f.useD), L:!!(f.L??f.useL), H:!!(f.H??f.useH), Sp:!!(f.Sp??f.useSp),
-  mat:!!(f.mat??f.hasMaterial), fin:!!(f.fin??f.hasFinish), tok:!!(f.tok??f.useTokens)
-});
-const toInternal = canon => ({
-  famiglie:(canon.famiglie||[]).map(f=>({code:f.code,label:f.label,useD:f.D,useL:f.L,useH:f.H,useSp:f.Sp,hasMaterial:f.mat,hasFinish:f.fin,useTokens:f.tok})),
-  materiali:canon.materiali||[], finiture:canon.finiture||[], tipi:canon.tipi||[]
-});
-function toCanonical(){
-  return {
-    famiglie: data.famiglie.map(f => canonFromAny({code:f.code,label:f.label,D:f.useD,L:f.useL,H:f.useH,Sp:f.useSp,mat:f.hasMaterial,fin:f.hasFinish,tok:f.useTokens})),
-    materiali: data.materiali,
-    finiture: data.finiture,
-    tipi: data.tipi
-  };
-}
-
-// Render
-function renderAll(){ renderFam(); renderSimple('materiali','#tbodyMat'); renderSimple('finiture','#tbodyFin'); renderSimple('tipi','#tbodyTip'); }
-function renderFam(){
-  const tb = $('#tbodyFam'); tb.innerHTML='';
-  data.famiglie.forEach((row,idx)=>tb.appendChild(buildFamRow(row,idx)));
-  $('#statusFam').textContent = data.famiglie.length ? '' : 'Nessuna famiglia presente.';
-}
-function buildFamRow(row,idx){
-  const tr=el('tr');
-  const tdC=el('td'), tdL=el('td'); 
-  const inC=el('input',{type:'text',value:row.code}); inC.oninput=()=>row.code=inC.value.trim().toUpperCase(); tdC.appendChild(inC);
-  const inL=el('input',{type:'text',value:row.label}); inL.oninput=()=>row.label=inL.value; tdL.appendChild(inL);
-  const mk=(p)=>{const td=el('td'); const c=el('input',{type:'checkbox',checked:!!row[p]}); c.onchange=()=>row[p]=c.checked; td.appendChild(c); return td;}
-  const tdA=el('td'); const btn=el('button',{className:'btn danger',textContent:'Elimina'}); btn.onclick=()=>{ if(confirm('Eliminare?')){data.famiglie.splice(idx,1); renderFam();}}; tdA.appendChild(el('div',{className:'row-actions'})).appendChild(btn);
-  tr.append(tdC,tdL,mk('useD'),mk('useL'),mk('useH'),mk('useSp'),mk('hasMaterial'),mk('hasFinish'),mk('useTokens'),tdA);
-  return tr;
-}
-function renderSimple(key, tbSel){
-  const tb = document.querySelector(tbSel); tb.innerHTML='';
-  data[key].forEach((row,idx)=>{
-    const tr=el('tr');
-    const tdC=el('td'); const inC=el('input',{type:'text',value:row.code||''}); inC.oninput=()=>row.code=inC.value.trim().toUpperCase(); tdC.appendChild(inC);
-    const tdL=el('td'); const inL=el('input',{type:'text',value:row.label||''}); inL.oninput=()=>row.label=inL.value; tdL.appendChild(inL);
-    const tdA=el('td'); const btn=el('button',{className:'btn danger',textContent:'Elimina'}); btn.onclick=()=>{ if(confirm('Eliminare?')){data[key].splice(idx,1); renderSimple(key,tbSel);} }; tdA.appendChild(el('div',{className:'row-actions'})).appendChild(btn);
-    tr.append(tdC,tdL,tdA); tb.appendChild(tr);
+  <!-- ===== JS: tema + (qui sotto il tuo JS di gestione cataloghi) ===== -->
+  <script>
+  /* Tema */
+  const THEME_KEY='tc.theme';
+  const setTheme = t => document.documentElement.setAttribute('data-theme', t);
+  (function(){ setTheme(localStorage.getItem(THEME_KEY) || 'dark'); })();
+  document.getElementById('themeToggle').addEventListener('click', ()=>{
+    const curr = document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+    const next = curr==='light' ? 'dark' : 'light';
+    setTheme(next); localStorage.setItem(THEME_KEY, next);
   });
-}
 
-// Bottoni
-$('#addFam').onclick=()=>{data.famiglie.push({code:'',label:'',useD:false,useL:false,useH:false,useSp:false,hasMaterial:false,hasFinish:false,useTokens:false}); renderFam();}
-$('#addMat').onclick=()=>{data.materiali.push({code:'',label:''}); renderSimple('materiali','#tbodyMat');}
-$('#addFin').onclick=()=>{data.finiture.push({code:'',label:''}); renderSimple('finiture','#tbodyFin');}
-$('#addTip').onclick=()=>{data.tipi.push({code:'',label:''}); renderSimple('tipi','#tbodyTip');}
-
-$('#btnSave').onclick=()=>{ saveOverrideCanonical(toCanonical()); setMsg('Dati salvati in browser (override attivo).'); };
-$('#btnRemove').onclick=()=>{ if(confirm('Rimuovere override locale?')){ clearOverride(); location.reload(); } };
-
-$('#btnReset').onclick=async()=>{ // IGNORA override e prende i file
-  if(!confirm('Caricare i default da assets/data/?')) return;
-  const canon = await fetchDefaultsDirect();
-  saveOverrideCanonical(canon);            // così Generatore e Dati sono allineati
-  data = toInternal(canon);
-  renderAll();
-  setMsg('Default caricati dai file e salvati in locale.');
-};
-
-$('#btnExport').onclick=()=>{ const a=document.createElement('a'); const txt=JSON.stringify(toCanonical(),null,2); a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'})); a.download='cataloghi_scm_v4.json'; a.click(); URL.revokeObjectURL(a.href); setMsg('JSON esportato.'); }
-
-$('#fileImport').addEventListener('change', async (ev)=>{
-  const file = ev.target.files?.[0];
-  if(!file) return;
-  try{
-    const text = await file.text();
-    const parsed = JSON.parse(text);
-    let canon;
-    if(Array.isArray(parsed)){ // solo famiglie
-      canon = { famiglie: parsed, materiali:[], finiture:[], tipi:[] };
-    }else{
-      canon = { famiglie: parsed.famiglie||[], materiali: parsed.materiali||[], finiture: parsed.finiture||[], tipi: parsed.tipi||[] };
-    }
-    saveOverrideCanonical(canon);
-    data = toInternal(canon);
-    renderAll();
-    setMsg('JSON importato e salvato in locale.');
-  }catch(e){
-    alert('File non valido: ' + e.message);
-  }finally{
-    ev.target.value = '';
-  }
-});
-
-$('#btnValidate').onclick=()=>{ 
-  const c=toCanonical(); const probs=[];
-  const chk=(arr,name)=>{const seen=new Set(); for(const x of arr){ if(!x.code||!x.label) probs.push(`${name}: codice/descrizione mancanti`); if(seen.has(x.code)) probs.push(`${name}: duplicato ${x.code}`); seen.add(x.code);} };
-  chk(c.famiglie,'Famiglie'); chk(c.materiali,'Materiali'); chk(c.finiture,'Finiture'); chk(c.tipi,'Tipi');
-  alert(probs.length ? 'Problemi:\n - ' + probs.join('\n - ') : 'Validazione OK.');
-};
-
-// Tabs + gestione ancora (#famiglie/#materiali/#finiture/#tipi)
-function activateTab(key){
-  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active', x.dataset.tab===key));
-  document.querySelectorAll('section.panel').forEach(s=>s.classList.add('hidden'));
-  const target = document.getElementById('view-'+key);
-  if(target) target.classList.remove('hidden');
-}
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{ activateTab(t.dataset.tab); location.hash = t.dataset.tab; });
-window.addEventListener('hashchange', ()=>{ const k=(location.hash||'#famiglie').slice(1); activateTab(k); });
-
-// GitHub helpers
-function guessRepo(){
-  const host = location.hostname;              // es: gtr2500.github.io
-  const owner = host.split('.')[0];
-  const path = location.pathname.split('/').filter(Boolean);
-  const repo  = path[0] || 'CoderSmart';
-  const branch = 'main';
-  return {owner, repo, branch};
-}
-function b64(s){ return btoa(unescape(encodeURIComponent(s))); }
-
-$('#btnOpenGH').onclick=()=>{
-  const {owner,repo,branch} = guessRepo();
-  ['famiglie.json','materiali.json','finiture.json','tipi.json']
-    .map(f=>`https://github.com/${owner}/${repo}/edit/${branch}/assets/data/${f}`)
-    .forEach(u=>window.open(u,'_blank'));
-  setMsg('Aperte le pagine di editing su GitHub.');
-};
-
-$('#btnSaveGH').onclick=async()=>{
-  const token = prompt('Inserisci un GitHub Personal Access Token (Contents RW solo su questo repo).');
-  if(!token) return;
-  const {owner,repo,branch} = guessRepo();
-  const canon = toCanonical();
-  const payloads = {
-    'assets/data/famiglie.json': JSON.stringify(canon.famiglie, null, 2),
-    'assets/data/materiali.json': JSON.stringify(canon.materiali, null, 2),
-    'assets/data/finiture.json': JSON.stringify(canon.finiture, null, 2),
-    'assets/data/tipi.json': JSON.stringify(canon.tipi, null, 2),
-  };
-  try{
-    for(const [path,content] of Object.entries(payloads)){
-      const info = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,{
-        headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`}
-      }).then(r=>r.ok?r.json():null);
-      const sha = info?.sha;
-      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
-        method:'PUT',
-        headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`},
-        body: JSON.stringify({ message:`Update ${path} from dati.html`, content:b64(content), branch, sha })
-      });
-      if(!res.ok) throw new Error(`GitHub API error su ${path}`);
-    }
-    alert('Salvataggio su GitHub completato.');
-    setMsg('File aggiornati nel repo.');
-  }catch(e){
-    console.error(e);
-    alert('Errore nel salvataggio su GitHub: '+e.message);
-    setMsg('Errore GitHub.');
-  }
-};
-
-// Boot
-(async function init(){
-  setMsg('Inizializzazione…');
-  const canon = await loadCatalogs();     // override se presente, altrimenti file
-  data = toInternal(canon);
-  // attiva tab da ancora (default famiglie)
-  const initial = (location.hash || '#famiglie').slice(1);
-  activateTab(['famiglie','materiali','finiture','tipi'].includes(initial) ? initial : 'famiglie');
-  renderAll();
-  setMsg('Pronto.');
-})();
-</script>
+  /* =======================
+     INCOLLA QUI IL TUO JS esistente
+     (gestione famiglie/materiali/finiture/tipi, salvataggi, ecc.)
+     ======================= */
+  </script>
 </body>
 </html>
