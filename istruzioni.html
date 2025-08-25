@@ -2,16 +2,14 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Istruzioni — ShortCode Maker v4</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tecnical Coder — Istruzioni</title>
+  <link rel="stylesheet" href="assets/styles.css" />
   <style>
     :root{ --bg:#0f1115; --panel:#111827; --panel2:#0f1623; --line:#2a2f3a; --text:#e6e6e6; --muted:#9aa4b2; --accent:#3b82f6; --ok:#22c55e; --warn:#f59e0b; --err:#ef4444; }
     *{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
     body{margin:0;background:var(--bg);color:var(--text)}
-    a{color:#93c5fd}
-    header{position:sticky;top:0;background:#0f131a;border-bottom:1px solid var(--line);z-index:10}
-    .bar{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;gap:12px;align-items:center}
-    h1{font-size:18px;margin:0}
+    .bar{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center}
     nav{margin-left:auto;display:flex;gap:8px}
     nav a{color:#cbd5e1;text-decoration:none;background:#111827;border:1px solid #2a2f3a;padding:6px 10px;border-radius:8px}
     nav a.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
@@ -34,170 +32,57 @@
   </style>
 </head>
 <body>
-<header>
-  <div class="bar">
-    <h1>Istruzioni — ShortCode Maker v4</h1>
-    <nav>
-      <a href="index.html">Generatore</a>
-      <a class="active" href="istruzioni.html">Istruzioni</a>
-      <a href="dati.html">Dati</a>
-    </nav>
-  </div>
-</header>
 
-<main>
+  <!-- Header con logo + titolo -->
+  <header class="app-header">
+    <a class="brand" href="https://www.glcgrimaldelli.com" target="_blank" rel="noopener">
+      <img class="brand-logo"
+           src="https://www.glcgrimaldelli.com/wp-content/uploads/2019/06/Logo-Sottopagine.jpg"
+           alt="Grimaldelli s.r.l." />
+    </a>
+    <h1 class="brand-title">Tecnical Coder</h1>
+  </header>
 
-  <div class="card">
-    <p class="lead">
-      Questa pagina spiega come usare l’app, anche senza competenze tecniche.  
-      Il flusso di lavoro è sempre lo stesso:
-    </p>
-    <ol>
-      <li><b>Compila/aggiorna i cataloghi</b> in <a href="dati.html">Dati</a> (Famiglie, Materiali, Finiture, Tipi).</li>
-      <li><b>Genera il codice</b> in <a href="index.html">Generatore</a> scegliendo i valori.</li>
-      <li><b>Copia</b> ShortCode, nome cartella, nome file e descrizione.</li>
-    </ol>
-  </div>
-
-  <div class="card toc">
-    <h2>Indice</h2>
-    <a href="#cataloghi">1) Compilare i cataloghi (Dati)</a>
-    <a href="#fam-flags">1.a) Cosa significano le spunte (D • L • H • Sp • Mat • Fin • Tok)</a>
-    <a href="#salvataggi">1.b) Salvare, ripristinare, esportare</a>
-    <a href="#github">1.c) Salvare i dati nel repository GitHub</a>
-    <a href="#generatore">2) Generare il codice (Generatore)</a>
-    <a href="#faq">FAQ & Risoluzione problemi</a>
-    <a href="#glossario">Glossario</a>
-  </div>
-
-  <div id="cataloghi" class="card">
-    <h2>1) Compilare i cataloghi (<a href="dati.html">Dati</a>)</h2>
-    <p>La pagina <b>Dati</b> contiene 4 schede:</p>
-    <ul>
-      <li><b>Famiglie</b> – gruppi principali di prodotto (es. Cancelli, Strutture, Tubazioni…).</li>
-      <li><b>Materiali</b> – es. S235, S355, AISI 304…</li>
-      <li><b>Finiture</b> – es. Grezzo, Verniciato, Zincato…</li>
-      <li><b>Tipi</b> – forme o sottocategorie (es. Tubo, Lamiera, Staffa…)</li>
-    </ul>
-
-    <div class="grid2">
-      <div>
-        <h3>Aggiungere o modificare voci</h3>
-        <ol>
-          <li>Apri la scheda desiderata (es. <b>Famiglie</b>).</li>
-          <li>Clicca <span class="kbd">+ Aggiungi</span> per creare una nuova riga, oppure modifica quelle esistenti.</li>
-          <li>Per <b>Famiglie</b> spunta le colonne di cui avrai bisogno (vedi sotto).</li>
-          <li>Clicca <span class="kbd">Salva</span> per tenere le modifiche in questo browser.</li>
-        </ol>
-        <p class="note">I <b>codici</b> devono essere univoci (niente duplicati) e senza spazi. Consigliato 2–4 lettere maiuscole.</p>
-      </div>
-      <div>
-        <h3>Navigazione rapida</h3>
-        <p>Puoi aprire direttamente una scheda con questi link:</p>
-        <ul>
-          <li><a href="dati.html#famiglie">Dati → Famiglie</a></li>
-          <li><a href="dati.html#materiali">Dati → Materiali</a></li>
-          <li><a href="dati.html#finiture">Dati → Finiture</a></li>
-          <li><a href="dati.html#tipi">Dati → Tipi</a></li>
-        </ul>
-      </div>
+  <!-- Nav -->
+  <div class="subnav">
+    <div class="bar">
+      <nav>
+        <a href="index.html">Generatore</a>
+        <a class="active" href="istruzioni.html">Istruzioni</a>
+        <a href="dati.html">Dati</a>
+      </nav>
     </div>
   </div>
 
-  <div id="fam-flags" class="card">
-    <h2>1.a) Significato delle spunte (solo scheda “Famiglie”)</h2>
-    <p>Per ogni famiglia puoi decidere quali campi saranno disponibili nel generatore:</p>
-    <ul>
-      <li><b>D</b> – Diametro (Ø) in mm</li>
-      <li><b>L</b> – Lunghezza (mm)</li>
-      <li><b>H</b> – Altezza (mm)</li>
-      <li><b>Sp</b> – Spessore (mm)</li>
-      <li><b>Mat</b> – Materiale (menu a discesa)</li>
-      <li><b>Fin</b> – Finitura (menu a discesa)</li>
-      <li><b>Tok</b> – Token (breve sigla aggiuntiva, es. DX, SN…)</li>
-    </ul>
-    <div class="callout">
-      Se un campo è <b>disattivato</b>, nel codice verrà sostituito con <span class="kbd">000</span>.  
-      Esempio: se “Sp” è OFF, il pezzo “Sxxx” non verrà generato (uscirà “000” al suo posto).
+  <main>
+    <!-- (Mantieni qui il contenuto delle istruzioni già preparato) -->
+    <div class="card">
+      <p class="lead">
+        Questa pagina spiega come usare l’app, anche senza competenze tecniche.  
+        Il flusso di lavoro è sempre lo stesso:
+      </p>
+      <ol>
+        <li><b>Compila/aggiorna i cataloghi</b> in <a href="dati.html">Dati</a> (Famiglie, Materiali, Finiture, Tipi).</li>
+        <li><b>Genera il codice</b> in <a href="index.html">Generatore</a> scegliendo i valori.</li>
+        <li><b>Copia</b> ShortCode, nome cartella, nome file e descrizione.</li>
+      </ol>
     </div>
-  </div>
 
-  <div id="salvataggi" class="card">
-    <h2>1.b) Salvare, ripristinare, esportare</h2>
-    <ul>
-      <li><span class="kbd">Salva</span> – memorizza i dati <b>nel browser</b> (solo su questo PC). È chiamato “override locale”.</li>
-      <li><span class="kbd">Rimuovi override</span> – cancella l’override locale e ricarica i dati dai file del sito.</li>
-      <li><span class="kbd">Reset default</span> – ricarica direttamente i file in <span class="kbd">assets/data</span> e li rimette come base.</li>
-      <li><span class="kbd">Esporta JSON</span> – scarica un file di backup con tutti i cataloghi.</li>
-      <li><span class="kbd">Importa JSON</span> – carica un backup o un file fornito (accetta sia il pacchetto completo, sia solo l’array di “Famiglie”).</li>
-    </ul>
-    <p class="note">Dopo “Reset” o “Rimuovi override” può servire un <b>aggiorna forzato</b> del browser (<span class="kbd">Ctrl</span>+<span class="kbd">F5</span>).</p>
-  </div>
+    <!-- … (segue il resto delle tue sezioni: indice, dettagli, FAQ, glossario) … -->
 
-  <div id="github" class="card">
-    <h2>1.c) Salvare i dati nel repository GitHub</h2>
-    <p>Per rendere i dati permanenti per tutti:</p>
-    <ol>
-      <li>Clicca <span class="kbd">Apri editor GitHub</span> per aprire i 4 file nel tuo repo e incolla i contenuti; <b>oppure</b></li>
-      <li>Usa <span class="kbd">Salva su GitHub (API)</span>: ti chiederà un <b>Personal Access Token</b> con permesso sui contenuti del repository. Incolla il token quando richiesto.</li>
-    </ol>
-    <div class="callout ok">
-      Dopo il salvataggio su GitHub, premi <b>Reset default</b> per rileggere i file aggiornati e allineare il tuo browser.
+    <div class="footer">
+      Suggerimento: aggiungi questa pagina ai preferiti del browser per una consultazione veloce.
     </div>
-  </div>
+  </main>
 
-  <div id="generatore" class="card">
-    <h2>2) Generare il codice (<a href="index.html">Generatore</a>)</h2>
-    <ol>
-      <li>Seleziona <b>Famiglia</b>, <b>Materiale</b> e <b>Finitura</b> (se abilitati per quella famiglia).</li>
-      <li>Spunta cosa includere nella sezione “Composizione ShortCode”.  
-          Le spunte abilitate/disa bilitate dipendono dalla famiglia selezionata.</li>
-      <li>Compila i campi numerici (D/L/H/Sp) e l’eventuale <b>Token</b> (max 5 caratteri, solo lettere/numeri).</li>
-      <li>Leggi i risultati nella sezione <b>Output</b> e usa i bottoni <b>Copia</b>.</li>
-    </ol>
-    <p>La struttura del codice è:</p>
-    <div class="pill">FAM – TIPO – D3 – L4 – H4 – S3 – MAT – FIN – TOK</div>
-    <p class="note">Le parti non incluse diventano <span class="kbd">000</span> (es. “S000” se lo Spessore non è previsto).</p>
-  </div>
-
-  <div id="faq" class="card">
-    <h2>FAQ & Risoluzione problemi</h2>
-    <h3>Non vedo tutte le famiglie / i menu sono vuoti</h3>
-    <ul>
-      <li>Vai su <b>Dati</b> → clicca <span class="kbd">Rimuovi override</span> → ricarica la pagina.</li>
-      <li>Se serve, usa <span class="kbd">Reset default</span> per leggere i file del sito.</li>
-      <li>Forza l’aggiornamento con <span class="kbd">Ctrl</span>+<span class="kbd">F5</span>.</li>
-    </ul>
-
-    <h3>Mi segnala codici duplicati</h3>
-    <p>I codici devono essere unici. Apri <b>Dati → Famiglie</b>, rinomina uno dei duplicati e premi <b>Salva</b>.</p>
-
-    <h3>“Salva su GitHub (API)” non va</h3>
-    <ul>
-      <li>Controlla di avere un <b>token valido</b> con permessi sui contenuti del repository.</li>
-      <li>Assicurati di essere sul <b>repository giusto</b> e sul branch <b>main</b>.</li>
-    </ul>
-
-    <h3>Il codice mostra 000 dove non dovrebbe</h3>
-    <p>In <b>Dati → Famiglie</b> attiva le spunte relative (D/L/H/Sp/Mat/Fin/Tok) per quella famiglia, poi torna nel Generatore.</p>
-  </div>
-
-  <div id="glossario" class="card">
-    <h2>Glossario</h2>
-    <ul>
-      <li><b>Famiglia</b> — macro categoria (es. Cancelli, Strutture…). Decide anche quali campi sono disponibili.</li>
-      <li><b>Tipo</b> — sottocategoria/forma (Tubo, Lamiera, Staffa…).</li>
-      <li><b>Materiale</b> — es. S235, S355, AISI 304.</li>
-      <li><b>Finitura</b> — es. Grezzo, Verniciato, Zincato.</li>
-      <li><b>Token</b> — breve sigla (es. DX, SN) max 5 caratteri.</li>
-      <li><b>Override locale</b> — salvataggio nel browser. Vale solo sul tuo PC finché non lo rimuovi.</li>
-    </ul>
-  </div>
-
-  <div class="footer">
-    Suggerimento: aggiungi questa pagina ai preferiti del browser per una consultazione veloce.
-  </div>
-
-</main>
+  <!-- Footer firmato -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span class="signature">Manuel Zago</span>
+      <span class="sep"> — </span>
+      <span class="product">&copy; Tecnical Coder</span>
+      <span class="for"> per Grimaldelli s.r.l.</span>
+    </div>
+  </footer>
 </body>
 </html>
