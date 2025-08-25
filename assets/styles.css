@@ -1,60 +1,145 @@
 /* ===========================
-   Brand header & signed footer
+   Tema, Header, Footer, UI base
    =========================== */
 
-/* Fallback elegante per la firma (Autograf -> Great Vibes) */
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-
+/* --- Palette brand --- */
 :root{
-  --surface-0:#0a0f18;     /* sfondo header/footer */
-  --surface-1:#111826;     /* riga separatrice */
-  --text-0:#e6edf3;        /* testo principale */
-  --text-1:#9fb1c0;        /* testo attenuato */
-  --accent:#fe8003;        /* arancio Grimaldelli (facoltativo) */
+  --brand:#fe8003;   /* arancione aziendale */
 }
 
-/* Header con logo a sinistra e titolo centrato */
+/* === Temi =============================================================== */
+/* Fallback: dark */
+:root{
+  --bg:#0f1115;
+  --panel:#111827;
+  --panel2:#0f1623;
+  --line:#2a2f3a;
+  --text:#e6e6e6;
+  --muted:#9aa4b2;
+}
+/* Dark (esplicito) */
+:root[data-theme="dark"]{
+  --bg:#0f1115;
+  --panel:#111827;
+  --panel2:#0f1623;
+  --line:#2a2f3a;
+  --text:#e6e6e6;
+  --muted:#9aa4b2;
+}
+/* Light */
+:root[data-theme="light"]{
+  --bg:#f7f8fb;
+  --panel:#ffffff;
+  --panel2:#f2f4f8;
+  --line:#e2e8f0;
+  --text:#0f172a;
+  --muted:#6b7280;
+}
+
+/* === Tipografia / reset base =========================================== */
+*{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text)}
+
+/* === Header brand ======================================================= */
 .app-header{
-  position:sticky; top:0; z-index: 99;
+  position:sticky; top:0; z-index:99;
   display:flex; align-items:center; gap:.75rem;
   padding:.6rem 1rem;
-  background:var(--surface-0);
-  border-bottom:1px solid var(--surface-1);
+  background:var(--panel);
+  border-bottom:2px solid var(--brand);
 }
-.app-header .brand{ display:inline-flex; align-items:center; gap:.5rem; text-decoration:none; }
+.app-header .brand{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none}
 .app-header .brand-logo{
-  height:42px; width:auto; display:block; object-fit:contain;
+  height:84px; width:auto; display:block; object-fit:contain; /* doppio */
 }
 .app-header .brand-title{
-  margin:0 auto;             /* centra il titolo */
-  font-size:clamp(18px,2.2vw,22px);
-  font-weight:700; letter-spacing:.4px;
-  color:var(--text-0);
-  text-align:center;
+  flex:1; margin:0; text-align:center;
+  font-size:clamp(20px,2.4vw,24px);
+  font-weight:800; letter-spacing:.3px;
+  color:var(--brand);                  /* titolo arancione */
 }
 
-/* eventuale riga nav subito sotto l'header */
+/* Theme toggle (sole/luna) */
+.theme-toggle{
+  display:inline-grid; place-items:center;
+  width:40px; height:40px;
+  border:1px solid var(--line); border-radius:10px;
+  background:var(--panel2); color:var(--text);
+  cursor:pointer;
+}
+.theme-toggle svg{width:20px;height:20px}
+.theme-toggle .icon-sun{display:none}
+:root[data-theme="light"] .theme-toggle .icon-sun{display:block}
+:root[data-theme="light"] .theme-toggle .icon-moon{display:none}
+:root[data-theme="dark"]  .theme-toggle .icon-sun{display:none}
+:root[data-theme="dark"]  .theme-toggle .icon-moon{display:block}
+
+/* === Subnav (barra link pagina) ======================================== */
 .subnav{
-  background:#0f131a;
-  border-bottom:1px solid var(--surface-1);
+  background:var(--panel);
+  border-bottom:1px solid var(--line);
 }
+.bar{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center}
+nav{margin-left:auto;display:flex;gap:8px}
+nav a{
+  color:var(--text);
+  text-decoration:none;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  padding:6px 10px;border-radius:8px
+}
+nav a.active{outline:2px solid var(--brand);}
 
-/* Footer firmato */
+/* === Layout card / controlli =========================================== */
+main{max-width:1200px;margin:0 auto;padding:20px}
+.card{
+  background:var(--panel);
+  border:2px solid var(--brand);     /* contorni arancione */
+  border-radius:12px;padding:14px;margin-bottom:16px
+}
+.row{display:grid;gap:12px}
+.grid-3{grid-template-columns:1fr 1fr 1fr}
+.grid-4{grid-template-columns:1fr 1fr 1fr 1fr}
+@media (max-width:920px){ .grid-3,.grid-4{grid-template-columns:1fr} }
+
+label{font-size:13px;color:var(--muted)}
+select,input[type="text"],input[type="number"]{
+  width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--text);
+  border-radius:8px;padding:8px 10px
+}
+.checks{display:flex;gap:10px;flex-wrap:wrap}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--panel2);border:1px solid var(--line);
+  padding:8px 10px;border-radius:999px;color:var(--muted)
+}
+.btn{
+  background:var(--panel);border:1px solid var(--line);color:var(--text);
+  padding:8px 12px;border-radius:10px;cursor:pointer
+}
+.copyrow{display:grid;grid-template-columns:1fr 90px;gap:8px}
+
+/* === Tabelle pagina Dati =============================================== */
+.panel{background:var(--panel);border:2px solid var(--brand);border-radius:12px;padding:12px}
+table{width:100%;border-collapse:separate;border-spacing:0 8px}
+thead th{font-size:13px;color:var(--muted);text-align:left;padding:8px 10px}
+tbody td{background:var(--panel2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 10px}
+tbody td:first-child{border-left:1px solid var(--line);border-top-left-radius:10px;border-bottom-left-radius:10px}
+tbody td:last-child{border-right:1px solid var(--line);border-top-right-radius:10px;border-bottom-right-radius:10px}
+
+/* === Footer firmato (a destra) ========================================= */
 .app-footer{
-  margin-top:48px;
-  background:var(--surface-0);
-  border-top:1px solid var(--surface-1);
-  color:var(--text-1);
+  margin-top:48px;background:var(--panel);border-top:2px solid var(--brand);color:var(--muted)
 }
 .app-footer .footer-inner{
-  max-width:1200px; margin:0 auto; padding:16px;
-  display:flex; flex-wrap:wrap; gap:.5rem; align-items:center;
+  max-width:1200px;margin:0 auto;padding:16px;
+  display:flex;justify-content:flex-end;align-items:center;gap:.5rem;flex-wrap:wrap
 }
-.app-footer .signature{
-  font-family:'Autograf','Great Vibes',cursive;
-  font-size:1.25rem; line-height:1; color:var(--text-0);
-}
-.app-footer .sep{ opacity:.6; }
-.app-footer .product{ font-weight:600; color:var(--text-0); }
-.app-footer a{ color:var(--text-1); text-decoration:none; }
-.app-footer a:hover{ color:var(--text-0); }
+.app-footer .product{font-weight:600;color:var(--text)}
+.app-footer .signature{color:#9aa4b2}  /* nome in grigio, stesso font */
+.app-footer .sep{opacity:.6}
+
+/* Helpers */
+.hidden{display:none}
+.note{font-size:13px;color:var(--muted);margin-top:6px}
