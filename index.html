@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tecnical Coder</title>
   <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    /* supporto al mini selettore vicino a D */
+    .inline{display:flex; gap:8px; align-items:center}
+    .mini{
+      min-width:56px;
+      padding:6px 8px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      color:var(--text);
+      border-radius:10px;
+      height:36px;
+    }
+    main{max-width:1200px;margin:0 auto;padding:20px}
+  </style>
 </head>
 <body>
 
@@ -82,8 +96,14 @@
           <select id="selTipo"></select>
         </div>
         <div>
-          <label>Ø D [mm]</label>
-          <input id="inpD" type="number" min="0" max="999" value="0" />
+          <label>Misura D [mm]</label>
+          <div class="inline">
+            <select id="dLabel" class="mini" title="Prefisso in descrizione (Ø oppure A)">
+              <option value="Ø" selected>Ø</option>
+              <option value="A">A</option>
+            </select>
+            <input id="inpD" type="number" min="0" max="999" value="0" />
+          </div>
         </div>
         <div>
           <label>L [mm]</label>
@@ -269,6 +289,7 @@
     // 2) Utility UI
     const $ = s => document.querySelector(s);
     const pad = (n, w)=> String(Math.max(0, +n|0)).padStart(w,'0');
+    function dPrefix(){ return (document.getElementById('dLabel')?.value || 'Ø'); }
 
     let catalogs = {famiglie:[],materiali:[],finiture:[],tipi:[]};
     let famSel = null;
@@ -306,7 +327,7 @@
       const Hv = +$('#inpH').value || 0;
       const Sv = +$('#inpSp').value || 0;
 
-      if (inc.D  && Dv>0) parts.push('Ø', String(Dv));
+      if (inc.D  && Dv>0) parts.push(dPrefix(), String(Dv));
       if (inc.L  && Lv>0) parts.push('L', String(Lv));
       if (inc.H  && Hv>0) parts.push('H', String(Hv));
       if (inc.Sp && Sv>0) parts.push('Sp', String(Sv), 'mm');
@@ -372,6 +393,7 @@
     function attach(){
       document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input', render));
       document.getElementById('selFamiglia').addEventListener('change', applyFamFlags);
+      document.getElementById('dLabel').addEventListener('change', render);
       document.querySelectorAll('[data-copy]').forEach(b=>{
         b.addEventListener('click', ()=>{
           const inp = document.querySelector(b.getAttribute('data-copy'));
