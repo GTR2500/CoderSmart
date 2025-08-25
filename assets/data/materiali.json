@@ -1,5 +1,5 @@
 [
   { "code":"S235", "label":"Acciaio S235" },
   { "code":"S355", "label":"Acciaio S355" },
-  { "code":"A304", "label":"AISI 304"     }
+  { "code":"A304", "label":"AISI 304" }
 ]
