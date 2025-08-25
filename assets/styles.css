@@ -61,6 +61,21 @@ body{margin:0;background:var(--bg);color:var(--text)}
 :root[data-theme="dark"]  .theme-toggle .icon-sun{display:none}
 :root[data-theme="dark"]  .theme-toggle .icon-moon{display:block}
 
+/* === Badge "Ultimo aggiornamento" ====================================== */
+.build-badge{
+  margin-right:.5rem;
+  font-size:12px;
+  font-weight:700;
+  padding:4px 10px;
+  border-radius:999px;
+  border:1px solid var(--brand);
+  color:var(--brand);
+  background:rgba(254,128,3,.12); /* arancione tenue */
+  white-space:nowrap;
+  cursor:pointer;
+}
+:root[data-theme="dark"] .build-badge{ background:rgba(254,128,3,.18); }
+
 /* ===== Subnav =========================================================== */
 .subnav{
   background:var(--panel);
