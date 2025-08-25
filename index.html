@@ -12,7 +12,7 @@
     .bar{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;gap:12px;align-items:center}
     h1{font-size:18px;margin:0}
     nav{margin-left:auto;display:flex;gap:8px}
-    nav a{color:#cbd5e1;text-decoration:none;background:#111827;border:1px solid var(--line);padding:6px 10px;border-radius:8px}
+    nav a{color:#cbd5e1;text-decoration:none;background:#111827;border:1px solid #2a2f3a;padding:6px 10px;border-radius:8px}
     nav a.active{border-color:#3b82f6;box-shadow:0 0 0 1px #3b82f6 inset}
     main{max-width:1200px;margin:0 auto;padding:20px}
     .card{background:#111827;border:1px solid #2a2f3a;border-radius:12px;padding:14px;margin-bottom:16px}
@@ -118,7 +118,7 @@
 </main>
 
 <script type="module">
-import { loadCatalogs } from './assets/loader.js';
+import { loadCatalogs } from './assets/data/loader.js';  // << path corretto
 
 const pad = (n, w)=> String(Math.max(0, +n|0)).padStart(w,'0');
 const $ = s => document.querySelector(s);
@@ -137,7 +137,6 @@ function applyFamFlags(){
   const fcode = $('#selFamiglia').value;
   famSel = catalogs.famiglie.find(f=>f.code===fcode) || null;
   const flags = famSel || {D:false,L:false,H:false,Sp:false,mat:false,fin:false,tok:false};
-  // abilita/disable checkboxes in base alla famiglia
   $('#chkD').disabled = !flags.D; if(!flags.D) $('#chkD').checked=false;
   $('#chkL').disabled = !flags.L; if(!flags.L) $('#chkL').checked=false;
   $('#chkH').disabled = !flags.H; if(!flags.H) $('#chkH').checked=false;
@@ -201,10 +200,9 @@ function attach(){
       inp.select(); document.execCommand('copy');
     });
   });
-  // auto-refresh quando salvi da dati.html in altra tab
   window.addEventListener('storage', (e) => {
     if (['scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'].includes(e.key)) {
-      init(); // ricarica cataloghi
+      init();
     }
   });
 }
@@ -215,7 +213,7 @@ async function init(){
   fillSimple($('#selMateriale'), catalogs.materiali);
   fillSimple($('#selFinitura'), catalogs.finiture);
   fillSimple($('#selTipo'), catalogs.tipi);
-  applyFamFlags(); // setta enable/disable e render
+  applyFamFlags();
 }
 
 attach();
