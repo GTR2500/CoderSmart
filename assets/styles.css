@@ -42,3 +42,58 @@ textarea { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace
 .thead > div { font-weight: 600; color: var(--muted); }
 .trow > div { background: #0d121a; border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
 .doc p, .doc li { line-height: 1.55; }
+/* --------------------------
+   Brand header & signed footer
+   -------------------------- */
+
+/* Fallback elegante per la firma (Autograf -> Great Vibes) */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+:root{
+  --surface-0:#0a0f18;     /* sfondo header/footer (scuro) */
+  --surface-1:#111826;     /* riga separatrice */
+  --text-0:#e6edf3;        /* testo principale */
+  --text-1:#9fb1c0;        /* testo attenuato */
+  --accent:#fe8003;        /* arancio Grimaldelli (facoltativo) */
+}
+
+/* Header */
+.app-header{
+  position: sticky; top:0; z-index: 99;
+  display:flex; align-items:center; gap:.75rem;
+  padding:.6rem 1rem;
+  background:var(--surface-0);
+  border-bottom:1px solid var(--surface-1);
+}
+.app-header .brand{ display:inline-flex; align-items:center; gap:.5rem; text-decoration:none; }
+.app-header .brand-logo{
+  height:42px; width:auto; display:block; object-fit:contain;
+  filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+}
+.app-header .brand-title{
+  margin:0 auto; /* centra il titolo */
+  font-size:clamp(18px,2.2vw,22px);
+  font-weight:700; letter-spacing:.4px;
+  color:var(--text-0);
+  text-align:center;
+}
+
+/* Footer firmato */
+.app-footer{
+  margin-top:48px;
+  background:var(--surface-0);
+  border-top:1px solid var(--surface-1);
+  color:var(--text-1);
+}
+.app-footer .footer-inner{
+  max-width:1200px; margin:0 auto; padding:16px;
+  display:flex; flex-wrap:wrap; gap:.5rem; align-items:center;
+}
+.app-footer .signature{
+  font-family:'Autograf','Great Vibes',cursive;
+  font-size:1.25rem; line-height:1; color:var(--text-0);
+}
+.app-footer .sep{ opacity:.6; }
+.app-footer .product{ font-weight:600; color:var(--text-0); }
+.app-footer a{ color:var(--text-1); text-decoration:none; }
+.app-footer a:hover{ color:var(--text-0); }
