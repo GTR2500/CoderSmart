@@ -195,9 +195,25 @@ async function loadCatalogs(){
   ]);
   return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
 }
+// carica SEMPRE dai file, ignorando LS (usato per Reset default)
+async function fetchDefaultsDirect(){
+  const [fam, mat, fin, tip] = await Promise.all([
+    fetch(PATHS.famiglie).then(r=>r.json()),
+    fetch(PATHS.materiali).then(r=>r.json()),
+    fetch(PATHS.finiture).then(r=>r.json()),
+    fetch(PATHS.tipi).then(r=>r.json()),
+  ]);
+  return { famiglie: fam, materiali: mat, finiture: fin, tipi: tip };
+}
+function saveOverrideCanonical(canon){
+  const raw = JSON.stringify(canon);
+  STORAGE_KEYS.forEach(k=>localStorage.setItem(k,raw));
+}
+function clearOverride(){ STORAGE_KEYS.forEach(k=>localStorage.removeItem(k)); }
 /* ===================================================== */
 
 let data = { famiglie:[], materiali:[], finiture:[], tipi:[] };
+
 const $ = s => document.querySelector(s);
 const el = (t,p={}) => Object.assign(document.createElement(t), p);
 const setMsg = (m) => $('#statusMsg').textContent = m;
@@ -212,12 +228,6 @@ const toInternal = canon => ({
   famiglie:(canon.famiglie||[]).map(f=>({code:f.code,label:f.label,useD:f.D,useL:f.L,useH:f.H,useSp:f.Sp,hasMaterial:f.mat,hasFinish:f.fin,useTokens:f.tok})),
   materiali:canon.materiali||[], finiture:canon.finiture||[], tipi:canon.tipi||[]
 });
-
-function saveToLS(canon){
-  const raw = JSON.stringify(canon);
-  for(const k of STORAGE_KEYS) localStorage.setItem(k, raw);
-}
-function removeLS(){ for(const k of STORAGE_KEYS) localStorage.removeItem(k); }
 function toCanonical(){
   return {
     famiglie: data.famiglie.map(f => canonFromAny({code:f.code,label:f.label,D:f.useD,L:f.useL,H:f.useH,Sp:f.useSp,mat:f.hasMaterial,fin:f.hasFinish,tok:f.useTokens})),
@@ -227,7 +237,7 @@ function toCanonical(){
   };
 }
 
-// UI
+// Render
 function renderAll(){ renderFam(); renderSimple('materiali','#tbodyMat'); renderSimple('finiture','#tbodyFin'); renderSimple('tipi','#tbodyTip'); }
 function renderFam(){
   const tb = $('#tbodyFam'); tb.innerHTML='';
@@ -255,17 +265,55 @@ function renderSimple(key, tbSel){
   });
 }
 
-// Actions
+// Bottoni
 $('#addFam').onclick=()=>{data.famiglie.push({code:'',label:'',useD:false,useL:false,useH:false,useSp:false,hasMaterial:false,hasFinish:false,useTokens:false}); renderFam();}
 $('#addMat').onclick=()=>{data.materiali.push({code:'',label:''}); renderSimple('materiali','#tbodyMat');}
 $('#addFin').onclick=()=>{data.finiture.push({code:'',label:''}); renderSimple('finiture','#tbodyFin');}
 $('#addTip').onclick=()=>{data.tipi.push({code:'',label:''}); renderSimple('tipi','#tbodyTip');}
 
-$('#btnSave').onclick=()=>{saveToLS(toCanonical()); setMsg('Dati salvati in browser (override attivo).');}
-$('#btnRemove').onclick=()=>{ if(confirm('Rimuovere override locale?')){ removeLS(); setMsg('Override rimosso. Ricarica pagina.'); } }
-$('#btnReset').onclick=async()=>{ if(!confirm('Caricare i default da assets/data/?')) return; const canon=await loadCatalogs(); saveToLS(canon); data=toInternal(canon); renderAll(); setMsg('Default caricati e salvati in locale.'); }
+$('#btnSave').onclick=()=>{ saveOverrideCanonical(toCanonical()); setMsg('Dati salvati in browser (override attivo).'); };
+$('#btnRemove').onclick=()=>{ if(confirm('Rimuovere override locale?')){ clearOverride(); location.reload(); } };
+
+$('#btnReset').onclick=async()=>{ // IGNORA override e prende i file
+  if(!confirm('Caricare i default da assets/data/?')) return;
+  const canon = await fetchDefaultsDirect();
+  saveOverrideCanonical(canon);            // così Generatore e Dati sono allineati
+  data = toInternal(canon);
+  renderAll();
+  setMsg('Default caricati dai file e salvati in locale.');
+};
+
 $('#btnExport').onclick=()=>{ const a=document.createElement('a'); const txt=JSON.stringify(toCanonical(),null,2); a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'})); a.download='cataloghi_scm_v4.json'; a.click(); URL.revokeObjectURL(a.href); setMsg('JSON esportato.'); }
-$('#btnValidate').onclick=()=>{ const c=toCanonical(); const probs=[]; const chk=(arr,name)=>{const seen=new Set(); for(const x of arr){ if(!x.code||!x.label) probs.push(`${name}: codice/descrizione mancanti`); if(seen.has(x.code)) probs.push(`${name}: duplicato ${x.code}`); seen.add(x.code);} }; chk(c.famiglie,'Famiglie'); chk(c.materiali,'Materiali'); chk(c.finiture,'Finiture'); chk(c.tipi,'Tipi'); if(probs.length) alert('Problemi:\\n - '+probs.join('\\n - ')); setMsg(probs.length?'Validazione: errori trovati.':'Validazione OK.'); }
+
+$('#fileImport').addEventListener('change', async (ev)=>{
+  const file = ev.target.files?.[0];
+  if(!file) return;
+  try{
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    let canon;
+    if(Array.isArray(parsed)){ // solo famiglie
+      canon = { famiglie: parsed, materiali:[], finiture:[], tipi:[] };
+    }else{
+      canon = { famiglie: parsed.famiglie||[], materiali: parsed.materiali||[], finiture: parsed.finiture||[], tipi: parsed.tipi||[] };
+    }
+    saveOverrideCanonical(canon);
+    data = toInternal(canon);
+    renderAll();
+    setMsg('JSON importato e salvato in locale.');
+  }catch(e){
+    alert('File non valido: ' + e.message);
+  }finally{
+    ev.target.value = '';
+  }
+});
+
+$('#btnValidate').onclick=()=>{ 
+  const c=toCanonical(); const probs=[];
+  const chk=(arr,name)=>{const seen=new Set(); for(const x of arr){ if(!x.code||!x.label) probs.push(`${name}: codice/descrizione mancanti`); if(seen.has(x.code)) probs.push(`${name}: duplicato ${x.code}`); seen.add(x.code);} };
+  chk(c.famiglie,'Famiglie'); chk(c.materiali,'Materiali'); chk(c.finiture,'Finiture'); chk(c.tipi,'Tipi');
+  alert(probs.length ? 'Problemi:\n - ' + probs.join('\n - ') : 'Validazione OK.');
+};
 
 // Tabs
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); document.querySelectorAll('section.panel').forEach(s=>s.classList.add('hidden')); document.querySelector('#view-'+t.dataset.tab).classList.remove('hidden');});
@@ -325,7 +373,7 @@ $('#btnSaveGH').onclick=async()=>{
 // Boot
 (async function init(){
   setMsg('Inizializzazione…');
-  const canon = await loadCatalogs();        // override se presente, altrimenti default
+  const canon = await loadCatalogs();     // override se presente, altrimenti file
   data = toInternal(canon);
   renderAll();
   setMsg('Pronto.');
