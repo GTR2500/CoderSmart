@@ -2,18 +2,23 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>ShortCode Maker v4 — Grimaldelli</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tecnical Coder</title>
+
+  <!-- Stili brand header/footer -->
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <!-- Stili della pagina (UI generatore) -->
   <style>
     :root{ --bg:#0f1115; --panel:#111827; --panel2:#0f1623; --line:#2a2f3a; --text:#e6e6e6; }
     *{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
     body{margin:0;background:var(--bg);color:var(--text)}
-    header{position:sticky;top:0;background:#0f131a;border-bottom:1px solid var(--line)}
-    .bar{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;gap:12px;align-items:center}
-    h1{font-size:18px;margin:0}
+    /* nav semplice sotto header */
+    .bar{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center}
     nav{margin-left:auto;display:flex;gap:8px}
     nav a{color:#cbd5e1;text-decoration:none;background:#111827;border:1px solid #2a2f3a;padding:6px 10px;border-radius:8px}
     nav a.active{border-color:#3b82f6;box-shadow:0 0 0 1px #3b82f6 inset}
+
     main{max-width:1200px;margin:0 auto;padding:20px}
     .card{background:#111827;border:1px solid #2a2f3a;border-radius:12px;padding:14px;margin-bottom:16px}
     .row{display:grid;gap:12px}
@@ -28,306 +33,319 @@
   </style>
 </head>
 <body>
-<header>
-  <div class="bar">
-    <h1>ShortCode Maker v4 — Grimaldelli</h1>
-    <nav>
-      <a class="active" href="index.html">Generatore</a>
-      <a href="istruzioni.html">Istruzioni</a>
-      <a href="dati.html">Dati</a>
-    </nav>
+
+  <!-- ===== BRAND HEADER ===== -->
+  <header class="app-header">
+    <a class="brand" href="https://www.glcgrimaldelli.com" target="_blank" rel="noopener">
+      <img class="brand-logo"
+           src="https://www.glcgrimaldelli.com/wp-content/uploads/2019/06/Logo-Sottopagine.jpg"
+           alt="Grimaldelli s.r.l." />
+    </a>
+    <h1 class="brand-title">Tecnical Coder</h1>
+  </header>
+
+  <!-- Nav pagina -->
+  <div class="subnav">
+    <div class="bar">
+      <nav>
+        <a class="active" href="index.html">Generatore</a>
+        <a href="istruzioni.html">Istruzioni</a>
+        <a href="dati.html">Dati</a>
+      </nav>
+    </div>
   </div>
-</header>
 
-<main>
-  <section class="card">
-    <h3>Cataloghi (per i menu a discesa)</h3>
-    <div class="row grid-3">
-      <div>
-        <label>Famiglia</label>
-        <select id="selFamiglia" data-catalog="famiglie"></select>
+  <main>
+    <section class="card">
+      <h3>Cataloghi (per i menu a discesa)</h3>
+      <div class="row grid-3">
+        <div>
+          <label>Famiglia</label>
+          <select id="selFamiglia" data-catalog="famiglie"></select>
+        </div>
+        <div>
+          <label>Materiale</label>
+          <select id="selMateriale" data-catalog="materiali"></select>
+        </div>
+        <div>
+          <label>Finitura</label>
+          <select id="selFinitura" data-catalog="finiture"></select>
+        </div>
       </div>
-      <div>
-        <label>Materiale</label>
-        <select id="selMateriale" data-catalog="materiali"></select>
-      </div>
-      <div>
-        <label>Finitura</label>
-        <select id="selFinitura" data-catalog="finiture"></select>
-      </div>
-    </div>
-    <div class="pill" style="margin-top:8px">Le liste si modificano dalla pagina <a href="dati.html" style="color:#93c5fd">Dati</a>.</div>
-  </section>
+      <div class="pill" style="margin-top:8px">Le liste si modificano dalla pagina <a href="dati.html" style="color:#93c5fd">Dati</a>.</div>
+    </section>
 
-  <section class="card">
-    <h3>Composizione ShortCode (seleziona cosa includere)</h3>
-    <div class="checks">
-      <label><input type="checkbox" id="chkFam" checked disabled /> Famiglia</label>
-      <label><input type="checkbox" id="chkTipo" checked /> Tipo</label>
-      <label><input type="checkbox" id="chkD" /> Ø D</label>
-      <label><input type="checkbox" id="chkL" /> L</label>
-      <label><input type="checkbox" id="chkH" /> H</label>
-      <label><input type="checkbox" id="chkSp" /> Spessore</label>
-      <label><input type="checkbox" id="chkMat" /> Materiale</label>
-      <label><input type="checkbox" id="chkFin" /> Finitura</label>
-      <label><input type="checkbox" id="chkTok" /> Token</label>
-    </div>
-    <div class="pill" style="margin-top:8px">Struttura v4: <b>FAM-TIPO-D3-L4-H4-S3-MAT-FIN-TOK</b>. I campi non inclusi diventano <b>000</b>.</div>
-  </section>
+    <section class="card">
+      <h3>Composizione ShortCode (seleziona cosa includere)</h3>
+      <div class="checks">
+        <label><input type="checkbox" id="chkFam" checked disabled /> Famiglia</label>
+        <label><input type="checkbox" id="chkTipo" checked /> Tipo</label>
+        <label><input type="checkbox" id="chkD" /> Ø D</label>
+        <label><input type="checkbox" id="chkL" /> L</label>
+        <label><input type="checkbox" id="chkH" /> H</label>
+        <label><input type="checkbox" id="chkSp" /> Spessore</label>
+        <label><input type="checkbox" id="chkMat" /> Materiale</label>
+        <label><input type="checkbox" id="chkFin" /> Finitura</label>
+        <label><input type="checkbox" id="chkTok" /> Token</label>
+      </div>
+      <div class="pill" style="margin-top:8px">Struttura v4: <b>FAM-TIPO-D3-L4-H4-S3-MAT-FIN-TOK</b>. I campi non inclusi diventano <b>000</b>.</div>
+    </section>
 
-  <section class="card">
-    <h3>Attributi</h3>
-    <div class="row grid-4">
-      <div>
-        <label>Tipo Prodotto</label>
-        <select id="selTipo"></select>
+    <section class="card">
+      <h3>Attributi</h3>
+      <div class="row grid-4">
+        <div>
+          <label>Tipo Prodotto</label>
+          <select id="selTipo"></select>
+        </div>
+        <div>
+          <label>Ø D [mm]</label>
+          <input id="inpD" type="number" min="0" max="999" value="0" />
+        </div>
+        <div>
+          <label>L [mm]</label>
+          <input id="inpL" type="number" min="0" max="9999" value="0" />
+        </div>
+        <div>
+          <label>H [mm]</label>
+          <input id="inpH" type="number" min="0" max="9999" value="0" />
+        </div>
       </div>
-      <div>
-        <label>Ø D [mm]</label>
-        <input id="inpD" type="number" min="0" max="999" value="0" />
+      <div class="row grid-4" style="margin-top:12px">
+        <div>
+          <label>Spessore [mm]</label>
+          <input id="inpSp" type="number" min="0" max="999" value="0" />
+        </div>
+        <div>
+          <label>Token (DX/SN/ALTRO, max 5)</label>
+          <input id="inpTok" type="text" maxlength="5" />
+        </div>
       </div>
-      <div>
-        <label>L [mm]</label>
-        <input id="inpL" type="number" min="0" max="9999" value="0" />
-      </div>
-      <div>
-        <label>H [mm]</label>
-        <input id="inpH" type="number" min="0" max="9999" value="0" />
-      </div>
-    </div>
-    <div class="row grid-4" style="margin-top:12px">
-      <div>
-        <label>Spessore [mm]</label>
-        <input id="inpSp" type="number" min="0" max="999" value="0" />
-      </div>
-      <div>
-        <label>Token (DX/SN/ALTRO, max 5)</label>
-        <input id="inpTok" type="text" maxlength="5" />
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="card">
-    <h3>Output</h3>
-    <div class="copyrow">
-      <div>
-        <label>ShortCode (auto)</label>
-        <input id="outCode" type="text" readonly />
+    <section class="card">
+      <h3>Output</h3>
+      <div class="copyrow">
+        <div>
+          <label>ShortCode (auto)</label>
+          <input id="outCode" type="text" readonly />
+        </div>
+        <button class="btn" data-copy="#outCode">Copia</button>
       </div>
-      <button class="btn" data-copy="#outCode">Copia</button>
-    </div>
-    <div class="copyrow">
-      <div>
-        <label>Descrizione (auto: etichette complete)</label>
-        <input id="outDesc" type="text" readonly />
+      <div class="copyrow">
+        <div>
+          <label>Descrizione (auto: etichette complete)</label>
+          <input id="outDesc" type="text" readonly />
+        </div>
+        <button class="btn" data-copy="#outDesc">Copia</button>
       </div>
-      <button class="btn" data-copy="#outDesc">Copia</button>
-    </div>
-    <div class="copyrow">
-      <div>
-        <label>Nome cartella (auto)</label>
-        <input id="outFolder" type="text" readonly />
+      <div class="copyrow">
+        <div>
+          <label>Nome cartella (auto)</label>
+          <input id="outFolder" type="text" readonly />
+        </div>
+        <button class="btn" data-copy="#outFolder">Copia</button>
       </div>
-      <button class="btn" data-copy="#outFolder">Copia</button>
-    </div>
-  </section>
-</main>
+    </section>
+  </main>
 
-<script>
-/* ========= Loader (override → default) ========= */
-const STORAGE_KEYS = [
-  'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
-];
-const PATHS = {
-  famiglie:'assets/data/famiglie.json',
-  materiali:'assets/data/materiali.json',
-  finiture:'assets/data/finiture.json',
-  tipi:'assets/data/tipi.json'
-};
-const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
-const canonFam = x => ({
-  code:(x.code||'').trim().toUpperCase(),
-  label:x.label||'',
-  D:toBool(x.D??x.useD??x.d),
-  L:toBool(x.L??x.useL??x.l),
-  H:toBool(x.H??x.useH??x.h),
-  Sp:toBool(x.Sp??x.useSp??x.sp),
-  mat:toBool(x.mat??x.hasMaterial??x.material),
-  fin:toBool(x.fin??x.hasFinish??x.finish),
-  tok:toBool(x.tok??x.useTokens??x.tokens)
-});
-const canonSimple = x => ({code:(x.code||'').trim().toUpperCase(),label:x.label||''});
-function canonize(obj){
-  return {
-    famiglie:(obj.famiglie||[]).map(canonFam),
-    materiali:(obj.materiali||[]).map(canonSimple),
-    finiture:(obj.finiture||[]).map(canonSimple),
-    tipi:(obj.tipi||[]).map(canonSimple)
+  <!-- ===== FOOTER FIRMATO ===== -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span class="signature">Manuel Zago</span>
+      <span class="sep"> — </span>
+      <span class="product">&copy; Tecnical Coder</span>
+      <span class="for"> per Grimaldelli s.r.l.</span>
+    </div>
+  </footer>
+
+  <!-- ===== JS della pagina (logica generatore) ===== -->
+  <script>
+  /* ========= Loader (override → default) ========= */
+  const STORAGE_KEYS = [
+    'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
+  ];
+  const PATHS = {
+    famiglie:'assets/data/famiglie.json',
+    materiali:'assets/data/materiali.json',
+    finiture:'assets/data/finiture.json',
+    tipi:'assets/data/tipi.json'
   };
-}
-function readLS(){
-  for(const k of STORAGE_KEYS){
-    const raw = localStorage.getItem(k);
-    if(!raw) continue;
-    try{
-      const j = JSON.parse(raw);
-      if(j && j.famiglie && j.materiali && j.finiture && j.tipi) return canonize(j);
-    }catch(e){}
-  }
-  return null;
-}
-async function loadCatalogs(){
-  const fromLS = readLS();
-  if(fromLS) return fromLS;
-  const [fam,mat,fin,tip] = await Promise.all([
-    fetch(PATHS.famiglie).then(r=>r.json()),
-    fetch(PATHS.materiali).then(r=>r.json()),
-    fetch(PATHS.finiture).then(r=>r.json()),
-    fetch(PATHS.tipi).then(r=>r.json())
-  ]);
-  return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
-}
-/* ===================================================== */
-
-const pad = (n, w)=> String(Math.max(0, +n|0)).padStart(w,'0');
-const $ = s => document.querySelector(s);
-
-let catalogs = {famiglie:[],materiali:[],finiture:[],tipi:[]};
-let famSel = null;
-
-function fillSelect(sel, items){
-  sel.innerHTML = '<option value=""></option>' + items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
-}
-function fillSimple(sel, items){
-  sel.innerHTML = '<option value=""></option>' + items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
-}
-
-function applyFamFlags(){
-  const fcode = $('#selFamiglia').value;
-  famSel = catalogs.famiglie.find(f=>f.code===fcode) || null;
-  const flags = famSel || {D:false,L:false,H:false,Sp:false,mat:false,fin:false,tok:false};
-
-  // abilita/disabilita le spunte in base alla famiglia
-  $('#chkD').disabled = !flags.D; if(!flags.D) $('#chkD').checked=false;
-  $('#chkL').disabled = !flags.L; if(!flags.L) $('#chkL').checked=false;
-  $('#chkH').disabled = !flags.H; if(!flags.H) $('#chkH').checked=false;
-  $('#chkSp').disabled= !flags.Sp; if(!flags.Sp) $('#chkSp').checked=false;
-  $('#chkMat').disabled=!flags.mat; if(!flags.mat) $('#chkMat').checked=false;
-  $('#chkFin').disabled=!flags.fin; if(!flags.fin) $('#chkFin').checked=false;
-  $('#chkTok').disabled=!flags.tok; if(!flags.tok) $('#chkTok').checked=false;
-
-  render();
-}
-
-/* === Nuova costruzione descrizione compatta ================================
-   Formato: [Famiglia label] [Tipo codice] [Ø D] [L] [H] [Sp mm] [Mat codice] [Fin codice] [Token]
-   Solo se flag attivo + dato presente.
-============================================================================ */
-function makeDescriptionCompact(inc){
-  const parts = [];
-
-  // Famiglia (label completa)
-  if (famSel && famSel.label) parts.push(famSel.label);
-
-  // Tipo (solo codice)
-  const tipoCode = ($('#selTipo').value || '').trim().toUpperCase();
-  if (inc.tipo && tipoCode) parts.push(tipoCode);
-
-  // Dimensioni
-  const Dval = +$('#inpD').value || 0;
-  const Lval = +$('#inpL').value || 0;
-  const Hval = +$('#inpH').value || 0;
-  const Spval = +$('#inpSp').value || 0;
-
-  if (inc.D  && Dval>0) parts.push('Ø', String(Dval));
-  if (inc.L  && Lval>0) parts.push('L', String(Lval));
-  if (inc.H  && Hval>0) parts.push('H', String(Hval));
-  if (inc.Sp && Spval>0) parts.push('Sp', String(Spval), 'mm');
-
-  // Materiale e Finitura (solo codice dai select)
-  const matCode = ($('#selMateriale').value || '').trim().toUpperCase();
-  const finCode = ($('#selFinitura').value  || '').trim().toUpperCase();
-  if (inc.mat && matCode) parts.push(matCode);
-  if (inc.fin && finCode) parts.push(finCode);
-
-  // Token (solo valore)
-  const tokVal = ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);
-  if (inc.tok && tokVal) parts.push(tokVal);
-
-  return parts.join(' ').replace(/\s+/g,' ').trim();
-}
-
-function render(){
-  const fam = $('#selFamiglia').value || '';
-  const tipo = $('#selTipo').value || '';
-
-  const inc = {
-    fam:true,
-    tipo: $('#chkTipo').checked,
-    D:    $('#chkD').checked,
-    L:    $('#chkL').checked,
-    H:    $('#chkH').checked,
-    Sp:   $('#chkSp').checked,
-    mat:  $('#chkMat').checked,
-    fin:  $('#chkFin').checked,
-    tok:  $('#chkTok').checked,
-  };
-
-  const vals = {
-    D: pad($('#inpD').value,3),
-    L: pad($('#inpL').value,4),
-    H: pad($('#inpH').value,4),
-    Sp: pad($('#inpSp').value,3),
-    mat: $('#selMateriale').value || '000',
-    fin: $('#selFinitura').value || '000',
-    tok: ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5) || '000'
-  };
-
-  // ShortCode
-  const parts = [];
-  parts.push(fam || '---');
-  parts.push(inc.tipo ? (tipo || '---') : '000');
-  parts.push(inc.D   ? `D${vals.D}` : '000');
-  parts.push(inc.L   ? `L${vals.L}` : '000');
-  parts.push(inc.H   ? `H${vals.H}` : '000');
-  parts.push(inc.Sp  ? `S${vals.Sp}`: '000');
-  parts.push(inc.mat ? vals.mat     : '000');
-  parts.push(inc.fin ? vals.fin     : '000');
-  parts.push(inc.tok ? vals.tok     : '000');
-
-  const sc = parts.join('-');
-  $('#outCode').value = sc;
-
-  // Descrizione compatta
-  const desc = makeDescriptionCompact(inc);
-  $('#outDesc').value = desc;
-
-  // Nome cartella = ShortCode — Descrizione
-  $('#outFolder').value = desc ? `${sc} — ${desc}` : sc;
-}
-
-function attach(){
-  document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input', render));
-  document.getElementById('selFamiglia').addEventListener('change', applyFamFlags);
-  document.querySelectorAll('[data-copy]').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      const inp = document.querySelector(b.getAttribute('data-copy'));
-      inp.select(); document.execCommand('copy');
-    });
+  const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
+  const canonFam = x => ({
+    code:(x.code||'').trim().toUpperCase(),
+    label:x.label||'',
+    D:toBool(x.D??x.useD??x.d),
+    L:toBool(x.L??x.useL??x.l),
+    H:toBool(x.H??x.useH??x.h),
+    Sp:toBool(x.Sp??x.useSp??x.sp),
+    mat:toBool(x.mat??x.hasMaterial??x.material),
+    fin:toBool(x.fin??x.hasFinish??x.finish),
+    tok:toBool(x.tok??x.useTokens??x.tokens)
   });
-}
+  const canonSimple = x => ({code:(x.code||'').trim().toUpperCase(),label:x.label||''});
+  function canonize(obj){
+    return {
+      famiglie:(obj.famiglie||[]).map(canonFam),
+      materiali:(obj.materiali||[]).map(canonSimple),
+      finiture:(obj.finiture||[]).map(canonSimple),
+      tipi:(obj.tipi||[]).map(canonSimple)
+    };
+  }
+  function readLS(){
+    for(const k of STORAGE_KEYS){
+      const raw = localStorage.getItem(k);
+      if(!raw) continue;
+      try{
+        const j = JSON.parse(raw);
+        if(j && j.famiglie && j.materiali && j.finiture && j.tipi) return canonize(j);
+      }catch(e){}
+    }
+    return null;
+  }
+  async function loadCatalogs(){
+    const fromLS = readLS();
+    if(fromLS) return fromLS;
+    const [fam,mat,fin,tip] = await Promise.all([
+      fetch(PATHS.famiglie).then(r=>r.json()),
+      fetch(PATHS.materiali).then(r=>r.json()),
+      fetch(PATHS.finiture).then(r=>r.json()),
+      fetch(PATHS.tipi).then(r=>r.json())
+    ]);
+    return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
+  }
+  /* ===================================================== */
 
-async function init(){
-  catalogs = await loadCatalogs();
-  fillSelect(document.getElementById('selFamiglia'), catalogs.famiglie);
-  fillSimple(document.getElementById('selMateriale'), catalogs.materiali);
-  fillSimple(document.getElementById('selFinitura'), catalogs.finiture);
-  fillSimple(document.getElementById('selTipo'), catalogs.tipi);
-  applyFamFlags();
-}
+  const pad = (n, w)=> String(Math.max(0, +n|0)).padStart(w,'0');
+  const $ = s => document.querySelector(s);
 
-attach();
-init();
-</script>
+  let catalogs = {famiglie:[],materiali:[],finiture:[],tipi:[]};
+  let famSel = null;
+
+  function fillSelect(sel, items){
+    sel.innerHTML = '<option value=""></option>' + items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
+  }
+  function fillSimple(sel, items){
+    sel.innerHTML = '<option value=""></option>' + items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
+  }
+
+  function applyFamFlags(){
+    const fcode = $('#selFamiglia').value;
+    famSel = catalogs.famiglie.find(f=>f.code===fcode) || null;
+    const flags = famSel || {D:false,L:false,H:false,Sp:false,mat:false,fin:false,tok:false};
+
+    // abilita/disabilita le spunte in base alla famiglia
+    $('#chkD').disabled = !flags.D; if(!flags.D) $('#chkD').checked=false;
+    $('#chkL').disabled = !flags.L; if(!flags.L) $('#chkL').checked=false;
+    $('#chkH').disabled = !flags.H; if(!flags.H) $('#chkH').checked=false;
+    $('#chkSp').disabled= !flags.Sp; if(!flags.Sp) $('#chkSp').checked=false;
+    $('#chkMat').disabled=!flags.mat; if(!flags.mat) $('#chkMat').checked=false;
+    $('#chkFin').disabled=!flags.fin; if(!flags.fin) $('#chkFin').checked=false;
+    $('#chkTok').disabled=!flags.tok; if(!flags.tok) $('#chkTok').checked=false;
+
+    render();
+  }
+
+  // Descrizione compatta: Famiglia (label), Tipo (codice), Ø/L/H/Sp, Materiale (codice), Finitura (codice), Token (solo valore)
+  function makeDescriptionCompact(inc){
+    const parts = [];
+    if (famSel && famSel.label) parts.push(famSel.label);
+
+    const tipoCode = ($('#selTipo').value || '').trim().toUpperCase();
+    if (inc.tipo && tipoCode) parts.push(tipoCode);
+
+    const Dval = +$('#inpD').value || 0;
+    const Lval = +$('#inpL').value || 0;
+    const Hval = +$('#inpH').value || 0;
+    const Spval = +$('#inpSp').value || 0;
+
+    if (inc.D  && Dval>0) parts.push('Ø', String(Dval));
+    if (inc.L  && Lval>0) parts.push('L', String(Lval));
+    if (inc.H  && Hval>0) parts.push('H', String(Hval));
+    if (inc.Sp && Spval>0) parts.push('Sp', String(Spval), 'mm');
+
+    const matCode = ($('#selMateriale').value || '').trim().toUpperCase();
+    const finCode = ($('#selFinitura').value  || '').trim().toUpperCase();
+    if (inc.mat && matCode) parts.push(matCode);
+    if (inc.fin && finCode) parts.push(finCode);
+
+    const tokVal = ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);
+    if (inc.tok && tokVal) parts.push(tokVal);
+
+    return parts.join(' ').replace(/\s+/g,' ').trim();
+  }
+
+  function render(){
+    const fam = $('#selFamiglia').value || '';
+    const tipo = $('#selTipo').value || '';
+
+    const inc = {
+      fam:true,
+      tipo: $('#chkTipo').checked,
+      D:    $('#chkD').checked,
+      L:    $('#chkL').checked,
+      H:    $('#chkH').checked,
+      Sp:   $('#chkSp').checked,
+      mat:  $('#chkMat').checked,
+      fin:  $('#chkFin').checked,
+      tok:  $('#chkTok').checked,
+    };
+
+    const vals = {
+      D: pad($('#inpD').value,3),
+      L: pad($('#inpL').value,4),
+      H: pad($('#inpH').value,4),
+      Sp: pad($('#inpSp').value,3),
+      mat: $('#selMateriale').value || '000',
+      fin: $('#selFinitura').value || '000',
+      tok: ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5) || '000'
+    };
+
+    // ShortCode
+    const parts = [];
+    parts.push(fam || '---');
+    parts.push(inc.tipo ? (tipo || '---') : '000');
+    parts.push(inc.D   ? `D${vals.D}` : '000');
+    parts.push(inc.L   ? `L${vals.L}` : '000');
+    parts.push(inc.H   ? `H${vals.H}` : '000');
+    parts.push(inc.Sp  ? `S${vals.Sp}`: '000');
+    parts.push(inc.mat ? vals.mat     : '000');
+    parts.push(inc.fin ? vals.fin     : '000');
+    parts.push(inc.tok ? vals.tok     : '000');
+
+    const sc = parts.join('-');
+    $('#outCode').value = sc;
+
+    // Descrizione compatta
+    const desc = makeDescriptionCompact(inc);
+    $('#outDesc').value = desc;
+
+    // Nome cartella = ShortCode — Descrizione
+    $('#outFolder').value = desc ? `${sc} — ${desc}` : sc;
+  }
+
+  function attach(){
+    document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input', render));
+    document.getElementById('selFamiglia').addEventListener('change', applyFamFlags);
+    document.querySelectorAll('[data-copy]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        const inp = document.querySelector(b.getAttribute('data-copy'));
+        inp.select(); document.execCommand('copy');
+      });
+    });
+  }
+
+  async function init(){
+    catalogs = await loadCatalogs();
+    fillSelect(document.getElementById('selFamiglia'), catalogs.famiglie);
+    fillSimple(document.getElementById('selMateriale'), catalogs.materiali);
+    fillSimple(document.getElementById('selFinitura'), catalogs.finiture);
+    fillSimple(document.getElementById('selTipo'), catalogs.tipi);
+    applyFamFlags();
+  }
+
+  attach();
+  init();
+  </script>
 </body>
 </html>
