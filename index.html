@@ -117,8 +117,61 @@
   </section>
 </main>
 
-<script type="module">
-import { loadCatalogs } from './assets/data/loader.js';  // << path corretto
+<script>
+/* ========= Loader inline (override → default) ========= */
+const STORAGE_KEYS = [
+  'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
+];
+const PATHS = {
+  famiglie:'assets/data/famiglie.json',
+  materiali:'assets/data/materiali.json',
+  finiture:'assets/data/finiture.json',
+  tipi:'assets/data/tipi.json'
+};
+const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
+const canonFam = x => ({
+  code:(x.code||'').trim().toUpperCase(),
+  label:x.label||'',
+  D:toBool(x.D??x.useD??x.d),
+  L:toBool(x.L??x.useL??x.l),
+  H:toBool(x.H??x.useH??x.h),
+  Sp:toBool(x.Sp??x.useSp??x.sp),
+  mat:toBool(x.mat??x.hasMaterial??x.material),
+  fin:toBool(x.fin??x.hasFinish??x.finish),
+  tok:toBool(x.tok??x.useTokens??x.tokens)
+});
+const canonSimple = x => ({code:(x.code||'').trim().toUpperCase(),label:x.label||''});
+function canonize(obj){
+  return {
+    famiglie:(obj.famiglie||[]).map(canonFam),
+    materiali:(obj.materiali||[]).map(canonSimple),
+    finiture:(obj.finiture||[]).map(canonSimple),
+    tipi:(obj.tipi||[]).map(canonSimple)
+  };
+}
+function readLS(){
+  for(const k of STORAGE_KEYS){
+    const raw = localStorage.getItem(k);
+    if(!raw) continue;
+    try{
+      const j = JSON.parse(raw);
+      if(j && j.famiglie && j.materiali && j.finiture && j.tipi) return canonize(j);
+    }catch(e){}
+  }
+  return null;
+}
+async function loadCatalogs(){
+  const fromLS = readLS();
+  if(fromLS) return fromLS;
+  const [fam,mat,fin,tip] = await Promise.all([
+    fetch(PATHS.famiglie).then(r=>r.json()),
+    fetch(PATHS.materiali).then(r=>r.json()),
+    fetch(PATHS.finiture).then(r=>r.json()),
+    fetch(PATHS.tipi).then(r=>r.json())
+  ]);
+  return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
+}
+/* ===================================================== */
 
 const pad = (n, w)=> String(Math.max(0, +n|0)).padStart(w,'0');
 const $ = s => document.querySelector(s);
