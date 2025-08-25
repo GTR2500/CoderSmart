@@ -3,12 +3,5 @@
   { "code":"BAT", "label":"Battifianchi",  "D":false, "L":true,  "H":false, "Sp":true,  "mat":true, "fin":true, "tok":false },
   { "code":"BOX", "label":"Box Vitelli",   "D":false, "L":true,  "H":true,  "Sp":true,  "mat":true, "fin":true, "tok":false },
   { "code":"CAN", "label":"Cancelli",      "D":false, "L":true,  "H":true,  "Sp":true,  "mat":true, "fin":true, "tok":true  },
-  { "code":"CAC", "label":"Cancelli Carrai","D":false,"L":true,  "H":true,  "Sp":true,  "mat":true, "fin":true, "tok":true  },
-  { "code":"CAS", "label":"Cassoni",       "D":false, "L":true,  "H":true,  "Sp":true,  "mat":true, "fin":true, "tok":false },
-  { "code":"CAV", "label":"Cavalletti",    "D":false, "L":true,  "H":true,  "Sp":true,  "mat":true, "fin":true, "tok":false },
-  { "code":"FTV", "label":"Fotovoltaico",  "D":false, "L":true,  "H":true,  "Sp":true,  "mat":true, "fin":true, "tok":true  },
-  { "code":"RUS", "label":"Ruspette",      "D":true,  "L":true,  "H":true,  "Sp":true,  "mat":true, "fin":true, "tok":false },
-  { "code":"STA", "label":"Staffaggi",     "D":false, "L":true,  "H":false, "Sp":true,  "mat":true, "fin":true, "tok":false },
-  { "code":"STT", "label":"Strutture",     "D":false, "L":true,  "H":true,  "Sp":true,  "mat":true, "fin":true, "tok":false },
-  { "code":"TUB", "label":"Tubi Lavaggio", "D":true,  "L":true,  "H":false, "Sp":true,  "mat":true, "fin":true, "tok":false }
+  { "code":"STT", "label":"Strutture",     "D":false, "L":true,  "H":true,  "Sp":true,  "mat":true, "fin":true, "tok":false }
 ]
