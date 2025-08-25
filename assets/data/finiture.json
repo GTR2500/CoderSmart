@@ -1,5 +1,5 @@
 [
-  { "code":"GREZ", "label":"Grezzo"     },
+  { "code":"GREZ", "label":"Grezzo" },
   { "code":"VERN", "label":"Verniciato" },
-  { "code":"ZINC", "label":"Zincato"    }
+  { "code":"ZINC", "label":"Zincato" }
 ]
