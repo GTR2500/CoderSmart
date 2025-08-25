@@ -35,7 +35,6 @@
       <a class="active" href="index.html">Generatore</a>
       <a href="istruzioni.html">Istruzioni</a>
       <a href="dati.html">Dati</a>
-      <a href="tipi.html">Config. Tipi</a>
     </nav>
   </div>
 </header>
@@ -182,22 +181,24 @@ let famSel = null;
 function fillSelect(sel, items){
   sel.innerHTML = '<option value=""></option>' + items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
 }
-function fillSimple(sel, items){
-  sel.innerHTML = '<option value=""></option>' + items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
-}
-
 function applyFamFlags(){
   const fcode = $('#selFamiglia').value;
   famSel = catalogs.famiglie.find(f=>f.code===fcode) || null;
   const flags = famSel || {D:false,L:false,H:false,Sp:false,mat:false,fin:false,tok:false};
-  $('#chkD').disabled = !flags.D; if(!flags.D) $('#chkD').checked=false;
-  $('#chkL').disabled = !flags.L; if(!flags.L) $('#chkL').checked=false;
-  $('#chkH').disabled = !flags.H; if(!flags.H) $('#chkH').checked=false;
-  $('#chkSp').disabled= !flags.Sp; if(!flags.Sp) $('#chkSp').checked=false;
-  $('#chkMat').disabled=!flags.mat; if(!flags.mat) $('#chkMat').checked=false;
-  $('#chkFin').disabled=!flags.fin; if(!flags.fin) $('#chkFin').checked=false;
-  $('#chkTok').disabled=!flags.tok; if(!flags.tok) $('#chkTok').checked=false;
+  ['D','L','H','Sp','mat','fin','tok'].forEach(k=>{
+    const el = document.getElementById('chk'+(k==='mat'||k==='fin'||k==='tok'?k[0].toUpperCase()+k.slice(1):k));
+  });
+  document.getElementById('chkD').disabled = !flags.D; if(!flags.D) document.getElementById('chkD').checked=false;
+  document.getElementById('chkL').disabled = !flags.L; if(!flags.L) document.getElementById('chkL').checked=false;
+  document.getElementById('chkH').disabled = !flags.H; if(!flags.H) document.getElementById('chkH').checked=false;
+  document.getElementById('chkSp').disabled= !flags.Sp; if(!flags.Sp) document.getElementById('chkSp').checked=false;
+  document.getElementById('chkMat').disabled=!flags.mat; if(!flags.mat) document.getElementById('chkMat').checked=false;
+  document.getElementById('chkFin').disabled=!flags.fin; if(!flags.fin) document.getElementById('chkFin').checked=false;
+  document.getElementById('chkTok').disabled=!flags.tok; if(!flags.tok) document.getElementById('chkTok').checked=false;
   render();
+}
+function fillSimple(sel, items){
+  sel.innerHTML = '<option value=""></option>' + items.map(x=>`<option value="${x.code}">${x.code} — ${x.label}</option>`).join('');
 }
 
 function render(){
@@ -205,23 +206,24 @@ function render(){
   const tipo = $('#selTipo').value || '';
   const inc = {
     fam:true,
-    tipo: $('#chkTipo').checked,
-    D:   $('#chkD').checked,
-    L:   $('#chkL').checked,
-    H:   $('#chkH').checked,
-    Sp:  $('#chkSp').checked,
-    mat: $('#chkMat').checked,
-    fin: $('#chkFin').checked,
-    tok: $('#chkTok').checked,
+    tipo: document.getElementById('chkTipo').checked,
+    D:   document.getElementById('chkD').checked,
+    L:   document.getElementById('chkL').checked,
+    H:   document.getElementById('chkH').checked,
+    Sp:  document.getElementById('chkSp').checked,
+    mat: document.getElementById('chkMat').checked,
+    fin: document.getElementById('chkFin').checked,
+    tok: document.getElementById('chkTok').checked,
   };
+  const pad = (n, w)=> String(Math.max(0, +n|0)).padStart(w,'0');
   const vals = {
-    D: pad($('#inpD').value,3),
-    L: pad($('#inpL').value,4),
-    H: pad($('#inpH').value,4),
-    Sp: pad($('#inpSp').value,3),
-    mat: $('#selMateriale').value || '000',
-    fin: $('#selFinitura').value || '000',
-    tok: ($('#inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5) || '000'
+    D: pad(document.getElementById('inpD').value,3),
+    L: pad(document.getElementById('inpL').value,4),
+    H: pad(document.getElementById('inpH').value,4),
+    Sp: pad(document.getElementById('inpSp').value,3),
+    mat: document.getElementById('selMateriale').value || '000',
+    fin: document.getElementById('selFinitura').value || '000',
+    tok: (document.getElementById('inpTok').value || '').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5) || '000'
   };
 
   const parts = [];
@@ -235,18 +237,17 @@ function render(){
   parts.push(inc.fin ? vals.fin     : '000');
   parts.push(inc.tok ? vals.tok     : '000');
 
-  const code = parts.join('-');
-  $('#outCode').value = code;
-  $('#outFolder').value = fam ? `${fam}` : '';
-  $('#outFile').value   = code + '.pdf';
+  document.getElementById('outCode').value   = parts.join('-');
+  document.getElementById('outFolder').value = fam ? `${fam}` : '';
+  document.getElementById('outFile').value   = parts.join('-') + '.pdf';
   const famLabel = famSel ? famSel.label : '';
-  const tipoLabel = (catalogs.tipi.find(t=>t.code===$('#selTipo').value)||{}).label || '';
-  $('#outDesc').value = [famLabel, tipoLabel].filter(Boolean).join(' — ');
+  const tipoLabel = (catalogs.tipi.find(t=>t.code===document.getElementById('selTipo').value)||{}).label || '';
+  document.getElementById('outDesc').value = [famLabel, tipoLabel].filter(Boolean).join(' — ');
 }
 
 function attach(){
   document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input', render));
-  $('#selFamiglia').addEventListener('change', applyFamFlags);
+  document.getElementById('selFamiglia').addEventListener('change', applyFamFlags);
   document.querySelectorAll('[data-copy]').forEach(b=>{
     b.addEventListener('click', ()=>{
       const inp = document.querySelector(b.getAttribute('data-copy'));
@@ -262,10 +263,10 @@ function attach(){
 
 async function init(){
   catalogs = await loadCatalogs();
-  fillSelect($('#selFamiglia'), catalogs.famiglie);
-  fillSimple($('#selMateriale'), catalogs.materiali);
-  fillSimple($('#selFinitura'), catalogs.finiture);
-  fillSimple($('#selTipo'), catalogs.tipi);
+  fillSelect(document.getElementById('selFamiglia'), catalogs.famiglie);
+  fillSimple(document.getElementById('selMateriale'), catalogs.materiali);
+  fillSimple(document.getElementById('selFinitura'), catalogs.finiture);
+  fillSimple(document.getElementById('selTipo'), catalogs.tipi);
   applyFamFlags();
 }
 
