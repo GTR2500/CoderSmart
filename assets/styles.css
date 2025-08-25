@@ -3,22 +3,11 @@
    =========================== */
 
 /* --- Palette brand --- */
-:root{
-  --brand:#fe8003;   /* arancione aziendale */
-}
+:root{ --brand:#fe8003; } /* arancione aziendale */
 
-/* === Temi =============================================================== */
-/* Fallback: dark */
+/* ===== Temi ===== */
+/* Dark (default) */
 :root{
-  --bg:#0f1115;
-  --panel:#111827;
-  --panel2:#0f1623;
-  --line:#2a2f3a;
-  --text:#e6e6e6;
-  --muted:#9aa4b2;
-}
-/* Dark (esplicito) */
-:root[data-theme="dark"]{
   --bg:#0f1115;
   --panel:#111827;
   --panel2:#0f1623;
@@ -36,12 +25,11 @@
   --muted:#6b7280;
 }
 
-/* === Tipografia / reset base =========================================== */
 *{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--text)}
 
-/* === Header brand ======================================================= */
+/* ===== Header ============================================================ */
 .app-header{
   position:sticky; top:0; z-index:99;
   display:flex; align-items:center; gap:.75rem;
@@ -50,17 +38,15 @@ body{margin:0;background:var(--bg);color:var(--text)}
   border-bottom:2px solid var(--brand);
 }
 .app-header .brand{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none}
-.app-header .brand-logo{
-  height:84px; width:auto; display:block; object-fit:contain; /* doppio */
-}
+.app-header .brand-logo{height:84px; width:auto; display:block; object-fit:contain;} /* doppio */
 .app-header .brand-title{
   flex:1; margin:0; text-align:center;
   font-size:clamp(20px,2.4vw,24px);
   font-weight:800; letter-spacing:.3px;
-  color:var(--brand);                  /* titolo arancione */
+  color:var(--brand);                /* titolo arancione */
 }
 
-/* Theme toggle (sole/luna) */
+/* Toggle tema (sole/luna) */
 .theme-toggle{
   display:inline-grid; place-items:center;
   width:40px; height:40px;
@@ -75,7 +61,7 @@ body{margin:0;background:var(--bg);color:var(--text)}
 :root[data-theme="dark"]  .theme-toggle .icon-sun{display:none}
 :root[data-theme="dark"]  .theme-toggle .icon-moon{display:block}
 
-/* === Subnav (barra link pagina) ======================================== */
+/* ===== Subnav =========================================================== */
 .subnav{
   background:var(--panel);
   border-bottom:1px solid var(--line);
@@ -83,20 +69,18 @@ body{margin:0;background:var(--bg);color:var(--text)}
 .bar{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center}
 nav{margin-left:auto;display:flex;gap:8px}
 nav a{
-  color:var(--text);
-  text-decoration:none;
-  background:var(--panel2);
-  border:1px solid var(--line);
-  padding:6px 10px;border-radius:8px
+  color:var(--text); text-decoration:none;
+  background:var(--panel2); border:1px solid var(--line);
+  padding:6px 10px; border-radius:8px;
 }
 nav a.active{outline:2px solid var(--brand);}
 
-/* === Layout card / controlli =========================================== */
+/* ===== Layout card / controlli ========================================= */
 main{max-width:1200px;margin:0 auto;padding:20px}
 .card{
   background:var(--panel);
-  border:2px solid var(--brand);     /* contorni arancione */
-  border-radius:12px;padding:14px;margin-bottom:16px
+  border:2px solid var(--brand);   /* contorni arancione */
+  border-radius:12px; padding:14px; margin-bottom:16px;
 }
 .row{display:grid;gap:12px}
 .grid-3{grid-template-columns:1fr 1fr 1fr}
@@ -105,8 +89,8 @@ main{max-width:1200px;margin:0 auto;padding:20px}
 
 label{font-size:13px;color:var(--muted)}
 select,input[type="text"],input[type="number"]{
-  width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--text);
-  border-radius:8px;padding:8px 10px
+  width:100%; background:var(--panel2); border:1px solid var(--line); color:var(--text);
+  border-radius:8px; padding:8px 10px;
 }
 .checks{display:flex;gap:10px;flex-wrap:wrap}
 .pill{
@@ -120,7 +104,7 @@ select,input[type="text"],input[type="number"]{
 }
 .copyrow{display:grid;grid-template-columns:1fr 90px;gap:8px}
 
-/* === Tabelle pagina Dati =============================================== */
+/* ===== Tabelle pagina Dati ============================================= */
 .panel{background:var(--panel);border:2px solid var(--brand);border-radius:12px;padding:12px}
 table{width:100%;border-collapse:separate;border-spacing:0 8px}
 thead th{font-size:13px;color:var(--muted);text-align:left;padding:8px 10px}
@@ -128,13 +112,14 @@ tbody td{background:var(--panel2);border-top:1px solid var(--line);border-bottom
 tbody td:first-child{border-left:1px solid var(--line);border-top-left-radius:10px;border-bottom-left-radius:10px}
 tbody td:last-child{border-right:1px solid var(--line);border-top-right-radius:10px;border-bottom-right-radius:10px}
 
-/* === Footer firmato (a destra) ========================================= */
+/* ===== Footer firmato (a destra) ======================================= */
 .app-footer{
-  margin-top:48px;background:var(--panel);border-top:2px solid var(--brand);color:var(--muted)
+  margin-top:48px; background:var(--panel);
+  border-top:2px solid var(--brand); color:var(--muted)
 }
 .app-footer .footer-inner{
-  max-width:1200px;margin:0 auto;padding:16px;
-  display:flex;justify-content:flex-end;align-items:center;gap:.5rem;flex-wrap:wrap
+  max-width:1200px; margin:0 auto; padding:16px;
+  display:flex; justify-content:flex-end; align-items:center; gap:.5rem; flex-wrap:wrap;
 }
 .app-footer .product{font-weight:600;color:var(--text)}
 .app-footer .signature{color:#9aa4b2}  /* nome in grigio, stesso font */
