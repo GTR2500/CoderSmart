@@ -141,25 +141,72 @@
   <div class="footer" id="statusMsg">Pronto.</div>
 </main>
 
-<script type="module">
-import { loadCatalogs } from './assets/data/loader.js';  // << path corretto
-
+<script>
+/* ========= Loader inline (override → default) ========= */
 const STORAGE_KEYS = [
   'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
 ];
+const PATHS = {
+  famiglie:'assets/data/famiglie.json',
+  materiali:'assets/data/materiali.json',
+  finiture:'assets/data/finiture.json',
+  tipi:'assets/data/tipi.json'
+};
+const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
+const canonFam = x => ({
+  code:(x.code||'').trim().toUpperCase(),
+  label:x.label||'',
+  D:toBool(x.D??x.useD??x.d),
+  L:toBool(x.L??x.useL??x.l),
+  H:toBool(x.H??x.useH??x.h),
+  Sp:toBool(x.Sp??x.useSp??x.sp),
+  mat:toBool(x.mat??x.hasMaterial??x.material),
+  fin:toBool(x.fin??x.hasFinish??x.finish),
+  tok:toBool(x.tok??x.useTokens??x.tokens)
+});
+const canonSimple = x => ({code:(x.code||'').trim().toUpperCase(),label:x.label||''});
+function canonize(obj){
+  return {
+    famiglie:(obj.famiglie||[]).map(canonFam),
+    materiali:(obj.materiali||[]).map(canonSimple),
+    finiture:(obj.finiture||[]).map(canonSimple),
+    tipi:(obj.tipi||[]).map(canonSimple)
+  };
+}
+function readLS(){
+  for(const k of STORAGE_KEYS){
+    const raw = localStorage.getItem(k);
+    if(!raw) continue;
+    try{
+      const j = JSON.parse(raw);
+      if(j && j.famiglie && j.materiali && j.finiture && j.tipi) return canonize(j);
+    }catch(e){}
+  }
+  return null;
+}
+async function loadCatalogs(){
+  const fromLS = readLS();
+  if(fromLS) return fromLS;
+  const [fam,mat,fin,tip] = await Promise.all([
+    fetch(PATHS.famiglie).then(r=>r.json()),
+    fetch(PATHS.materiali).then(r=>r.json()),
+    fetch(PATHS.finiture).then(r=>r.json()),
+    fetch(PATHS.tipi).then(r=>r.json())
+  ]);
+  return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
+}
+/* ===================================================== */
 
 let data = { famiglie:[], materiali:[], finiture:[], tipi:[] };
-
 const $ = s => document.querySelector(s);
 const el = (t,p={}) => Object.assign(document.createElement(t), p);
 const setMsg = (m) => $('#statusMsg').textContent = m;
 
-const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
 const canonFromAny = f => ({
   code:(f.code||'').trim().toUpperCase(),
   label:f.label||'',
-  D:toBool(f.D??f.useD??f.d), L:toBool(f.L??f.useL??f.l), H:toBool(f.H??f.useH??f.h), Sp:toBool(f.Sp??f.useSp??f.sp),
-  mat:toBool(f.mat??f.hasMaterial??f.material), fin:toBool(f.fin??f.hasFinish??f.finish), tok:toBool(f.tok??f.useTokens??f.tokens)
+  D:!!(f.D??f.useD), L:!!(f.L??f.useL), H:!!(f.H??f.useH), Sp:!!(f.Sp??f.useSp),
+  mat:!!(f.mat??f.hasMaterial), fin:!!(f.fin??f.hasFinish), tok:!!(f.tok??f.useTokens)
 });
 const toInternal = canon => ({
   famiglie:(canon.famiglie||[]).map(f=>({code:f.code,label:f.label,useD:f.D,useL:f.L,useH:f.H,useSp:f.Sp,hasMaterial:f.mat,hasFinish:f.fin,useTokens:f.tok})),
@@ -171,7 +218,6 @@ function saveToLS(canon){
   for(const k of STORAGE_KEYS) localStorage.setItem(k, raw);
 }
 function removeLS(){ for(const k of STORAGE_KEYS) localStorage.removeItem(k); }
-async function loadDefaults(){ return await loadCatalogs(); }
 function toCanonical(){
   return {
     famiglie: data.famiglie.map(f => canonFromAny({code:f.code,label:f.label,D:f.useD,L:f.useL,H:f.useH,Sp:f.useSp,mat:f.hasMaterial,fin:f.hasFinish,tok:f.useTokens})),
@@ -217,7 +263,7 @@ $('#addTip').onclick=()=>{data.tipi.push({code:'',label:''}); renderSimple('tipi
 
 $('#btnSave').onclick=()=>{saveToLS(toCanonical()); setMsg('Dati salvati in browser (override attivo).');}
 $('#btnRemove').onclick=()=>{ if(confirm('Rimuovere override locale?')){ removeLS(); setMsg('Override rimosso. Ricarica pagina.'); } }
-$('#btnReset').onclick=async()=>{ if(!confirm('Caricare i default da assets/data/?')) return; const canon=await loadDefaults(); saveToLS(canon); data=toInternal(canon); renderAll(); setMsg('Default caricati e salvati in locale.'); }
+$('#btnReset').onclick=async()=>{ if(!confirm('Caricare i default da assets/data/?')) return; const canon=await loadCatalogs(); saveToLS(canon); data=toInternal(canon); renderAll(); setMsg('Default caricati e salvati in locale.'); }
 $('#btnExport').onclick=()=>{ const a=document.createElement('a'); const txt=JSON.stringify(toCanonical(),null,2); a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'})); a.download='cataloghi_scm_v4.json'; a.click(); URL.revokeObjectURL(a.href); setMsg('JSON esportato.'); }
 $('#btnValidate').onclick=()=>{ const c=toCanonical(); const probs=[]; const chk=(arr,name)=>{const seen=new Set(); for(const x of arr){ if(!x.code||!x.label) probs.push(`${name}: codice/descrizione mancanti`); if(seen.has(x.code)) probs.push(`${name}: duplicato ${x.code}`); seen.add(x.code);} }; chk(c.famiglie,'Famiglie'); chk(c.materiali,'Materiali'); chk(c.finiture,'Finiture'); chk(c.tipi,'Tipi'); if(probs.length) alert('Problemi:\\n - '+probs.join('\\n - ')); setMsg(probs.length?'Validazione: errori trovati.':'Validazione OK.'); }
 
@@ -279,10 +325,10 @@ $('#btnSaveGH').onclick=async()=>{
 // Boot
 (async function init(){
   setMsg('Inizializzazione…');
-  const canon = await loadDefaults(); // loader legge override se presente
+  const canon = await loadCatalogs();        // override se presente, altrimenti default
   data = toInternal(canon);
   renderAll();
-  setMsg('Caricati dati da browser (se presenti) o default.');
+  setMsg('Pronto.');
 })();
 </script>
 </body>
