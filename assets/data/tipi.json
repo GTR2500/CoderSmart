@@ -1,5 +1,5 @@
 [
-  { "code":"TUB", "label":"Tubo"    },
+  { "code":"TUB", "label":"Tubo" },
   { "code":"LAM", "label":"Lamiera" },
-  { "code":"STA", "label":"Staffa"  }
+  { "code":"STA", "label":"Staffa" }
 ]
