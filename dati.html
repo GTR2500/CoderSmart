@@ -46,7 +46,6 @@
       <a href="index.html">Generatore</a>
       <a href="istruzioni.html">Istruzioni</a>
       <a class="active" href="dati.html">Dati</a>
-      <a href="tipi.html">Config. Tipi</a>
     </nav>
   </div>
 </header>
@@ -70,7 +69,7 @@
   </div>
 
   <div class="tabs">
-    <div class="tab active" data-tab="famiglie">Famiglie</div>
+    <div class="tab" data-tab="famiglie">Famiglie</div>
     <div class="tab" data-tab="materiali">Materiali</div>
     <div class="tab" data-tab="finiture">Finiture</div>
     <div class="tab" data-tab="tipi">Tipi</div>
@@ -195,7 +194,7 @@ async function loadCatalogs(){
   ]);
   return canonize({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
 }
-// carica SEMPRE dai file, ignorando LS (usato per Reset default)
+// IGNORA LS: serve per Reset default
 async function fetchDefaultsDirect(){
   const [fam, mat, fin, tip] = await Promise.all([
     fetch(PATHS.famiglie).then(r=>r.json()),
@@ -315,8 +314,15 @@ $('#btnValidate').onclick=()=>{
   alert(probs.length ? 'Problemi:\n - ' + probs.join('\n - ') : 'Validazione OK.');
 };
 
-// Tabs
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); document.querySelectorAll('section.panel').forEach(s=>s.classList.add('hidden')); document.querySelector('#view-'+t.dataset.tab).classList.remove('hidden');});
+// Tabs + gestione ancora (#famiglie/#materiali/#finiture/#tipi)
+function activateTab(key){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active', x.dataset.tab===key));
+  document.querySelectorAll('section.panel').forEach(s=>s.classList.add('hidden'));
+  const target = document.getElementById('view-'+key);
+  if(target) target.classList.remove('hidden');
+}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{ activateTab(t.dataset.tab); location.hash = t.dataset.tab; });
+window.addEventListener('hashchange', ()=>{ const k=(location.hash||'#famiglie').slice(1); activateTab(k); });
 
 // GitHub helpers
 function guessRepo(){
@@ -375,6 +381,9 @@ $('#btnSaveGH').onclick=async()=>{
   setMsg('Inizializzazione…');
   const canon = await loadCatalogs();     // override se presente, altrimenti file
   data = toInternal(canon);
+  // attiva tab da ancora (default famiglie)
+  const initial = (location.hash || '#famiglie').slice(1);
+  activateTab(['famiglie','materiali','finiture','tipi'].includes(initial) ? initial : 'famiglie');
   renderAll();
   setMsg('Pronto.');
 })();
