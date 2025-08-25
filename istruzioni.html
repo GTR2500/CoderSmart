@@ -10,6 +10,11 @@
     .card h2{margin:0 0 10px}
     .card h3{margin:14px 0 8px}
     ul,ol{margin:8px 0 8px 18px}
+    .callout{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px;margin:8px 0;color:var(--text)}
+    .ok{border-left:4px solid #22c55e}
+    .warn{border-left:4px solid #f59e0b}
+    .bad{border-left:4px solid #ef4444}
+    code{background:var(--panel2);border:1px solid var(--line);padding:0 4px;border-radius:4px}
   </style>
 </head>
 <body>
@@ -38,51 +43,170 @@
   </div>
 
   <main>
+    <!-- Cos’è -->
     <section class="card">
-      <h2>Come si usa</h2>
+      <h2>Cos’è Tecnical Coder (spiegato semplice)</h2>
+      <p>Tecnical Coder crea automaticamente un <b>codice compatto</b> (ShortCode) e una <b>descrizione</b> per i prodotti.  
+      Tu scegli “Famiglia”, “Tipo”, misure e altri dati: il programma costruisce per te:</p>
+      <ul>
+        <li><b>ShortCode (auto)</b>: il codice tecnico (solo sigle e numeri).</li>
+        <li><b>Descrizione (auto)</b>: un testo leggibile.</li>
+        <li><b>Nome cartella (auto)</b>: codice + descrizione, pronto da copiare.</li>
+      </ul>
+      <div class="callout ok">Non serve conoscere l’informatica: basta riempire i campi e premere “Copia”.</div>
+    </section>
+
+    <!-- Cosa serve -->
+    <section class="card">
+      <h2>Di cosa hai bisogno</h2>
+      <ul>
+        <li>Un browser moderno (Chrome, Edge, Firefox).</li>
+        <li>Connessione Internet per caricare i dati dal sito.</li>
+        <li><i>Facoltativo</i>: un account GitHub solo se vuoi salvare i dati direttamente nel repository.</li>
+      </ul>
+      <div class="callout warn">In alto a destra trovi il pulsante <b>sole/luna</b> per passare tra tema <b>chiaro</b> e <b>scuro</b>.</div>
+    </section>
+
+    <!-- Prima volta: Dati -->
+    <section class="card">
+      <h2>Prima volta: prepara le liste in <a href="dati.html">Dati</a></h2>
+      <p>Le tendine del Generatore prendono i valori da quattro liste (cataloghi):</p>
       <ol>
-        <li>Apri <b>Dati</b> e compila/aggiorna i 4 cataloghi: <i>Famiglie, Materiali, Finiture, Tipi</i>.
+        <li><b>Famiglie</b> (es. ARG = Argani, CAN = Cancelli…)</li>
+        <li><b>Materiali</b> (es. S235, S355, AISI304…)</li>
+        <li><b>Finiture</b> (es. GR = Grezzo, V = Verniciato…)</li>
+        <li><b>Tipi</b> (es. TUB = Tubo, LAM = Lamiera…)</li>
+      </ol>
+      <h3>Come aggiungere una voce</h3>
+      <ol>
+        <li>Apri la pagina <a href="dati.html">Dati</a>.</li>
+        <li>Seleziona la scheda (Famiglie, Materiali, Finiture o Tipi).</li>
+        <li>Clicca <b>+ Aggiungi…</b>, scrivi <b>Codice</b> (breve, senza spazi) e <b>Descrizione</b> (nome completo).</li>
+        <li>Per le <b>Famiglie</b> spunta anche le caselle:
           <ul>
-            <li><b>Salva</b> memorizza in locale (browser). </li>
-            <li><b>Reset default</b> ricarica i file in <code>assets/data/</code>.</li>
-            <li><b>Esporta/Importa JSON</b> per backup o condivisione.</li>
-            <li><b>Salva su GitHub</b> (con PAT) aggiorna i file nel repo.</li>
-          </ul>
-        </li>
-        <li>Vai su <b>Generatore</b>, scegli i valori:
-          <ul>
-            <li>Le caselle D/L/H/Sp/Mat/Fin/Tok sono abilitate in base alla <i>Famiglia</i>.</li>
-            <li>Solo i campi spuntati entrano nello ShortCode (gli altri diventano <code>000</code>).</li>
-          </ul>
-        </li>
-        <li>Copia gli output:
-          <ul>
-            <li><b>ShortCode (auto)</b> – solo codice.</li>
-            <li><b>Descrizione (auto)</b> – formato compatto come richiesto.</li>
-            <li><b>Nome cartella (auto)</b> – ShortCode + descrizione.</li>
+            <li><b>D</b> — se la famiglia usa il diametro Ø.</li>
+            <li><b>L</b> — se usa la lunghezza L.</li>
+            <li><b>H</b> — se usa l’altezza H.</li>
+            <li><b>Sp</b> — se usa lo spessore.</li>
+            <li><b>Mat</b> — se il materiale va scelto.</li>
+            <li><b>Fin</b> — se la finitura va scelta.</li>
+            <li><b>Tok</b> — se serve il <i>Token</i> (es. DX/SN/altro, max 5 caratteri).</li>
           </ul>
         </li>
       </ol>
+      <h3>Come salvare le liste</h3>
+      <ul>
+        <li><b>Salva</b> → memorizza tutto <u>solo in questo browser</u> (sul tuo PC). Se svuoti la cache o cambi PC, i dati non ci sono più.</li>
+        <li><b>Esporta JSON</b> → scarica un file con tutte le liste (ottimo per backup o per passarlo a un collega).</li>
+        <li><b>Importa JSON</b> → carica un file esportato in precedenza.</li>
+        <li><b>Reset default</b> → ricarica i file standard (quelli nel progetto), utile per ripartire da zero.</li>
+        <li><b>Rimuovi override</b> → cancella le modifiche salvate nel browser.</li>
+      </ul>
+      <div class="callout warn"><b>Consiglio:</b> dopo aver “Salvato”, fai anche “Esporta JSON” e conservalo come copia di sicurezza.</div>
+
+      <h3>Salvare nel repository (avanzato)</h3>
+      <ul>
+        <li><b>Apri editor GitHub</b> → apre le pagine di modifica dei file direttamente su GitHub. Salvi da lì come un normale file.</li>
+        <li><b>Salva su GitHub (API)</b> → salva i file dal sito al repository in un colpo solo. Serve un <b>PAT</b> (Personal Access Token) con permesso “Contents: Read &amp; Write”.</li>
+      </ul>
+      <div class="callout bad"><b>Attenzione:</b> il token è personale. Non condividerlo. Usalo solo se sai cosa stai facendo.</div>
     </section>
 
+    <!-- Generatore -->
     <section class="card">
-      <h2>Struttura codice</h2>
-      <p><b>FAM-TIPO-D3-L4-H4-S3-MAT-FIN-TOK</b> — i campi non inclusi diventano <b>000</b>.</p>
+      <h2>Generare il codice (passo passo)</h2>
+      <ol>
+        <li>Apri la pagina <a href="index.html">Generatore</a>.</li>
+        <li>Dal blocco <b>Cataloghi</b> scegli:
+          <ul>
+            <li><b>Famiglia</b> (es. ARG – Argani)</li>
+            <li><b>Materiale</b> (es. S235 – Acciaio S235) — appare solo se la famiglia lo prevede.</li>
+            <li><b>Finitura</b> (es. V – Verniciato) — appare solo se la famiglia lo prevede.</li>
+          </ul>
+        </li>
+        <li>Nella riga <b>Composizione ShortCode</b> trovi le caselle da includere nel codice:
+          <div class="callout ok">
+            Le caselle che la famiglia non usa sono disattivate.  
+            Quelle attive, se spuntate, finiscono nello ShortCode; se non spuntate valgono <code>000</code>.
+          </div>
+        </li>
+        <li>Nel blocco <b>Attributi</b> compila:
+          <ul>
+            <li><b>Tipo Prodotto</b> (es. TUB = Tubo, LAM = Lamiera…)</li>
+            <li><b>Ø D</b>, <b>L</b>, <b>H</b>, <b>Spessore</b> — solo i campi abilitati dalla famiglia.</li>
+            <li><b>Token</b> (max 5 caratteri, es. DX, SN, 4444) — solo se previsto.</li>
+          </ul>
+        </li>
+        <li>Nell’area <b>Output</b> ottieni:
+          <ul>
+            <li><b>ShortCode (auto)</b> — il codice tecnico. Esempio: <code>ARG-TUB-D050-L0050-H0050-S050-S235-V-4444</code></li>
+            <li><b>Descrizione (auto)</b> — testo più leggibile, ad es.: <i>Argani TUB Ø 50 L 50 H 50 Sp 50 mm S235 V 4444</i></li>
+            <li><b>Nome cartella (auto)</b> — unisce codice + descrizione. Comodo per i nomi file/cartelle.</li>
+          </ul>
+          Usa i pulsanti <b>Copia</b> per incollare dove ti serve.
+        </li>
+      </ol>
+      <div class="callout ok">La descrizione segue il formato compatto richiesto: <br>
+        <i>Famiglia (testo) – Tipo (sigla) – Ø/L/H/Sp – Materiale (sigla) – Finitura (sigla) – Token (solo valore)</i>.
+      </div>
+    </section>
+
+    <!-- Consigli -->
+    <section class="card">
+      <h2>Consigli rapidi</h2>
       <ul>
-        <li><b>FAM</b>: codice famiglia (es. ARG)</li>
-        <li><b>TIPO</b>: codice tipo (es. TUB)</li>
-        <li><b>D3/L4/H4/S3</b>: misure con padding (es. D050, L0050)</li>
-        <li><b>MAT/FIN</b>: codici (es. S235, V)</li>
-        <li><b>TOK</b>: fino a 5 caratteri alfanumerici</li>
+        <li>Usa <b>codici brevi</b> in MAIUSCOLO (niente spazi): es. <code>ARG</code>, <code>TUB</code>, <code>S235</code>, <code>V</code>.</li>
+        <li>La <b>descrizione</b> dev’essere chiara: es. “Argani”, “Lamiera”, “Verniciato”.</li>
+        <li>Se il codice mostra molti <code>000</code>, significa che non hai spuntato (o compilato) quei campi.</li>
+        <li>Per lavorare con colleghi: usa <b>Esporta JSON</b> e <b>Importa JSON</b>.</li>
       </ul>
     </section>
 
+    <!-- FAQ -->
     <section class="card">
-      <h2>Consigli</h2>
+      <h2>Domande frequenti (FAQ)</h2>
+
+      <h3>1) Ho inserito i dati ma non li vedo nel Generatore.</h3>
+      <p>Controlla di aver fatto <b>Salva</b> nella pagina <b>Dati</b>. Poi ricarica il Generatore.</p>
+
+      <h3>2) Ho perso i dati inseriti.</h3>
+      <p>I dati salvati con <b>Salva</b> restano nel <b>browser</b> del tuo PC. Se cambi PC, svuoti la cache o usi un altro browser, i dati non ci sono.  
+      Soluzione: usa <b>Esporta JSON</b> per fare un backup, e <b>Importa JSON</b> per ripristinare.</p>
+
+      <h3>3) Non vedo alcune misure (D / L / H / Sp).</h3>
+      <p>Dipende dalla <b>Famiglia</b>. Nella pagina Dati, nella riga della famiglia, devi spuntare le caselle relative a quelle misure.</p>
+
+      <h3>4) La descrizione non si compila.</h3>
+      <p>La descrizione compare se hai scelto la <b>Famiglia</b> e, se spuntati, hai inserito i valori di D, L, H, Sp, Materiale, Finitura e Token.</p>
+
+      <h3>5) Che differenza c’è tra “Reset default” e “Rimuovi override”?</h3>
       <ul>
-        <li>Usa codici brevi e univoci.</li>
-        <li>Valida prima di salvare su GitHub.</li>
-        <li>Fai un export JSON periodico per backup.</li>
+        <li><b>Reset default</b> ricarica i file standard del progetto (in <code>assets/data</code>).</li>
+        <li><b>Rimuovi override</b> cancella i dati salvati nel tuo browser.</li>
+      </ul>
+
+      <h3>6) Posso salvare nel repository?</h3>
+      <p>Sì. Usa <b>Apri editor GitHub</b> (modifichi a mano su GitHub) oppure <b>Salva su GitHub (API)</b> (automatizzato, serve token con permesso “Contents: RW”).</p>
+
+      <h3>7) Come funziona il tema chiaro/scuro?</h3>
+      <p>Clicca l’icona <b>sole/luna</b> in alto a destra. La scelta resta salvata.</p>
+
+      <h3>8) Che cos’è il Token?</h3>
+      <p>È una breve sigla (max 5 caratteri) per informazioni aggiuntive (es. <b>DX</b>, <b>SN</b>, <b>4444</b>).</p>
+    </section>
+
+    <!-- Glossario -->
+    <section class="card">
+      <h2>Glossario veloce</h2>
+      <ul>
+        <li><b>Famiglia</b>: grande gruppo di prodotti (es. Argani, Cancelli).</li>
+        <li><b>Tipo</b>: sottogruppo/forma (es. TUB = Tubo, LAM = Lamiera).</li>
+        <li><b>Ø D / L / H / Sp</b>: misure in millimetri.</li>
+        <li><b>Materiale</b>: sigla del materiale (es. S235, S355, AISI304).</li>
+        <li><b>Finitura</b>: sigla della finitura (es. V = Verniciato, GR = Grezzo).</li>
+        <li><b>Token</b>: sigla extra (max 5 caratteri), es. DX, SN, 4444.</li>
+        <li><b>ShortCode</b>: il codice tecnico generato in automatico.</li>
+        <li><b>JSON</b>: un file di testo che contiene le liste; si può esportare/importare.</li>
       </ul>
     </section>
   </main>
@@ -98,6 +222,7 @@
   </footer>
 
   <script>
+    /* Tema chiaro/scuro */
     const THEME_KEY='tc.theme';
     const setTheme = t => document.documentElement.setAttribute('data-theme', t);
     (function(){ setTheme(localStorage.getItem(THEME_KEY) || 'dark'); })();
