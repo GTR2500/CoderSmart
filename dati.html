@@ -5,52 +5,37 @@
   <title>Dati — ShortCode Maker v4</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root{
-      --bg:#0f1115;--panel:#111827;--panel-2:#0f1623;--muted:#98a2b3;
-      --text:#e6e6e6;--line:#2a2f3a;--radius:12px;--gap:12px;
-    }
+    :root{ --bg:#0f1115; --panel:#111827; --panel2:#0f1623; --line:#2a2f3a;
+           --text:#e6e6e6; --muted:#9aa4b2; --ok:#22c55e; --warn:#f59e0b; --err:#ef4444; }
     *{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
     body{margin:0;background:var(--bg);color:var(--text)}
-    header{position:sticky;top:0;z-index:50;background:#0f131a;border-bottom:1px solid var(--line)}
-    .bar{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:14px}
+    header{position:sticky;top:0;background:#0f131a;border-bottom:1px solid var(--line);z-index:10}
+    .bar{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;gap:12px;align-items:center}
     h1{font-size:18px;margin:0}
-    nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-    nav a{ text-decoration:none;color:#cbd5e1;background:#111827;border:1px solid var(--line);
-      padding:6px 10px;border-radius:8px;font-size:14px }
-    nav a.active{color:white;border-color:#3b82f6;box-shadow:0 0 0 1px #3b82f6 inset}
+    nav{margin-left:auto;display:flex;gap:8px}
+    nav a{color:#cbd5e1;text-decoration:none;background:var(--panel);border:1px solid var(--line);padding:6px 10px;border-radius:8px}
+    nav a.active{border-color:#3b82f6;box-shadow:0 0 0 1px #3b82f6 inset}
     main{max-width:1200px;margin:0 auto;padding:20px}
-
     .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-    .btn{background:#111827;border:1px solid var(--line);color:#e5e7eb;
-      padding:8px 12px;border-radius:10px;font-size:14px;cursor:pointer}
-    .btn:hover{border-color:#3b82f6}
-    .btn.ok{border-color:#22c55e}
-    .btn.danger{border-color:#ef4444;color:#fecaca}
+    .btn{background:var(--panel);border:1px solid var(--line);color:#e5e7eb;padding:8px 12px;border-radius:10px;font-size:14px;cursor:pointer}
+    .btn.ok{border-color:var(--ok)} .btn.warn{border-color:var(--warn)} .btn.danger{border-color:var(--err);color:#fecaca}
     .btn.ghost{background:transparent}
-    .btn.small{padding:6px 9px;font-size:13px}
     .spacer{flex:1}
-
     .tabs{display:flex;gap:8px;margin:8px 0 16px}
-    .tab{ padding:8px 12px;border-radius:10px;background:#111827;border:1px solid var(--line);
-      cursor:pointer;user-select:none }
+    .tab{padding:8px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--line);cursor:pointer}
     .tab.active{border-color:#3b82f6;box-shadow:0 0 0 1px #3b82f6 inset}
-    .panel{background:#111827;border:1px solid var(--line);border-radius:12px;padding:12px}
-
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
     table{width:100%;border-collapse:separate;border-spacing:0 8px}
-    thead th{font-weight:600;color:#cbd5e1;text-align:left;font-size:13px;padding:8px 10px}
-    tbody td{padding:8px 10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-             background:#0f1623}
-    tbody tr td:first-child{border-left:1px solid var(--line);border-top-left-radius:10px;border-bottom-left-radius:10px}
-    tbody tr td:last-child{border-right:1px solid var(--line);border-top-right-radius:10px;border-bottom-right-radius:10px}
-    input[type="text"]{width:100%;background:#0b1220;border:1px solid #233047;color:#e5e7eb;border-radius:8px;padding:8px 10px;font-size:14px}
+    thead th{font-size:13px;color:#cbd5e1;text-align:left;padding:8px 10px}
+    tbody td{background:var(--panel2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 10px}
+    tbody td:first-child{border-left:1px solid var(--line);border-top-left-radius:10px;border-bottom-left-radius:10px}
+    tbody td:last-child{border-right:1px solid var(--line);border-top-right-radius:10px;border-bottom-right-radius:10px}
+    input[type="text"]{width:100%;background:#0b1220;border:1px solid #233047;color:#e5e7eb;border-radius:8px;padding:8px 10px}
     input[type="checkbox"]{width:18px;height:18px}
     .row-actions{display:flex;gap:8px}
-    .note{color:#98a2b3;font-size:13px;margin-top:6px}
-    .grid-actions{display:flex;gap:8px;margin:10px 0}
-    .pill{display:inline-flex;align-items:center;gap:8px;background:#0b1220;border:1px solid var(--line);
-          padding:8px 10px;border-radius:999px;color:#cbd5e1;font-size:13px}
+    .note{font-size:13px;color:#98a2b3;margin-top:6px}
     .hidden{display:none}
-    .footer-note{margin-top:12px;color:#9aa4b2;font-size:12px}
+    .footer{margin-top:12px;font-size:12px;color:#9aa4b2}
   </style>
 </head>
 <body>
@@ -79,7 +64,12 @@
     <input id="fileImport" type="file" accept="application/json" class="hidden" />
   </div>
 
-  <div class="tabs" id="tabs">
+  <div class="toolbar">
+    <button class="btn warn" id="btnOpenGH">Apri editor GitHub</button>
+    <button class="btn warn" id="btnSaveGH">Salva su GitHub (API)</button>
+  </div>
+
+  <div class="tabs">
     <div class="tab active" data-tab="famiglie">Famiglie</div>
     <div class="tab" data-tab="materiali">Materiali</div>
     <div class="tab" data-tab="finiture">Finiture</div>
@@ -88,9 +78,9 @@
 
   <!-- Famiglie -->
   <section class="panel" id="view-famiglie">
-    <div class="grid-actions">
-      <button class="btn small" id="addFam">+ Aggiungi famiglia</button>
-      <span class="pill">D • L • H • Sp • Mat • Fin • Tok</span>
+    <div style="display:flex;gap:8px;margin:8px 0 12px">
+      <button class="btn" id="addFam">+ Aggiungi famiglia</button>
+      <span class="note">D • L • H • Sp • Mat • Fin • Tok → abilita le colonne per quella famiglia</span>
     </div>
     <table>
       <thead>
@@ -109,249 +99,199 @@
       </thead>
       <tbody id="tbodyFam"></tbody>
     </table>
-    <div class="note">Abilita le colonne rilevanti per ogni famiglia.</div>
+    <div class="note" id="statusFam"></div>
   </section>
 
   <!-- Materiali -->
   <section class="panel hidden" id="view-materiali">
-    <div class="grid-actions">
-      <button class="btn small" id="addMat">+ Aggiungi materiale</button>
-      <span class="pill">Esempi: S235, S355, AISI 304</span>
+    <div style="display:flex;gap:8px;margin:8px 0 12px">
+      <button class="btn" id="addMat">+ Aggiungi materiale</button>
+      <span class="note">Esempi: S235, S355, AISI 304…</span>
     </div>
     <table>
-      <thead>
-        <tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr>
-      </thead>
+      <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
       <tbody id="tbodyMat"></tbody>
     </table>
   </section>
 
   <!-- Finiture -->
   <section class="panel hidden" id="view-finiture">
-    <div class="grid-actions">
-      <button class="btn small" id="addFin">+ Aggiungi finitura</button>
-      <span class="pill">Esempi: GREZ, VERN, ZINC</span>
+    <div style="display:flex;gap:8px;margin:8px 0 12px">
+      <button class="btn" id="addFin">+ Aggiungi finitura</button>
+      <span class="note">Esempi: GREZ, VERN, ZINC…</span>
     </div>
     <table>
-      <thead>
-        <tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr>
-      </thead>
+      <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
       <tbody id="tbodyFin"></tbody>
     </table>
   </section>
 
   <!-- Tipi -->
   <section class="panel hidden" id="view-tipi">
-    <div class="grid-actions">
-      <button class="btn small" id="addTip">+ Aggiungi tipo</button>
-      <span class="pill">Esempi: TUB, LAM, STA</span>
+    <div style="display:flex;gap:8px;margin:8px 0 12px">
+      <button class="btn" id="addTip">+ Aggiungi tipo</button>
+      <span class="note">Esempi: TUB, LAM, STA…</span>
     </div>
     <table>
-      <thead>
-        <tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr>
-      </thead>
+      <thead><tr><th style="width:120px">Codice</th><th>Descrizione</th><th style="width:120px">Azioni</th></tr></thead>
       <tbody id="tbodyTip"></tbody>
     </table>
   </section>
 
-  <div class="footer-note" id="statusMsg">Pronto.</div>
+  <div class="footer" id="statusMsg">Pronto.</div>
 </main>
 
-<script>
-(() => {
-  // ---------- Config ----------
-  const STORAGE_KEYS = [
-    'scm.catalogs.override',
-    'scm:catalogsOverride',
-    'scm_override_catalogs',
-    'ShortCodeMakerV4.catalogsOverride'
-  ];
-  const DEFAULT_PATHS = {
-     famiglie:'assets/data/famiglie.json',
-     materiali:'assets/data/materiali.json',
-     finiture:'assets/data/finiture.json',
-     tipi:'assets/data/tipi.json',
+<script type="module">
+import { loadCatalogs } from './assets/loader.js';
+
+const STORAGE_KEYS = [
+  'scm.catalogs.override','scm:catalogsOverride','scm_override_catalogs','ShortCodeMakerV4.catalogsOverride'
+];
+
+let data = { famiglie:[], materiali:[], finiture:[], tipi:[] }; // interno (useD/useL/…)
+
+const $ = s => document.querySelector(s);
+const el = (t,p={}) => Object.assign(document.createElement(t), p);
+const setMsg = (m) => $('#statusMsg').textContent = m;
+
+const toBool = v => !!(v===true||v==='true'||v===1||v==='1');
+const canonFromAny = f => ({ // canonico
+  code:(f.code||'').trim().toUpperCase(),
+  label:f.label||'',
+  D:toBool(f.D??f.useD??f.d), L:toBool(f.L??f.useL??f.l), H:toBool(f.H??f.useH??f.h), Sp:toBool(f.Sp??f.useSp??f.sp),
+  mat:toBool(f.mat??f.hasMaterial??f.material), fin:toBool(f.fin??f.hasFinish??f.finish), tok:toBool(f.tok??f.useTokens??f.tokens)
+});
+const toInternal = canon => ({
+  famiglie:(canon.famiglie||[]).map(f=>({code:f.code,label:f.label,useD:f.D,useL:f.L,useH:f.H,useSp:f.Sp,hasMaterial:f.mat,hasFinish:f.fin,useTokens:f.tok})),
+  materiali:canon.materiali||[], finiture:canon.finiture||[], tipi:canon.tipi||[]
+});
+
+function saveToLS(canon){
+  const raw = JSON.stringify(canon);
+  for(const k of STORAGE_KEYS) localStorage.setItem(k, raw);
+}
+function removeLS(){ for(const k of STORAGE_KEYS) localStorage.removeItem(k); }
+async function loadDefaults(){
+  const canon = await loadCatalogs(); // loader già normalizza
+  return canon;
+}
+function toCanonical(){
+  return {
+    famiglie: data.famiglie.map(f => canonFromAny({code:f.code,label:f.label,D:f.useD,L:f.useL,H:f.useH,Sp:f.useSp,mat:f.hasMaterial,fin:f.hasFinish,tok:f.useTokens})),
+    materiali: data.materiali,
+    finiture: data.finiture,
+    tipi: data.tipi
   };
+}
 
-  // ---------- State ----------
-  let data = {famiglie:[], materiali:[], finiture:[], tipi:[]}; // formato interno (useD/hasMaterial…)
+// UI render
+function renderAll(){ renderFam(); renderSimple('materiali','#tbodyMat'); renderSimple('finiture','#tbodyFin'); renderSimple('tipi','#tbodyTip'); }
+function renderFam(){
+  const tb = $('#tbodyFam'); tb.innerHTML='';
+  data.famiglie.forEach((row,idx)=>tb.appendChild(buildFamRow(row,idx)));
+  $('#statusFam').textContent = data.famiglie.length ? '' : 'Nessuna famiglia presente.';
+}
+function buildFamRow(row,idx){
+  const tr=el('tr');
+  const tdC=el('td'), tdL=el('td'); 
+  const inC=el('input',{type:'text',value:row.code}); inC.oninput=()=>row.code=inC.value.trim().toUpperCase(); tdC.appendChild(inC);
+  const inL=el('input',{type:'text',value:row.label}); inL.oninput=()=>row.label=inL.value; tdL.appendChild(inL);
+  const mk=(p)=>{const td=el('td'); const c=el('input',{type:'checkbox',checked:!!row[p]}); c.onchange=()=>row[p]=c.checked; td.appendChild(c); return td;}
+  const tdA=el('td'); const btn=el('button',{className:'btn danger',textContent:'Elimina'}); btn.onclick=()=>{ if(confirm('Eliminare?')){data.famiglie.splice(idx,1); renderFam();}}; tdA.appendChild(el('div',{className:'row-actions'})).appendChild(btn);
+  tr.append(tdC,tdL,mk('useD'),mk('useL'),mk('useH'),mk('useSp'),mk('hasMaterial'),mk('hasFinish'),mk('useTokens'),tdA);
+  return tr;
+}
+function renderSimple(key, tbSel){
+  const tb = document.querySelector(tbSel); tb.innerHTML='';
+  data[key].forEach((row,idx)=>{
+    const tr=el('tr');
+    const tdC=el('td'); const inC=el('input',{type:'text',value:row.code||''}); inC.oninput=()=>row.code=inC.value.trim().toUpperCase(); tdC.appendChild(inC);
+    const tdL=el('td'); const inL=el('input',{type:'text',value:row.label||''}); inL.oninput=()=>row.label=inL.value; tdL.appendChild(inL);
+    const tdA=el('td'); const btn=el('button',{className:'btn danger',textContent:'Elimina'}); btn.onclick=()=>{ if(confirm('Eliminare?')){data[key].splice(idx,1); renderSimple(key,tbSel);} }; tdA.appendChild(el('div',{className:'row-actions'})).appendChild(btn);
+    tr.append(tdC,tdL,tdA); tb.appendChild(tr);
+  });
+}
 
-  // ---------- Helpers ----------
-  const $ = s => document.querySelector(s);
-  const el = (t,p={}) => Object.assign(document.createElement(t), p);
-  const setStatus = (m,cls='') => { const n=$('#statusMsg'); n.className='footer-note '+cls; n.textContent=m; };
-  const toBool = v => !!(v===true || v==='true' || v===1 || v==='1');
+// Events
+$('#addFam').onclick=()=>{data.famiglie.push({code:'',label:'',useD:false,useL:false,useH:false,useSp:false,hasMaterial:false,hasFinish:false,useTokens:false}); renderFam();}
+$('#addMat').onclick=()=>{data.materiali.push({code:'',label:''}); renderSimple('materiali','#tbodyMat');}
+$('#addFin').onclick=()=>{data.finiture.push({code:'',label:''}); renderSimple('finiture','#tbodyFin');}
+$('#addTip').onclick=()=>{data.tipi.push({code:'',label:''}); renderSimple('tipi','#tbodyTip');}
 
-  // Canonico ⇄ Interno
-  const canonFromAny = f => ({
-    code:(f.code||'').trim().toUpperCase(),
-    label:f.label||'',
-    D:toBool(f.D ?? f.useD ?? f.d),
-    L:toBool(f.L ?? f.useL ?? f.l),
-    H:toBool(f.H ?? f.useH ?? f.h),
-    Sp:toBool(f.Sp ?? f.useSp ?? f.sp),
-    mat:toBool(f.mat ?? f.hasMaterial ?? f.material),
-    fin:toBool(f.fin ?? f.hasFinish ?? f.finish),
-    tok:toBool(f.tok ?? f.useTokens ?? f.tokens)
-  });
-  const internalFromCanon = f => ({
-    code:f.code, label:f.label,
-    useD:f.D, useL:f.L, useH:f.H, useSp:f.Sp,
-    hasMaterial:f.mat, hasFinish:f.fin, useTokens:f.tok
-  });
-  const canonizeAll = obj => ({
-    famiglie: (obj.famiglie||[]).map(canonFromAny),
-    materiali: (obj.materiali||[]).map(x=>({code:(x.code||'').trim().toUpperCase(),label:x.label||''})),
-    finiture:  (obj.finiture ||[]).map(x=>({code:(x.code||'').trim().toUpperCase(),label:x.label||''})),
-    tipi:      (obj.tipi     ||[]).map(x=>({code:(x.code||'').trim().toUpperCase(),label:x.label||''})),
-  });
-  const toInternal = canon => ({
-    famiglie: (canon.famiglie||[]).map(internalFromCanon),
-    materiali: canon.materiali||[],
-    finiture:  canon.finiture ||[],
-    tipi:      canon.tipi     ||[],
-  });
+$('#btnSave').onclick=()=>{saveToLS(toCanonical()); setMsg('Dati salvati in browser (override attivo).');}
+$('#btnRemove').onclick=()=>{ if(confirm('Rimuovere override locale?')){ removeLS(); setMsg('Override rimosso. Ricarica pagina.'); } }
+$('#btnReset').onclick=async()=>{ if(!confirm('Caricare i default da assets/data/?')) return; const canon=await loadDefaults(); saveToLS(canon); data=toInternal(canon); renderAll(); setMsg('Default caricati e salvati in locale.'); }
+$('#btnExport').onclick=()=>{ const a=document.createElement('a'); const txt=JSON.stringify(toCanonical(),null,2); a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'})); a.download='cataloghi_scm_v4.json'; a.click(); URL.revokeObjectURL(a.href); setMsg('JSON esportato.'); }
+$('#btnValidate').onclick=()=>{ const c=toCanonical(); const probs=[]; const chk=(arr,name)=>{const seen=new Set(); for(const x of arr){ if(!x.code||!x.label) probs.push(`${name}: codice/descrizione mancanti`); if(seen.has(x.code)) probs.push(`${name}: duplicato ${x.code}`); seen.add(x.code);} }; chk(c.famiglie,'Famiglie'); chk(c.materiali,'Materiali'); chk(c.finiture,'Finiture'); chk(c.tipi,'Tipi'); if(probs.length) alert('Problemi:\\n - '+probs.join('\\n - ')); setMsg(probs.length?'Validazione: errori trovati.':'Validazione OK.'); }
 
-  // Storage
-  function loadFromLocalStorage(){
-    for(const k of STORAGE_KEYS){
-      const raw = localStorage.getItem(k);
-      if(!raw) continue;
-      try{
-        const parsed = JSON.parse(raw);
-        if(parsed && parsed.famiglie && parsed.materiali && parsed.finiture && parsed.tipi){
-          return canonizeAll(parsed); // normalizza chiavi vecchie
-        }
-      }catch(e){}
+// Tabs
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); document.querySelectorAll('section.panel').forEach(s=>s.classList.add('hidden')); document.querySelector('#view-'+t.dataset.tab).classList.remove('hidden');});
+
+// GitHub helpers
+function guessRepo(){
+  // es: https://gtr2500.github.io/CoderSmart/dati.html
+  const host = location.hostname;              // gtr2500.github.io
+  const owner = host.split('.')[0];            // gtr2500
+  const path = location.pathname.split('/').filter(Boolean);
+  const repo  = path[0] || 'CoderSmart';       // CoderSmart
+  const branch = 'main';
+  return {owner, repo, branch};
+}
+function b64(s){ return btoa(unescape(encodeURIComponent(s))); }
+
+$('#btnOpenGH').onclick=()=>{
+  const {owner,repo,branch} = guessRepo();
+  const files = ['famiglie.json','materiali.json','finiture.json','tipi.json'].map(f=>`https://github.com/${owner}/${repo}/edit/${branch}/assets/data/${f}`);
+  files.forEach(u=>window.open(u,'_blank'));
+  setMsg('Aperte le pagine di editing su GitHub.');
+};
+
+$('#btnSaveGH').onclick=async()=>{
+  const token = prompt('Inserisci un GitHub Personal Access Token (permesso: Contents RW sul repo). Non verrà salvato.');
+  if(!token) return;
+  const {owner,repo,branch} = guessRepo();
+  const canon = toCanonical();
+  const payloads = {
+    'assets/data/famiglie.json': JSON.stringify(canon.famiglie, null, 2),
+    'assets/data/materiali.json': JSON.stringify(canon.materiali, null, 2),
+    'assets/data/finiture.json': JSON.stringify(canon.finiture, null, 2),
+    'assets/data/tipi.json': JSON.stringify(canon.tipi, null, 2),
+  };
+  try{
+    for(const [path,content] of Object.entries(payloads)){
+      // prendi sha file
+      const info = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,{
+        headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`}
+      }).then(r=>r.ok?r.json():null);
+      const sha = info?.sha;
+      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
+        method:'PUT',
+        headers:{'Accept':'application/vnd.github+json','Authorization':`Bearer ${token}`},
+        body: JSON.stringify({
+          message:`Update ${path} from dati.html`,
+          content:b64(content),
+          branch,
+          sha
+        })
+      });
+      if(!res.ok) throw new Error(`GitHub API error su ${path}`);
     }
-    return null;
+    alert('Salvataggio su GitHub completato.');
+    setMsg('File aggiornati nel repo.');
+  }catch(e){
+    console.error(e);
+    alert('Errore nel salvataggio su GitHub: '+e.message);
+    setMsg('Errore GitHub.');
   }
-  function saveToLocalStorage(canonical){
-    const raw = JSON.stringify(canonical);
-    for(const k of STORAGE_KEYS){ localStorage.setItem(k, raw); }
-  }
-  function removeOverrides(){ for(const k of STORAGE_KEYS){ localStorage.removeItem(k);} }
+};
 
-  async function loadDefaults(){
-    const [fam,mat,fin,tip] = await Promise.all([
-      fetch(DEFAULT_PATHS.famiglie).then(r=>r.json()),
-      fetch(DEFAULT_PATHS.materiali).then(r=>r.json()),
-      fetch(DEFAULT_PATHS.finiture).then(r=>r.json()),
-      fetch(DEFAULT_PATHS.tipi).then(r=>r.json()),
-    ]);
-    return canonizeAll({famiglie:fam,materiali:mat,finiture:fin,tipi:tip});
-  }
-
-  // UI render
-  function renderAll(){
-    renderFamiglie();
-    renderSimple('materiali', $('#tbodyMat'), buildSimpleRow);
-    renderSimple('finiture',  $('#tbodyFin'), buildSimpleRow);
-    renderSimple('tipi',      $('#tbodyTip'), buildSimpleRow);
-  }
-  function renderFamiglie(){
-    const tb = $('#tbodyFam'); tb.innerHTML='';
-    data.famiglie.forEach((row,idx)=>tb.appendChild(buildFamRow(row,idx)));
-  }
-  function buildFamRow(row, idx){
-    const tr = el('tr');
-
-    const tdCode = el('td');
-    const inCode = el('input',{type:'text',value:row.code});
-    inCode.addEventListener('input',()=> row.code = inCode.value.trim().toUpperCase());
-    tdCode.appendChild(inCode);
-
-    const tdLabel = el('td');
-    const inLabel = el('input',{type:'text',value:row.label});
-    inLabel.addEventListener('input',()=> row.label = inLabel.value);
-    tdLabel.appendChild(inLabel);
-
-    const mk = (prop)=>{ const td=el('td'); const c=el('input',{type:'checkbox',checked:!!row[prop]}); c.onchange=()=>row[prop]=c.checked; td.appendChild(c); return td; }
-
-    const tdAct = el('td');
-    const del = el('button',{className:'btn small danger',textContent:'Elimina'});
-    del.onclick=()=>{ if(confirm('Eliminare la famiglia?')){ data.famiglie.splice(idx,1); renderFamiglie(); } };
-    tdAct.appendChild(el('div',{className:'row-actions'})).appendChild(del);
-
-    tr.append(tdCode, tdLabel, mk('useD'), mk('useL'), mk('useH'), mk('useSp'), mk('hasMaterial'), mk('hasFinish'), mk('useTokens'), tdAct);
-    return tr;
-  }
-  function renderSimple(key, tb, builder){
-    tb.innerHTML=''; data[key].forEach((row,idx)=>tb.appendChild(builder(key,row,idx)));
-  }
-  function buildSimpleRow(key,row,idx){
-    const tr = el('tr');
-
-    const tdCode = el('td');
-    const inCode = el('input',{type:'text',value:row.code||''});
-    inCode.oninput=()=> row.code=inCode.value.trim().toUpperCase();
-    tdCode.appendChild(inCode);
-
-    const tdLabel = el('td');
-    const inLabel = el('input',{type:'text',value:row.label||''});
-    inLabel.oninput=()=> row.label=inLabel.value;
-    tdLabel.appendChild(inLabel);
-
-    const tdAct = el('td');
-    const del = el('button',{className:'btn small danger',textContent:'Elimina'});
-    del.onclick=()=>{ if(confirm('Eliminare la riga?')){ data[key].splice(idx,1); renderSimple(key, document.querySelector(key==='materiali'?'#tbodyMat':key==='finiture'?'#tbodyFin':'#tbodyTip'), buildSimpleRow); } };
-    tdAct.appendChild(el('div',{className:'row-actions'})).appendChild(del);
-
-    tr.append(tdCode,tdLabel,tdAct);
-    return tr;
-  }
-
-  // Buttons
-  $('#addFam').onclick=()=>{ data.famiglie.push({code:'',label:'',useD:false,useL:false,useH:false,useSp:false,hasMaterial:false,hasFinish:false,useTokens:false}); renderFamiglie(); };
-  $('#addMat').onclick=()=>{ data.materiali.push({code:'',label:''}); renderSimple('materiali',$('#tbodyMat'),buildSimpleRow); };
-  $('#addFin').onclick=()=>{ data.finiture.push({code:'',label:''}); renderSimple('finiture',$('#tbodyFin'),buildSimpleRow); };
-  $('#addTip').onclick=()=>{ data.tipi.push({code:'',label:''}); renderSimple('tipi',$('#tbodyTip'),buildSimpleRow); };
-
-  function toCanonicalFromInternal(){
-    return {
-      famiglie: data.famiglie.map(f=>canonFromAny({
-        code:f.code,label:f.label,D:f.useD,L:f.useL,H:f.useH,Sp:f.useSp,mat:f.hasMaterial,fin:f.hasFinish,tok:f.useTokens
-      })),
-      materiali: data.materiali,
-      finiture:  data.finiture,
-      tipi:      data.tipi
-    };
-  }
-
-  $('#btnSave').onclick=()=>{ const canonical = toCanonicalFromInternal(); saveToLocalStorage(canonical); setStatus('Dati salvati in browser (override attivo).','ok'); };
-  $('#btnRemove').onclick=()=>{ if(confirm('Rimuovere l’override locale?')){ removeOverrides(); setStatus('Override rimosso. Ricarica per usare i default.'); } };
-  $('#btnReset').onclick=async()=>{ if(!confirm('Ripristinare i default dai file in assets/data/?')) return; const canon = await loadDefaults(); saveToLocalStorage(canon); data = toInternal(canon); renderAll(); setStatus('Default caricati e salvati in locale.'); };
-  $('#btnExport').onclick=()=>{ const a=document.createElement('a'); const content=JSON.stringify(toCanonicalFromInternal(),null,2); a.href=URL.createObjectURL(new Blob([content],{type:'application/json'})); a.download='cataloghi_scm_v4.json'; a.click(); URL.revokeObjectURL(a.href); setStatus('File JSON esportato.'); };
-  $('#btnValidate').onclick=()=>{ const c=toCanonicalFromInternal(); const probs=[]; const chk=(arr,name)=>{ const seen=new Set(); for(const x of arr){ if(!x.code||!x.label) probs.push(`${name}: codice/descrizione mancanti`); if(seen.has(x.code)) probs.push(`${name}: codice duplicato ${x.code}`); seen.add(x.code);} }; chk(c.famiglie,'Famiglie'); chk(c.materiali,'Materiali'); chk(c.finiture,'Finiture'); chk(c.tipi,'Tipi'); if(probs.length){ alert('Problemi:\\n - '+probs.join('\\n - ')); setStatus('Validazione: errori trovati.'); } else { setStatus('Validazione OK.'); } };
-
-  $('#fileImport').onchange=async ev=>{
-    const file=ev.target.files?.[0]; if(!file) return;
-    try{
-      const obj = JSON.parse(await file.text());
-      const canon = canonizeAll(obj);        // accetta anche formati vecchi
-      saveToLocalStorage(canon);             // persiste canonico
-      data = toInternal(canon);              // mostra interno
-      renderAll();
-      setStatus('Dati importati e salvati in locale.');
-    }catch(e){ alert('Import fallito: '+e.message); setStatus('Import fallito.'); }
-    ev.target.value='';
-  };
-
-  // Tabs
-  document.querySelectorAll('.tab').forEach(t=>{
-    t.onclick=()=>{ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
-      document.querySelectorAll('section.panel').forEach(s=>s.classList.add('hidden'));
-      document.querySelector('#view-'+t.dataset.tab).classList.remove('hidden'); };
-  });
-
-  // Boot
-  (async function init(){
-    setStatus('Inizializzazione…');
-    const ls = loadFromLocalStorage();
-    if(ls){ data = toInternal(ls); setStatus('Caricati dati da browser (override attivo).'); }
-    else { try{ const canon = await loadDefaults(); data = toInternal(canon); setStatus('Caricati default da assets/data/.'); } catch(e){ console.error(e); setStatus('Errore nel caricamento dei default. Verifica assets/data/.'); } }
-    renderAll();
-  })();
+// Boot
+(async function init(){
+  setMsg('Inizializzazione…');
+  const canon = await loadDefaults(); // loader legge override se presente
+  data = toInternal(canon);
+  renderAll();
+  setMsg('Caricati dati da browser (se presenti) o default.');
 })();
 </script>
 </body>
